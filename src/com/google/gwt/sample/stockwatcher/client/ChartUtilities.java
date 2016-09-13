@@ -79,7 +79,7 @@ public static DialogBox addTimer(){
 	Timer timer = new Timer() {
 		  public void run() {
 			loadingPopup.clear();
-			loadingPopup.add(new HTML("Time elapsed: " + Integer.toString(timerCount) + "s"));
+			loadingPopup.add(new HTML("Getting data....." + Integer.toString(timerCount) + " seconds has elapsed"));
 			timerCount++;
 		  }
 		};
@@ -101,10 +101,11 @@ public static DialogBox addTimer(){
 			
 			//Remember to use Object[] input to get the rest of the information for chart display
 			public void onSuccess(String[][] result) {
-				Window.alert(result[0][0]+""+result[0][1]);
 				Number [][] data = formatData(result);
 				BasePage.panel.clear();
 				BasePage.panel.add(createChart(data,"My Chart yayayayaya"));
+				BasePage.panel.add(createFlexTable(result));
+				
 			}
 		});
 
@@ -114,10 +115,10 @@ public static DialogBox addTimer(){
 	public static Number[][] formatData(String [][] input){
 		Number [][] data = new Number[input.length][2];
 		
-		for(int i=0;i<input.length;i++)
+		for(int i=input.length-1;i>=0;i--)
 		{
-			data[i][0]=DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss").parse(input[i][0]).getTime();
-			data[i][1]=convertToNumber(input[i][1]);
+			data[input.length-i-1][0]=DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss").parse(input[i][0]).getTime();
+			data[input.length-i-1][1]=convertToNumber(input[i][1]);
 		}
 		return data;
 	}
@@ -160,29 +161,13 @@ public static DialogBox addTimer(){
 		
 		final Series series = chart.createSeries();  
 	    chart.addSeries(series.setName("data")); 
-
+	    
 	    for(int i=0;i<data.length;i++)
 		{
 	    	series.addPoint(data[i][0],data[i][1]);
+	    
 		}
 	    
-	    // Generate an array of random data  
-	    long time = new Date().getTime();  
-	    for(int i = -19; i <= 0; i++) {  
-	        series.addPoint(time + i * 1000, com.google.gwt.user.client.Random.nextDouble());  
-	    }  
-
-	    Timer tempTimer = new Timer() {  
-	        @Override  
-	        public void run() {  
-	            series.addPoint(  
-	                new Date().getTime(),  
-	                com.google.gwt.user.client.Random.nextDouble(),  
-	                true, true, true  
-	            );  
-	        }  
-	    };  
-	    tempTimer.scheduleRepeating(1000);  
 	    
 		return chart;
 	}
@@ -407,7 +392,7 @@ public Series newSeries(Chart chart, String seriesName, String data[][], int col
 }
 
 //Methods to create a flex table from an input 2D String array
-private FlexTable createFlexTable(String data[][])
+private static FlexTable createFlexTable(String data[][])
 {
 
 	FlexTable breakdownTable = new FlexTable();

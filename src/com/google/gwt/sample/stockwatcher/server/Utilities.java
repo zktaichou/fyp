@@ -23,6 +23,7 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import com.google.gwt.sample.stockwatcher.client.GreetingService;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -73,7 +74,10 @@ public class Utilities{
 	@SuppressWarnings("unchecked")
 	public static ArrayList<Object []> decryptData(ObjectInputStream ois){
 		try {
-			return (ArrayList<Object []>)ois.readObject();
+	        Cipher decrypter=Cipher.getInstance("AES");
+	        decrypter.init(Cipher.DECRYPT_MODE,getKey());
+	        
+			return (ArrayList<Object []>)(((SealedObject) ois.readObject()).getObject(decrypter));
 		} catch (Exception e) {return null;}
 	}
 	
@@ -81,10 +85,10 @@ public class Utilities{
 		try {
 			DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 			String [][] data = new String[input.size()][2];
-			
+
 			for(int i=0;i<input.size();i++)
 			{
-		    	data[i][0]=df.format((LocalDateTime)input.get(i)[0]);
+		    	data[i][0]=df.format(((LocalDateTime)input.get(i)[0]).plusHours(7));
 		    	data[i][1]=input.get(i)[1].toString();
 			}
 			
