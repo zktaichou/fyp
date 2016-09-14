@@ -4,6 +4,7 @@ import com.google.gwt.i18n.client.*;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
@@ -58,6 +59,7 @@ String startDay;
 String endDay;
 String getTimeFormat;
 
+static Number lastRequestTime;
 static int timerCount=0;
 int latestRequestID, showDetailsLatestRequestID;
 
@@ -102,9 +104,9 @@ public static DialogBox addTimer(){
 			//Remember to use Object[] input to get the rest of the information for chart display
 			public void onSuccess(String[][] result) {
 				Number [][] data = formatData(result);
-				BasePage.panel.clear();
+				lastRequestTime=data[0][0];
 				BasePage.panel.add(createChart(data,"My Chart yayayayaya"));
-				BasePage.panel.add(createFlexTable(result));
+				//BasePage.panel.add(createFlexTable(result));
 				
 			}
 		});
@@ -135,20 +137,21 @@ public static DialogBox addTimer(){
         .setChartTitleText(title)
 	    .setLegend(new Legend().setEnabled(false))  
 	    .setCredits(new Credits().setEnabled(false))  
-	    .setToolTip(new ToolTip()  
-	        .setFormatter(new ToolTipFormatter() {  
-	             public String format(ToolTipData toolTipData) {  
-	                 return "<b>" + toolTipData.getSeriesName() + "</b><br/>" +  
-	                     DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss")  
-	                         .format(new Date(toolTipData.getXAsLong())) + "<br/>" +  
-	                     NumberFormat.getFormat("0.00").format(toolTipData.getYAsDouble());  
-	             }  
-	        })  
-	    );  
+//	    .setToolTip(new ToolTip()  
+//	        .setFormatter(new ToolTipFormatter() {  
+//	             public String format(ToolTipData toolTipData) {  
+//	                 return "<b>" + toolTipData.getSeriesName() + "</b><br/>" +  
+//	                     DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss")  
+//	                         .format(new Date(toolTipData.getXAsLong())) + "<br/>" +  
+//	                     NumberFormat.getFormat("0.00").format(toolTipData.getYAsDouble());  
+//	             }  
+//	        })  
+//	    )
+	    ;  
 		
-		chart.getXAxis()  
-        .setType(Axis.Type.DATE_TIME)  
-        .setTickPixelInterval(150);  
+		//chart.getXAxis()  
+        //.setType(Axis.Type.DATE_TIME)  
+        //.setTickPixelInterval(150);  
  
     chart.getYAxis()  
         .setAxisTitleText("Value")  
@@ -167,6 +170,15 @@ public static DialogBox addTimer(){
 	    	series.addPoint(data[i][0],data[i][1]);
 	    
 		}
+	    
+	    Timer tempTimer = new Timer() {  
+            @Override  
+            public void run() {  
+            	//getData("testTemp",(java.sql.Date)lastRequestTime,new Date().getTime());
+                //series.addPoint(Number goes here, value goes here,true, true, true);  
+            }  
+        };  
+        tempTimer.scheduleRepeating(1000);  
 	    
 	    
 		return chart;

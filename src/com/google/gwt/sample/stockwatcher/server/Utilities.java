@@ -88,7 +88,7 @@ public class Utilities{
 
 			for(int i=0;i<input.size();i++)
 			{
-		    	data[i][0]=df.format(((LocalDateTime)input.get(i)[0]).plusHours(7));
+		    	data[i][0]=df.format(((LocalDateTime)input.get(i)[0]).plusHours(8));
 		    	data[i][1]=input.get(i)[1].toString();
 			}
 			
