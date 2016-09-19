@@ -26,16 +26,16 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			ArrayList<Object> toSend=new ArrayList<>();
 			toSend.add("37");
 			toSend.add(sn);
-			toSend.add(LocalDateTime.of(1990,1,1,0,0));
-			toSend.add(LocalDateTime.now());
+			toSend.add(Utility.dateToLocalDateTime(sd));
+			toSend.add(Utility.dateToLocalDateTime(ed));
 			OutputStream os = sc.getOutputStream();
 			ObjectOutputStream oos=new ObjectOutputStream(os);
-			oos.writeObject(Utilities.encryptMsg(toSend));
+			oos.writeObject(Utility.encryptMsg(toSend));
 			
 			InputStream is=sc.getInputStream();
 			ObjectInputStream ois=new ObjectInputStream(is);
 			@SuppressWarnings("unchecked")
-			ArrayList<Object []> data=Utilities.decryptData(ois);
+			ArrayList<Object []> data=Utility.decryptData(ois);
 			
 			oos.close();
 			os.close();
@@ -44,14 +44,14 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			
 			sc.close();
 			
-			return Utilities.DataToString(data);
+			return Utility.DataToString(data);
 		} catch (Exception e) {return null;}
 	}
 	
 	public boolean userLogin(String username, String password) throws IllegalArgumentException {
 		try {
 			
-			String hashedPassword = Utilities.hashSHA1CharAry(password);
+			String hashedPassword = Utility.hashSHA1CharAry(password);
 			Socket sc=new Socket("10.100.2.56",40001);
 			ArrayList<Object> toSend=new ArrayList<>();
 			toSend.add("2");
@@ -59,12 +59,12 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			toSend.add(hashedPassword);
 			OutputStream os = sc.getOutputStream();
 			ObjectOutputStream oos=new ObjectOutputStream(os);
-			oos.writeObject(Utilities.encryptMsg(toSend));
+			oos.writeObject(Utility.encryptMsg(toSend));
 			
 			InputStream is=sc.getInputStream();
 			ObjectInputStream ois=new ObjectInputStream(is);
 			@SuppressWarnings("unchecked")
-			String data=Utilities.decryptMsg(ois);
+			String data=Utility.decryptMsg(ois);
 			
 			oos.close();
 			os.close();

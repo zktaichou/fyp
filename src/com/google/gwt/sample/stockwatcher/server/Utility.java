@@ -1,17 +1,12 @@
 package com.google.gwt.sample.stockwatcher.server;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.net.Socket;
 import java.security.MessageDigest;
 import java.security.spec.KeySpec;
-import java.sql.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
@@ -22,15 +17,11 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import com.google.gwt.sample.stockwatcher.client.GreetingService;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-
 /**
  * The server-side implementation of the RPC service.
  */
 @SuppressWarnings("serial")
-public class Utilities{
+public class Utility{
 	
 	public static String hashSHA1CharAry (String c) {
     	try {
@@ -57,7 +48,6 @@ public class Utilities{
 		try {
 			Cipher encrypter=Cipher.getInstance("AES");
 	        encrypter.init(Cipher.ENCRYPT_MODE,getKey());
-	        
 			return new SealedObject(msg,encrypter);
 		} catch (Exception e) {return null;}
 	}
@@ -95,5 +85,25 @@ public class Utilities{
 			return data;
 		} catch (Exception e) {return null;}
 	}
+	
+	public static long localDateTimeToLong (LocalDateTime dt) {
+    	return dt.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+    }
+    
+    public static java.sql.Date localDateTimeToSQLDate (LocalDateTime dt) {
+        return new java.sql.Date(localDateTimeToLong(dt));
+    }
+    
+    public static java.util.Date localDateTimeToUtilDate (LocalDateTime dt) {
+        return new java.util.Date(localDateTimeToLong(dt));
+    }
+    
+    public static LocalDateTime dateToLocalDateTime (java.sql.Date d) {
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(d.getTime()), ZoneOffset.systemDefault());
+    }
+    
+    public static LocalDateTime dateToLocalDateTime (java.util.Date d) {
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(d.getTime()), ZoneOffset.systemDefault());
+    }
 	
 }

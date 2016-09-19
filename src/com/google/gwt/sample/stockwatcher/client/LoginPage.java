@@ -89,7 +89,7 @@ public class LoginPage  {
 			
 			greetingService.userLogin(usernameTB.getText(),passwordTB.getText(), new AsyncCallback<Boolean>() {
 				public void onFailure(Throwable caught) {
-					Window.alert("Data unreachable");
+					Window.alert("Can't connect to database");
 				}
 				
 				//Remember to use Object[] input to get the rest of the information for chart display

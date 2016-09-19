@@ -59,7 +59,14 @@ String startDay;
 String endDay;
 String getTimeFormat;
 
-static Number lastRequestTime;
+static Timer timer = new Timer() {
+	  public void run() {
+		loadingPopup.clear();
+		loadingPopup.add(new HTML("Getting data....." + Integer.toString(timerCount) + " seconds has elapsed"));
+		timerCount++;
+	  }
+};
+
 static int timerCount=0;
 int latestRequestID, showDetailsLatestRequestID;
 
@@ -77,22 +84,13 @@ public static final GreetingServiceAsync greetingService = GWT.create(GreetingSe
 public static DialogBox addTimer(){
 
 	timerCount = 0;
-	
-	Timer timer = new Timer() {
-		  public void run() {
-			loadingPopup.clear();
-			loadingPopup.add(new HTML("Getting data....." + Integer.toString(timerCount) + " seconds has elapsed"));
-			timerCount++;
-		  }
-		};
-
 	timer.scheduleRepeating(1000);
-	
 	return loadingPopup;
 }
 
 	public static void hideTimer(){
 		loadingPopup.removeFromParent();
+		timer.cancel();
 }
 	//Object returned here --------------vvvvv
 	public static void getData(String sn, java.sql.Date sd, java.sql.Date ed){
@@ -104,15 +102,30 @@ public static DialogBox addTimer(){
 			//Remember to use Object[] input to get the rest of the information for chart display
 			public void onSuccess(String[][] result) {
 				Number [][] data = formatData(result);
-				lastRequestTime=data[0][0];
+				//lastRequestTime=data[0][0];
 				BasePage.panel.add(createChart(data,"My Chart yayayayaya"));
 				//BasePage.panel.add(createFlexTable(result));
 				
 			}
 		});
-
 	}
 	
+	public static void getAppendData(final Series s, String sn, java.sql.Date sd, java.sql.Date ed){
+		greetingService.greetServer(sn,sd,ed, new AsyncCallback<String[][]>() {
+			public void onFailure(Throwable caught) {
+				Window.alert("Data unreachable");
+			}
+			
+			//Remember to use Object[] input to get the rest of the information for chart display
+			public void onSuccess(String[][] result) {
+				Number [][] data = formatData(result);
+				for(int i=0;i<data.length;i++)
+				{
+					s.addPoint(data[i][0],data[i][1],true, true, true);
+				}
+			}
+		});
+	}
 	
 	public static Number[][] formatData(String [][] input){
 		Number [][] data = new Number[input.length][2];
@@ -171,14 +184,17 @@ public static DialogBox addTimer(){
 	    
 		}
 	    
-	    Timer tempTimer = new Timer() {  
+	    Timer tempTimer = new Timer() {
+	    	java.sql.Date lastRequestTime = new java.sql.Date(System.currentTimeMillis());
             @Override  
-            public void run() {  
-            	//getData("testTemp",(java.sql.Date)lastRequestTime,new Date().getTime());
-                //series.addPoint(Number goes here, value goes here,true, true, true);  
+            public void run() {
+            	long currTime=System.currentTimeMillis();
+            	Window.alert(String.valueOf(currTime));
+            	//getAppendData(series,"testTemp",lastRequestTime,new java.sql.Date(currTime));
+                lastRequestTime=new java.sql.Date(currTime); 
             }  
-        };  
-        tempTimer.scheduleRepeating(1000);  
+        };
+        tempTimer.scheduleRepeating(10000);  
 	    
 	    
 		return chart;
