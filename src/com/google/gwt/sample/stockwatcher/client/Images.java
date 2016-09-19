@@ -10,6 +10,8 @@ public class Images{
 	public static final String SAMPLE_1 = "images/sample1.png";
 	public static final String SAMPLE_2 = "images/sample2.png";
 	public static final String SAMPLE_3 = "images/sample3.png";
+	public static final String LOADING = "images/loading.gif";
+	public static final String LOADING2 = "images/loading2.gif";
 	
 	// Function to customize image width, height and image alignment
 	public static String getImage(String _path, int _width_px, int _height_px) {

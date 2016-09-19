@@ -28,6 +28,7 @@ public class MonitoringPage  {
 	
 	VerticalPanel mainPanel = new VerticalPanel();
 	HorizontalPanel chartPanel = new HorizontalPanel();
+	HorizontalPanel buttonPanel = new HorizontalPanel();
 	FlexTable table = new FlexTable();
 	StockChart chart = new StockChart();
 	Button backButton = new Button("Back");
@@ -37,12 +38,16 @@ public class MonitoringPage  {
 	
 	public MonitoringPage(){
 		setHandlers();
+		
+		buttonPanel.setSpacing(10);
+		buttonPanel.add(viewLiveChart);
+		buttonPanel.add(viewStaticChart);
+		buttonPanel.add(addPrediction);
+		buttonPanel.add(backButton);
+		
 		mainPanel.setSize("100%", "100%");
 		mainPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		mainPanel.add(viewLiveChart);
-		mainPanel.add(viewStaticChart);
-		mainPanel.add(addPrediction);
-		mainPanel.add(backButton);
+		mainPanel.add(buttonPanel);
 		mainPanel.add(chartPanel);
 		}
 
@@ -73,7 +78,7 @@ public class MonitoringPage  {
 			public void onClick(ClickEvent event){
 				mainPanel.add(ChartUtilities.addTimer());
 				//Adds chart to chart panel in base page
-				ChartUtilities.getData("testTemp",null,null);
+				ChartUtilities.getData("testTemp",ChartUtilities.stringToDate("01", "01","2016"),new java.sql.Date(System.currentTimeMillis()));
 				};
 			});
 	}

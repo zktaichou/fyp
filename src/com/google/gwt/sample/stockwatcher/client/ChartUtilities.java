@@ -32,7 +32,7 @@ public class ChartUtilities{
  
 public static DialogBox loadingPopup= new DialogBox();
 PopupPanel noDataAvailablePopup = new PopupPanel();
-DialogBox filterPopup = new DialogBox();
+PopupPanel filterPopup = new PopupPanel();
 
 ListBox startMonthListBox;
 ListBox startYearListBox;
@@ -59,10 +59,9 @@ String startDay;
 String endDay;
 String getTimeFormat;
 
-static Timer timer = new Timer() {
+static Timer loadingTimer = new Timer() {
 	  public void run() {
-		loadingPopup.clear();
-		loadingPopup.add(new HTML("Getting data....." + Integer.toString(timerCount) + " seconds has elapsed"));
+		loadingPopup.setPopupPosition(720,512);
 		timerCount++;
 	  }
 };
@@ -75,35 +74,45 @@ HorizontalPanel loadingPopupPanel = new HorizontalPanel();
 
 static final DateTimeFormat dateTimeFormat = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss");
 
-static long getTime(String date) {  
+static long getTime(String date) {
     return dateTimeFormat.parse(date).getTime();  
 }  
 
 public static final GreetingServiceAsync greetingService = GWT.create(GreetingService.class);
 
 public static DialogBox addTimer(){
-
 	timerCount = 0;
-	timer.scheduleRepeating(1000);
+	loadingTimer.scheduleRepeating(1000);
+	
+	Anchor pic = new Anchor(" ");
+	pic.setHTML(Images.getImage(Images.LOADING2, 20));
+
+	HorizontalPanel loadingPanel = new HorizontalPanel();
+	loadingPanel.setSpacing(5);
+	loadingPanel.add(pic);
+	loadingPanel.add(new HTML("Loading data..."));
+
+	loadingPopup.clear();
+	loadingPopup.add(loadingPanel);
 	return loadingPopup;
 }
 
 	public static void hideTimer(){
+		timerCount = 0;
 		loadingPopup.removeFromParent();
-		timer.cancel();
+		loadingTimer.cancel();
 }
 	//Object returned here --------------vvvvv
 	public static void getData(String sn, java.sql.Date sd, java.sql.Date ed){
 		greetingService.greetServer(sn,sd,ed, new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
-				Window.alert("Data unreachable");
+				Window.alert("Data request failed");
 			}
 			
 			//Remember to use Object[] input to get the rest of the information for chart display
 			public void onSuccess(String[][] result) {
 				Number [][] data = formatData(result);
-				//lastRequestTime=data[0][0];
-				BasePage.panel.add(createChart(data,"My Chart yayayayaya"));
+				BasePage.panel.add(createChart(data,"Chart with live temperature updates"));
 				//BasePage.panel.add(createFlexTable(result));
 				
 			}
@@ -113,15 +122,16 @@ public static DialogBox addTimer(){
 	public static void getAppendData(final Series s, String sn, java.sql.Date sd, java.sql.Date ed){
 		greetingService.greetServer(sn,sd,ed, new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
-				Window.alert("Data unreachable");
+				//too bad
 			}
 			
 			//Remember to use Object[] input to get the rest of the information for chart display
 			public void onSuccess(String[][] result) {
+				
 				Number [][] data = formatData(result);
 				for(int i=0;i<data.length;i++)
 				{
-					s.addPoint(data[i][0],data[i][1],true, true, true);
+					s.addPoint(data[i][0],data[i][1], true, true, true);
 				}
 			}
 		});
@@ -144,29 +154,28 @@ public static DialogBox addTimer(){
 		
 		StockChart chart = new StockChart();
 		chart
-		.setType(Series.Type.LINE)  
+		.setType(Series.Type.SPLINE)  
         .setMarginRight(10)  
-        .setMarginLeft(10)  
+        .setBarPlotOptions(new BarPlotOptions()  
+                .setDataLabels(new DataLabels()  
+                    .setEnabled(true)  
+                )  
+            )
         .setChartTitleText(title)
 	    .setLegend(new Legend().setEnabled(false))  
-	    .setCredits(new Credits().setEnabled(false))  
-//	    .setToolTip(new ToolTip()  
-//	        .setFormatter(new ToolTipFormatter() {  
-//	             public String format(ToolTipData toolTipData) {  
-//	                 return "<b>" + toolTipData.getSeriesName() + "</b><br/>" +  
-//	                     DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss")  
-//	                         .format(new Date(toolTipData.getXAsLong())) + "<br/>" +  
-//	                     NumberFormat.getFormat("0.00").format(toolTipData.getYAsDouble());  
-//	             }  
-//	        })  
-//	    )
-	    ;  
+	    .setCredits(new Credits().setEnabled(false))
+	    .setSplinePlotOptions(new SplinePlotOptions()  
+                .setMarker(new Marker()  
+                    .setEnabled(true).setRadius(3)  
+                )  
+        )
+	    ;
 		
-		//chart.getXAxis()  
-        //.setType(Axis.Type.DATE_TIME)  
-        //.setTickPixelInterval(150);  
- 
-    chart.getYAxis()  
+		chart.getXAxis().setDateTimeLabelFormats(
+				new DateTimeLabelFormats()
+				    .setSecond("%l:%M:%S %p"));
+		
+		chart.getYAxis()  
         .setAxisTitleText("Value")  
         .setPlotLines(  
             chart.getYAxis().createPlotLine()  
@@ -189,18 +198,23 @@ public static DialogBox addTimer(){
             @Override  
             public void run() {
             	long currTime=System.currentTimeMillis();
-            	Window.alert(String.valueOf(currTime));
-            	//getAppendData(series,"testTemp",lastRequestTime,new java.sql.Date(currTime));
-                lastRequestTime=new java.sql.Date(currTime); 
+            	getAppendData(series,"testTemp",lastRequestTime,new java.sql.Date(currTime));
+                lastRequestTime=new java.sql.Date(currTime+10); 
             }  
         };
-        tempTimer.scheduleRepeating(10000);  
+        tempTimer.scheduleRepeating(2000);  
 	    
+        chart.setSize(Window.getClientWidth()*2/3, Window.getClientHeight()*2/3);
 	    
 		return chart;
 	}
 	
-public static Chart realTimeUpdatesChart() {  
+	public static java.sql.Date stringToDate(String day, String month, String year){
+		String stringDate = year+"-"+month+"-"+day+" 00:00:00";
+		return new java.sql.Date(dateTimeFormat.parse(stringDate).getTime());
+	}
+	
+    public static Chart realTimeUpdatesChart() {  
 
 	hideTimer();
 	
@@ -755,7 +769,7 @@ private void clearWidgets(DialogBox panel){
 
 private void clearAllPanels(){
 
-	clearWidgets(filterPopup);
+//	clearWidgets(filterPopup);
 
 	//Hide all components that are not shared between pages
 //	separator.setVisible(false);

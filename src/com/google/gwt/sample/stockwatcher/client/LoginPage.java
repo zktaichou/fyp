@@ -6,6 +6,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
@@ -29,6 +30,7 @@ public class LoginPage  {
 	Anchor forgotPassword = new Anchor("Forgot password");
 	Anchor makeNewAccount = new Anchor("Request new account");
 	Button loginButton = new Button("Login");
+	
 	public static final GreetingServiceAsync greetingService = GWT.create(GreetingService.class);
 
 	public LoginPage(){
@@ -73,6 +75,8 @@ public class LoginPage  {
 			});
 	}
 	
+	
+	
 	class MyHandler implements ClickHandler, KeyUpHandler {
 		
 		public void onClick(ClickEvent event) {
@@ -100,7 +104,7 @@ public class LoginPage  {
 					}
 					else
 					{
-						Window.alert("No such account exists");
+						Window.alert("No such username/password combination found");
 					}
 				}
 			});

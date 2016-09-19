@@ -14,6 +14,8 @@ public class BasePage implements EntryPoint {
 		panel.setSize("100%", "100%");
 		panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		panel.add(LoginPage.start());
+		panel.add(ChartUtilities.addTimer());
+		ChartUtilities.hideTimer();
 	}
 	
 }
