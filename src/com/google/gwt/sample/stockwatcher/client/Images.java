@@ -12,6 +12,8 @@ public class Images{
 	public static final String SAMPLE_3 = "images/sample3.png";
 	public static final String LOADING = "images/loading.gif";
 	public static final String LOADING2 = "images/loading2.gif";
+	public static final String ON = "images/on.png";
+	public static final String OFF = "images/off.png";
 	
 	// Function to customize image width, height and image alignment
 	public static String getImage(String _path, int _width_px, int _height_px) {

@@ -35,6 +35,7 @@ public class LoginPage  {
 
 	public LoginPage(){
 		setHandlers();
+		getSiteList();
 		
 		linksPanel.add(forgotPassword);
 		linksPanel.add(makeNewAccount);
@@ -54,6 +55,23 @@ public class LoginPage  {
 	public static VerticalPanel start(){
 		LoginPage temp = new LoginPage();
 		return temp.mainPanel;
+	}
+	
+	public void getSiteList(){
+		
+		ChartUtilities.request.getSiteList(new AsyncCallback<String[][]>() {
+			public void onFailure(Throwable caught) {
+				Window.alert("Unable to get site list");
+			}
+			
+			//Remember to use Object[] input to get the rest of the information for chart display
+			public void onSuccess(String[][] result) {
+				for(int i=0; i<result.length;i++)
+				{
+				ControlPage.siteLB.addItem(result[i][0],result[i][1]);
+				}
+			}
+		});
 	}
 	
 	public void setHandlers(){

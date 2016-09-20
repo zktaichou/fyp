@@ -28,7 +28,7 @@ public class SensorPage  {
 	public void setHandlers(){
 		backButton.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
-				Pages.enterSchedulePage();
+				Pages.enterControlPage();
 				};
 			});
 		pic.addClickHandler(new ClickHandler(){

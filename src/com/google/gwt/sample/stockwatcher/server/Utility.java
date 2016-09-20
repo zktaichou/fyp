@@ -17,12 +17,16 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.sample.stockwatcher.client.GreetingService;
+import com.google.gwt.sample.stockwatcher.client.GreetingServiceAsync;
+
 /**
  * The server-side implementation of the RPC service.
  */
 @SuppressWarnings("serial")
 public class Utility{
-	
+
 	public static String hashSHA1CharAry (String c) {
     	try {
     		MessageDigest md=MessageDigest.getInstance("SHA-1");
@@ -74,12 +78,17 @@ public class Utility{
 	public static String[][] DataToString(ArrayList<Object []> input){
 		try {
 			DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-			String [][] data = new String[input.size()][2];
+			String [][] data = new String[input.size()][input.get(0).length];
 
 			for(int i=0;i<input.size();i++)
 			{
-		    	data[i][0]=df.format(((LocalDateTime)input.get(i)[0]).plusHours(8));
-		    	data[i][1]=input.get(i)[1].toString();
+				for (int i2=0;i2<input.get(i).length;i2++) {
+					if (input.get(i)[i2] instanceof LocalDateTime) {
+				    	data[i][i2]=df.format(((LocalDateTime)input.get(i)[i2]).plusHours(8));
+					} else {
+				    	data[i][i2]=input.get(i)[i2].toString();
+					}
+				}
 			}
 			
 			return data;

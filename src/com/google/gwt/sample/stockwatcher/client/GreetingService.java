@@ -12,4 +12,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface GreetingService extends RemoteService {
 	String [][] greetServer(String sn, Date sd, Date ed) throws IllegalArgumentException;
 	boolean userLogin(String username, String password) throws IllegalArgumentException;
+	String[][] getSiteList() throws IllegalArgumentException;
+	String[][] getSiteControllerList(String siteName) throws IllegalArgumentException;
 }

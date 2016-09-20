@@ -13,14 +13,14 @@ public class MainMenuPage{
 	VerticalPanel mainPanel = new VerticalPanel();
 	HorizontalPanel selectionPanel = new HorizontalPanel();
 	Button monitorButton = new Button("Monitoring Page");
-	Button scheduleButton = new Button("Schedule Page");
+	Button controlButton = new Button("Schedule Page");
 	Button logoutButton = new Button("Logout");
 	String selectTitle = "<h1>Please select the page that you want to enter</h1>";
 	
 	public MainMenuPage(){
 		setHandlers();
 		selectionPanel.add(monitorButton);
-		selectionPanel.add(scheduleButton);
+		selectionPanel.add(controlButton);
 		selectionPanel.setSpacing(10);
 		
 		mainPanel.setSize("100%", "100%");
@@ -41,9 +41,9 @@ public class MainMenuPage{
 				Pages.enterMonitoringPage();
 				};
 			});
-		scheduleButton.addClickHandler(new ClickHandler(){
+		controlButton.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
-				Pages.enterSchedulePage();
+				Pages.enterControlPage();
 				};
 			});
 		logoutButton.addClickHandler(new ClickHandler(){

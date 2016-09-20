@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import com.google.gwt.sample.stockwatcher.client.GreetingService;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -76,6 +77,56 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return data.equals("ACTIVATED");
 		} catch (Exception e) {return false;}
 	}
-
+	
+	public String[][] getSiteList() throws IllegalArgumentException {
+		try {
+			Socket sc=new Socket("10.100.2.56",40001);
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("3");
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			@SuppressWarnings("unchecked")
+			ArrayList<Object []> data=Utility.decryptData(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return Utility.DataToString(data);
+		} catch (Exception e) {return null;}
+	}
+	
+	public String[][] getSiteControllerList(String siteName) throws IllegalArgumentException {
+		try {
+			Socket sc=new Socket("10.100.2.56",40001);
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("4");
+			toSend.add(siteName);
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			@SuppressWarnings("unchecked")
+			ArrayList<Object []> data=Utility.decryptData(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return Utility.DataToString(data);
+		} catch (Exception e) {return null;}
+	}
 	
 }

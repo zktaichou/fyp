@@ -1,6 +1,8 @@
 package com.google.gwt.sample.stockwatcher.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -14,8 +16,5 @@ public class BasePage implements EntryPoint {
 		panel.setSize("100%", "100%");
 		panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		panel.add(LoginPage.start());
-		panel.add(ChartUtilities.addTimer());
-		ChartUtilities.hideTimer();
 	}
-	
 }

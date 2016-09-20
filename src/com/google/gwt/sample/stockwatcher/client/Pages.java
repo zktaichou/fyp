@@ -2,11 +2,6 @@ package com.google.gwt.sample.stockwatcher.client;
 
 public class Pages{
 	
-	public static void enterWIPPage(){
-		BasePage.panel.clear();
-		BasePage.panel.add(WIP.start());
-	}
-	
 	public static void enterLoginPage(){
 		BasePage.panel.clear();
 		BasePage.panel.add(LoginPage.start());
@@ -22,9 +17,9 @@ public class Pages{
 		BasePage.panel.add(MonitoringPage.start());
 	}
 
-	public static void enterSchedulePage(){
+	public static void enterControlPage(){
 		BasePage.panel.clear();
-		BasePage.panel.add(SchedulePage.start());
+		BasePage.panel.add(ControlPage.start());
 	}
 	
 	public static void enterSensorPage(String ImageURL){
