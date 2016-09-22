@@ -1,12 +1,7 @@
 package com.google.gwt.sample.stockwatcher.client;
 
 import com.google.gwt.i18n.client.*;
-import com.google.gwt.sample.stockwatcher.server.Utility;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
@@ -17,11 +12,6 @@ import org.moxieapps.gwt.highcharts.client.plotOptions.*;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.http.client.Request;
-import com.google.gwt.http.client.RequestBuilder;
-import com.google.gwt.http.client.RequestCallback;
-import com.google.gwt.http.client.RequestException;
-import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -36,8 +26,6 @@ import com.google.gwt.user.client.ui.*;
 
 public class ChartUtilities{
 
-public static final GreetingServiceAsync request = GWT.create(GreetingService.class);
-public static DialogBox loadingPopup= new DialogBox();
 PopupPanel noDataAvailablePopup = new PopupPanel();
 PopupPanel filterPopup = new PopupPanel();
 
@@ -66,18 +54,12 @@ String startDay;
 String endDay;
 String getTimeFormat;
 
-static Timer loadingTimer = new Timer() {
-	  public void run() {
-		loadingPopup.setPopupPosition(720,512);
-		timerCount++;
-	  }
-};
 
-static int timerCount=0;
 int latestRequestID, showDetailsLatestRequestID;
 
 HorizontalPanel titlePanel = new HorizontalPanel();
 HorizontalPanel loadingPopupPanel = new HorizontalPanel();
+static final HorizontalPanel chartPanel = new HorizontalPanel();
 
 static final DateTimeFormat dateTimeFormat = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -86,49 +68,40 @@ static long getTime(String date) {
 }  
 
 
-public static DialogBox addTimer(){
-	timerCount = 0;
-	loadingTimer.scheduleRepeating(1000);
-	
-	Anchor pic = new Anchor(" ");
-	pic.setHTML(Images.getImage(Images.LOADING2, 20));
 
-	HorizontalPanel loadingPanel = new HorizontalPanel();
-	loadingPanel.setSpacing(5);
-	loadingPanel.add(pic);
-	loadingPanel.add(new HTML("Loading data..."));
-
-	loadingPopup.clear();
-	loadingPopup.add(loadingPanel);
-	return loadingPopup;
-}
-
-	public static void hideTimer(){
-		timerCount = 0;
-		loadingPopup.removeFromParent();
-		loadingTimer.cancel();
-}
 	//Object returned here --------------vvvvv
-	public static void getData(String sn, java.sql.Date sd, java.sql.Date ed){
-		request.greetServer(sn,sd,ed, new AsyncCallback<String[][]>() {
+	public static void getData(String sn, final java.sql.Date sd, java.sql.Date ed){
+		Data.latestRequestID++;
+		final int currRequestID=Data.latestRequestID;
+		chartPanel.clear();
+		if(!chartPanel.isAttached())
+		BasePage.panel.add(chartPanel);
+		
+		Window.alert("Sending request: "+sd.toString()+" end date: "+ed.toString());
+		
+		Utility.newRequestObj().greetServer(sn,sd,ed, new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
 				Window.alert("Data request failed");
 			}
 			
 			//Remember to use Object[] input to get the rest of the information for chart display
 			public void onSuccess(String[][] result) {
+				Window.alert(result[0][0]);
+				if(currRequestID==Data.latestRequestID)
+				{
 				Number [][] data = formatData(result);
-				BasePage.panel.add(createChart(data,"Chart with live temperature updates"));
+				chartPanel.add(createChart(data,"Chart with live temperature updates"));
 				//BasePage.panel.add(createFlexTable(result));
-				
+				}
 			}
 		});
 	}
 	
 	public static void getAppendData(final Series s, String sn, java.sql.Date sd, java.sql.Date ed){
-		request.greetServer(sn,sd,ed, new AsyncCallback<String[][]>() {
+		
+		Utility.newRequestObj().greetServer(sn,sd,ed, new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
-				//too bad
+				Window.alert("Data append fail");
 			}
 			
 			//Remember to use Object[] input to get the rest of the information for chart display
@@ -156,9 +129,9 @@ public static DialogBox addTimer(){
 	
 	public static StockChart createChart(Number[][] data, String title){
 		
-		ChartUtilities.hideTimer();
+		Utility.hideTimer();
 		
-		StockChart chart = new StockChart();
+		final StockChart chart = new StockChart();
 		chart
 		.setType(Series.Type.SPLINE)  
         .setMarginRight(10)  
@@ -199,17 +172,23 @@ public static DialogBox addTimer(){
 	    
 		}
 	    
-	    Timer tempTimer = new Timer() {
+	    final Timer tempTimer = new Timer() {
 	    	java.sql.Date lastRequestTime = new java.sql.Date(System.currentTimeMillis());
             @Override  
             public void run() {
-            	long currTime=System.currentTimeMillis();
-            	getAppendData(series,"testTemp",lastRequestTime,new java.sql.Date(currTime));
-                lastRequestTime=new java.sql.Date(currTime+10); 
+            	if (chart.isAttached()) {
+            		if (chart.isRendered()) {
+	                	long currTime=System.currentTimeMillis();
+	                	getAppendData(series,"testTemp",lastRequestTime,new java.sql.Date(currTime));
+	                    lastRequestTime=new java.sql.Date(currTime+10);
+            		}
+                    schedule(2000);
+            	}
+
             }  
         };
-        tempTimer.scheduleRepeating(2000);  
-	    
+        tempTimer.schedule(0);
+        
         chart.setSize(Window.getClientWidth()*2/3, Window.getClientHeight()*2/3);
 	    
 		return chart;
@@ -220,9 +199,7 @@ public static DialogBox addTimer(){
 		return new java.sql.Date(dateTimeFormat.parse(stringDate).getTime());
 	}
 	
-    public static Chart realTimeUpdatesChart() {  
-
-	hideTimer();
+    public static Chart realTimeUpdatesChart() {
 	
     final Chart chart = new Chart()  
         .setType(Series.Type.SPLINE)  
@@ -256,7 +233,7 @@ public static DialogBox addTimer(){
  
     chart.getYAxis()  
         .setAxisTitleText("Value")  
-        .setPlotLines(  
+        .setPlotLines(   
             chart.getYAxis().createPlotLine()  
                 .setValue(0)  
                 .setWidth(1)  

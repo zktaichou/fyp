@@ -12,4 +12,5 @@ public interface GreetingServiceAsync {
 	void userLogin(String username, String password, AsyncCallback<Boolean> callback) throws IllegalArgumentException;
 	void getSiteList(AsyncCallback<String[][]> callback) throws IllegalArgumentException;
 	void getSiteControllerList(String siteName, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
+	void getControllerSensorList(String controllerName, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
 }

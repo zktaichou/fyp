@@ -14,4 +14,5 @@ public interface GreetingService extends RemoteService {
 	boolean userLogin(String username, String password) throws IllegalArgumentException;
 	String[][] getSiteList() throws IllegalArgumentException;
 	String[][] getSiteControllerList(String siteName) throws IllegalArgumentException;
+	String[][] getControllerSensorList(String controllerName) throws IllegalArgumentException;
 }

@@ -13,7 +13,7 @@ public class MainMenuPage{
 	VerticalPanel mainPanel = new VerticalPanel();
 	HorizontalPanel selectionPanel = new HorizontalPanel();
 	Button monitorButton = new Button("Monitoring Page");
-	Button controlButton = new Button("Schedule Page");
+	Button controlButton = new Button("Control Page");
 	Button logoutButton = new Button("Logout");
 	String selectTitle = "<h1>Please select the page that you want to enter</h1>";
 	

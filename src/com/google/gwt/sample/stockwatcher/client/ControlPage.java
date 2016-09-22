@@ -76,7 +76,7 @@ public class ControlPage  {
 					int newW=(int)(width*resizeFactor); int newH=(int)(height*resizeFactor);
 					sitePic.setSize(newW+"px",newH+"px");	
 					
-					ChartUtilities.request.getSiteControllerList(siteLB.getSelectedItemText(), new AsyncCallback<String[][]>() {
+					Utility.newRequestObj().getSiteControllerList(siteLB.getSelectedItemText(), new AsyncCallback<String[][]>() {
 						public void onFailure(Throwable caught) {
 							Window.alert("Unable to get site list");
 						}

@@ -129,4 +129,30 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 		} catch (Exception e) {return null;}
 	}
 	
+	public String[][] getControllerSensorList(String controllerName) throws IllegalArgumentException {
+		try {
+			Socket sc=new Socket("10.100.2.56",40001);
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("5");
+			toSend.add(controllerName);
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			@SuppressWarnings("unchecked")
+			ArrayList<Object []> data=Utility.decryptData(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return Utility.DataToString(data);
+		} catch (Exception e) {return null;}
+	}
+	
 }

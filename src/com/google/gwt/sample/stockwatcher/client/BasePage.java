@@ -12,6 +12,8 @@ public class BasePage implements EntryPoint {
 	static VerticalPanel panel = new VerticalPanel();
 	
 	public void onModuleLoad() {
+		ResourcePreload.getSiteList();
+		
 		RootPanel.get("mainContainer").add(panel);
 		panel.setSize("100%", "100%");
 		panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
