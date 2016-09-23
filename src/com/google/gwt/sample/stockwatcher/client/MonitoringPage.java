@@ -24,6 +24,7 @@ import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
@@ -68,6 +69,18 @@ public class MonitoringPage  {
 		mainPanel.add(buttonPanel);
 		mainPanel.add(selectionPanel);
 		mainPanel.add(chartPanel);
+		
+		
+//		mainPanel.addNorth(viewStaticChart,50);
+//		mainPanel.addNorth(addPrediction,50);
+//		mainPanel.addNorth(backButton,50);
+//		mainPanel.addEast(siteListBox,50);
+//		mainPanel.addEast(siteControllerListBox,50);
+//		mainPanel.addEast(controllerSensorListBox,50);
+//		mainPanel.addEast(goButton,50);
+//		mainPanel.add(buttonPanel);
+//		mainPanel.add(selectionPanel);
+//		mainPanel.add(chartPanel);
 		}
 
 	public static VerticalPanel start(){

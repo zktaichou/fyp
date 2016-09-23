@@ -1,17 +1,19 @@
 package com.google.gwt.sample.stockwatcher.server;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.sql.Date;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import javax.crypto.SealedObject;
+
 import com.google.gwt.sample.stockwatcher.client.GreetingService;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -22,8 +24,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 	
 	public String[][] greetServer(String sn, Date sd, Date ed) throws IllegalArgumentException {
 		try {
-			
-			Socket sc=new Socket("10.100.2.56",40001);
+			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
 			ArrayList<Object> toSend=new ArrayList<>();
 			toSend.add("37");
 			toSend.add(sn);
@@ -31,10 +32,12 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			toSend.add(Utility.dateToLocalDateTime(ed));
 			OutputStream os = sc.getOutputStream();
 			ObjectOutputStream oos=new ObjectOutputStream(os);
-			oos.writeObject(Utility.encryptMsg(toSend));
 			
 			InputStream is=sc.getInputStream();
 			ObjectInputStream ois=new ObjectInputStream(is);
+			
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
 			@SuppressWarnings("unchecked")
 			ArrayList<Object []> data=Utility.decryptData(ois);
 			
@@ -46,14 +49,21 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			sc.close();
 			
 			return Utility.DataToString(data);
-		} catch (Exception e) {return null;}
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter("requestLog.txt")));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			
+			return null;}
 	}
 	
 	public boolean userLogin(String username, String password) throws IllegalArgumentException {
 		try {
 			
 			String hashedPassword = Utility.hashSHA1CharAry(password);
-			Socket sc=new Socket("10.100.2.56",40001);
+			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
 			ArrayList<Object> toSend=new ArrayList<>();
 			toSend.add("2");
 			toSend.add(username);
@@ -80,7 +90,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 	
 	public String[][] getSiteList() throws IllegalArgumentException {
 		try {
-			Socket sc=new Socket("10.100.2.56",40001);
+			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
 			ArrayList<Object> toSend=new ArrayList<>();
 			toSend.add("3");
 			OutputStream os = sc.getOutputStream();
@@ -105,7 +115,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 	
 	public String[][] getSiteControllerList(String siteName) throws IllegalArgumentException {
 		try {
-			Socket sc=new Socket("10.100.2.56",40001);
+			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
 			ArrayList<Object> toSend=new ArrayList<>();
 			toSend.add("4");
 			toSend.add(siteName);
@@ -131,7 +141,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 	
 	public String[][] getControllerSensorList(String controllerName) throws IllegalArgumentException {
 		try {
-			Socket sc=new Socket("10.100.2.56",40001);
+			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
 			ArrayList<Object> toSend=new ArrayList<>();
 			toSend.add("5");
 			toSend.add(controllerName);
@@ -153,6 +163,40 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			
 			return Utility.DataToString(data);
 		} catch (Exception e) {return null;}
+	}
+	
+	public int getNewPortNumber() throws IllegalArgumentException {
+		try {
+			Socket sc=new Socket(Utility.serverIP,Utility.portNumber);
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("new port number pls");
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(toSend);
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			@SuppressWarnings("unchecked")
+			int port = (int) ois.readObject();
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return port;
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter("getPortLog.txt")));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			
+		}
+		
+		return 0;
 	}
 	
 }

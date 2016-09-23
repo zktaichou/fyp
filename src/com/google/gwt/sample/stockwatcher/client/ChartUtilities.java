@@ -273,7 +273,7 @@ static long getTime(String date) {
 //	            .setDataLabels(new DataLabels()  
 //	                .setEnabled(true)  
 //	            )  
-//	        )  
+//	        )   
 //	        .setLegend(new Legend()  
 //	            .setEnabled(false)  
 //	        )  
