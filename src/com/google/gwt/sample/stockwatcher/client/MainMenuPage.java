@@ -3,12 +3,13 @@ package com.google.gwt.sample.stockwatcher.client;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class MainMenuPage{
+public class MainMenuPage extends Composite{
 
 	VerticalPanel mainPanel = new VerticalPanel();
 	HorizontalPanel selectionPanel = new HorizontalPanel();
@@ -19,20 +20,21 @@ public class MainMenuPage{
 	
 	public MainMenuPage(){
 		setHandlers();
+		
+		Header.clear();
+		Header header = new Header(selectTitle);
+		BasePage.headerPanel.add(header);
+		
 		selectionPanel.add(monitorButton);
 		selectionPanel.add(controlButton);
 		selectionPanel.setSpacing(10);
 		
 		mainPanel.setSize("100%", "100%");
 		mainPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		mainPanel.add(new HTML(selectTitle));
 		mainPanel.add(selectionPanel);
 		mainPanel.add(logoutButton);
-	}
-	
-	public static VerticalPanel start(){
-		MainMenuPage temp = new MainMenuPage();
-		return temp.mainPanel;
+		
+		initWidget(mainPanel);
 	}
 	
 	public void setHandlers(){

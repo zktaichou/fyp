@@ -1,40 +1,29 @@
 package com.google.gwt.sample.stockwatcher.client;
 
-import com.google.gwt.i18n.client.*;
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 
 import org.moxieapps.gwt.highcharts.client.*;
-import org.moxieapps.gwt.highcharts.client.labels.*;
-import org.moxieapps.gwt.highcharts.client.plotOptions.*;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.http.client.Request;
-import com.google.gwt.http.client.RequestBuilder;
-import com.google.gwt.http.client.RequestCallback;
-import com.google.gwt.http.client.RequestException;
-import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.SplitLayoutPanel;
-import com.google.gwt.user.client.ui.StackLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class MonitoringPage  {
+public class MonitoringPage extends Composite {
 	
 	VerticalPanel mainPanel = new VerticalPanel();
+	VerticalPanel parameterPanel = new VerticalPanel();
+
 	HorizontalPanel chartPanel = new HorizontalPanel();
 	HorizontalPanel buttonPanel = new HorizontalPanel();
 	HorizontalPanel selectionPanel = new HorizontalPanel();
@@ -50,12 +39,18 @@ public class MonitoringPage  {
 	Button addPrediction = new Button("Add Prediction");
 	Button viewLiveChart = new Button("Sample Live Chart");
 	Button viewStaticChart = new Button("View sensor data");
+
+	SplitPanel sp = new SplitPanel();
 	
 	public MonitoringPage(){
-		setHandlers();
-		setWidgetContent();
 		
+		setHandlers();
+//		setWidgetContent();
+		
+		Header.clear();
+			
 		buttonPanel.setSpacing(10);
+		buttonPanel.add(viewLiveChart);
 		buttonPanel.add(viewStaticChart);
 		buttonPanel.add(addPrediction);
 		buttonPanel.add(backButton);
@@ -66,27 +61,19 @@ public class MonitoringPage  {
 		selectionPanel.add(goButton);
 		
 		mainPanel.setSize("100%", "100%");
+		mainPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		mainPanel.add(buttonPanel);
-		mainPanel.add(selectionPanel);
-		mainPanel.add(chartPanel);
-		
-		
-//		mainPanel.addNorth(viewStaticChart,50);
-//		mainPanel.addNorth(addPrediction,50);
-//		mainPanel.addNorth(backButton,50);
-//		mainPanel.addEast(siteListBox,50);
-//		mainPanel.addEast(siteControllerListBox,50);
-//		mainPanel.addEast(controllerSensorListBox,50);
-//		mainPanel.addEast(goButton,50);
-//		mainPanel.add(buttonPanel);
 //		mainPanel.add(selectionPanel);
-//		mainPanel.add(chartPanel);
-		}
+		mainPanel.add(chartPanel);
+		mainPanel.add(new HTML("what happened"));
 
-	public static VerticalPanel start(){
-		MonitoringPage temp = new MonitoringPage();
-		return temp.mainPanel;
-	}
+		parameterPanel.add(new HTML("<h2>Monitoring Menu</h2></br>"));
+		parameterPanel.add(selectionPanel);
+		
+		sp.panel.addWest(parameterPanel,140);
+
+		initWidget(mainPanel);
+		}
 	
 	public void setHandlers(){
 		backButton.addClickHandler(new ClickHandler(){

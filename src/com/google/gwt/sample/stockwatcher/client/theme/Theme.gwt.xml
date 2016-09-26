@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+	<stylesheet src="gwt/theme/standard_theme.css" />
+	<stylesheet src="gwt/theme/menu_theme.css" />
+	<stylesheet src="gwt/theme/header_theme.css" />
+	<stylesheet src="gwt/theme/footer_theme.css" />
+</module>

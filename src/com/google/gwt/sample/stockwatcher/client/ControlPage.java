@@ -9,7 +9,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 
-public class ControlPage  {
+public class ControlPage extends Composite {
 	
 	VerticalPanel mainPanel = new VerticalPanel();
 	VerticalPanel photoPanel = new VerticalPanel();
@@ -32,12 +32,9 @@ public class ControlPage  {
 		mainPanel.add(backButton);
 		mainPanel.add(siteLB);
 		mainPanel.add(sitePic);
+		
+		initWidget(mainPanel);
 		}
-
-	public static VerticalPanel start(){
-		ControlPage temp = new ControlPage();
-		return temp.mainPanel;
-	}
 	
 	public void setHandlers(){
 		backButton.addClickHandler(new ClickHandler(){

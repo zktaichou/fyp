@@ -2,6 +2,27 @@
 
 
 /** Example rules used by the template application (remove for your app) */
+body {
+	margin: 0 !important;
+}
+
+#menuContainer, #headerContainer, #contentContainer, #footerContainer {
+	width: 100%;
+	border: none;
+}
+
+#menuContainer, #headerContainer, #contentContainer {
+	position: relative;
+	top: 0px;
+}
+
+#footerContainer {
+	/* Make sure the footer floats at the bottom of the page */
+	position: fixed;
+	bottom: 0px;
+	overflow: auto;
+}
+
 h1 {
   font-size: 2em;
   font-weight: bold;

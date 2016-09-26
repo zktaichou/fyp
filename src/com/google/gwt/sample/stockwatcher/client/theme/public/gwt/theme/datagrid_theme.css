@@ -1,0 +1,39 @@
+.datagrid-cell-text-align-center div {
+	text-align: center;
+}
+
+.datagrid-clickable-cell:hover div {
+	color: #0000FF !important;
+	text-decoration: underline !important;
+}
+
+.datagrid-clickable-cell div {
+	color: #000000;
+	cursor: pointer;
+}
+
+.datagrid-clickable-cell:hover div {
+	color: #0000FF !important;
+	text-decoration: underline !important;
+}
+
+.datagrid-column-word-wrap div {
+	overflow: inherit;
+	text-overflow: inherit;
+	white-space: normal;
+}
+
+.datagrid-column-no-word-wrap div {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* Not to be confused with datagrid components, this is just a background label */
+.datagrid-message-label {
+	width: 100%;
+	text-align: center;
+	border: 0;
+	font-size: 24pt;
+	color: #ccc;
+}

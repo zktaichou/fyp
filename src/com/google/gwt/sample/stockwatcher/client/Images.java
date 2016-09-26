@@ -14,6 +14,8 @@ public class Images{
 	public static final String LOADING2 = "images/loading2.gif";
 	public static final String ON = "images/on.png";
 	public static final String OFF = "images/off.png";
+	public static final String FSKTM_LOGO = "images/fsktm.png";
+	public static final String GEAR_ICON = "images/gear_icon.png";
 	
 	// Function to customize image width, height and image alignment
 	public static String getImage(String _path, int _width_px, int _height_px) {

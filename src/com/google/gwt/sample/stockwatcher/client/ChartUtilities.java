@@ -75,7 +75,7 @@ static long getTime(String date) {
 		final int currRequestID=Data.latestRequestID;
 		chartPanel.clear();
 		if(!chartPanel.isAttached())
-		BasePage.panel.add(chartPanel);
+		BasePage.contentPanel.add(chartPanel);
 		
 		Window.alert("Sending request: "+sd.toString()+" end date: "+ed.toString());
 		

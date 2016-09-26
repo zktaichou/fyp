@@ -1,0 +1,132 @@
+.gwt-NewMainMenuPanel {
+	color: #FFFFFF;
+	background: #000000;
+	vertical-align: middle !important;
+	border-radius: 5px;
+	padding: 0px 15px 0px 15px;
+}
+
+.gwt-NewSubMenuPanel {
+	color: #FFFFFF ;
+	background: #000000;
+	border-radius: 5px;
+}
+
+.gwt-NewMainMenuHeader {
+	color: #FFFFFF;
+	font-family: Verdana;
+	font-weight: bold;
+	font-size: 11pt;
+	text-decoration: none;
+}
+
+.gwt-NewMainMenuLabel {
+	color: #FFFFFF ;
+	font-family: Verdana;
+	font-size: 10pt;
+	text-decoration: none;
+}
+
+.gwt-PopUpPanel {
+	border-width: 0px;
+	color: #FFFFFF;
+	background: #000000;
+	border-radius: 5px;
+}
+
+.gwt-MainMenuPanel {
+	background: #000000 !important;
+	padding: 0px 10px 0px 10px;
+	/* height: 55px; */
+	border: none;
+}
+
+.gwt-MainMenuTitle {
+	padding: 0px 10px 0px 20px;
+	font-size: 12pt;
+	font-family: Verdana;
+	font-weight: bold;
+	color: #FFFFFF;
+	/* text-shadow: grey 0.05em 0.05em 0.05em; */
+}
+
+/* Standard font for all GWT menu items */
+.gwt-MenuItem {
+	font-family: Verdana !important;
+	font-weight: normal !important;
+	color: #FFFFFF !important;
+}
+
+.gwt-MenuBar-horizontal {
+	background: #000000;
+	border: none !important;
+}
+
+.gwt-MenuBar-horizontal .gwt-MenuItem {
+	padding: 0px 15px 0px 15px;
+	vertical-align: middle;
+	height: 30px;
+	font-size: 11pt !important;
+	cursor: pointer;
+}
+
+.gwt-MenuBar-horizontal .gwt-MenuItem-selected {
+	background: #00A9E0;
+	border-radius: 2px;
+}
+
+/* SUBMENUS */
+.gwt-MenuBar-vertical .gwt-MenuItem {
+	padding: 0px 10px 0px 10px;
+	vertical-align: middle;
+	height: 28px;
+	font-size: 10pt !important;
+	cursor: pointer;
+}
+
+.gwt-MenuBar-vertical {
+	background: #111111 !important;
+}
+
+.gwt-MenuBar-vertical .gwt-MenuItem-selected {
+	background: #00A9E0 !important;
+	border-radius: 2px;
+}
+
+/* Menu Separator Styles */
+.gwt-MenuBar-vertical .gwt-MenuItemSeparator {
+	padding: 2px 0px 2px 0px;
+}
+
+.gwt-MenuBar-vertical .gwt-MenuItemSeparator .menuSeparatorInner {
+	border-top: 1px solid #c0c0c0 !important;
+	background: none !important;
+	height: 0px !important;
+}
+
+/* Overwrite Menu Default Background */
+.gwt-MenuBarPopup .menuPopupTopLeft, 
+.gwt-MenuBarPopup .menuPopupTopCenter,
+.gwt-MenuBarPopup .menuPopupTopRight, 
+.gwt-MenuBarPopup .menuPopupMiddleLeft,
+.gwt-MenuBarPopup .menuPopupMiddleCenter, 
+.gwt-MenuBarPopup .menuPopupMiddleRight,
+.gwt-MenuBarPopup .menuPopupBottomLeft, 
+.gwt-MenuBarPopup .menuPopupBottomCenter,
+.gwt-MenuBarPopup .menuPopupBottomRight {
+	background: #111111;
+}
+
+/* Overwrite Menu Outline Size */
+.gwt-MenuBarPopup .menuPopupTopLeftInner, 
+.gwt-MenuBarPopup .menuPopupTopRightInner, 
+.gwt-MenuBarPopup .menuPopupBottomLeftInner,
+.gwt-MenuBarPopup .menuPopupBottomRightInner {
+	width: 5px;
+	height: 5px;
+	overflow: hidden;
+}
+
+.pointer {
+	cursor: pointer !important;
+}

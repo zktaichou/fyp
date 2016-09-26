@@ -3,27 +3,37 @@ package com.google.gwt.sample.stockwatcher.client;
 public class Pages{
 	
 	public static void enterLoginPage(){
-		BasePage.panel.clear();
-		BasePage.panel.add(LoginPage.start());
+		LoginPage loginPage = new LoginPage();
+		
+		BasePage.contentPanel.clear();
+		BasePage.contentPanel.add(loginPage);
 	}
 
 	public static void enterMainMenuPage(){
-		BasePage.panel.clear();
-		BasePage.panel.add(MainMenuPage.start());
+		MainMenuPage mainMenuPage = new MainMenuPage();
+		
+		BasePage.contentPanel.clear();
+		BasePage.contentPanel.add(mainMenuPage);
 	}
 
 	public static void enterMonitoringPage(){
-		BasePage.panel.clear();
-		BasePage.panel.add(MonitoringPage.start());
+		MonitoringPage monitoringPage = new MonitoringPage();
+		
+		BasePage.contentPanel.clear();
+		BasePage.contentPanel.add(monitoringPage);
 	}
 
 	public static void enterControlPage(){
-		BasePage.panel.clear();
-		BasePage.panel.add(ControlPage.start());
+		ControlPage controlPage = new ControlPage();
+		
+		BasePage.contentPanel.clear();
+		BasePage.contentPanel.add(controlPage);
 	}
 	
 	public static void enterSensorPage(String ImageURL){
-		BasePage.panel.clear();
-		BasePage.panel.add(SensorPage.start(ImageURL));
+		SensorPage sensorPage = new SensorPage(ImageURL);
+		
+		BasePage.contentPanel.clear();
+		BasePage.contentPanel.add(sensorPage);
 	}
 }

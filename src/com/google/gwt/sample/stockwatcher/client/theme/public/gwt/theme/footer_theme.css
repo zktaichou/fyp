@@ -1,0 +1,41 @@
+.footer-panel {
+	
+}
+
+.footer-link-panel {
+	/* background: #000000 !important; */
+	margin: 0px 10px 0px 10px;
+	border: none;
+}
+
+.footer-text,
+.footer-link,
+.footer-link-separator {
+	padding: 0px 4px 0px 4px;
+	font-size: 8pt;
+	font-family: Verdana;
+	color: #FFFFFF;
+	text-decoration: none !important;
+}
+
+.a, 
+.footer-text,
+.footer-link, 
+.footer-link:visited, 
+.footer-text:hover,
+.footer-text:visited {
+	color: #FFFFFF !important;
+}
+
+.a,
+.footer-link:hover {
+	color: #00A9E0 !important;
+}
+
+.footer-logo {
+	vertical-align: middle;
+}
+
+.footer-link-separator {
+	color: #375151 !important;
+}

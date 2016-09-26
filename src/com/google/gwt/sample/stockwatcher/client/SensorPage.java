@@ -4,7 +4,7 @@ import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 
-public class SensorPage  {
+public class SensorPage extends Composite{
 	
 	VerticalPanel mainPanel = new VerticalPanel();
 	Button backButton = new Button("Back");
@@ -18,12 +18,9 @@ public class SensorPage  {
 		mainPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		mainPanel.add(backButton);
 		mainPanel.add(pic);
+		
+		initWidget(mainPanel);
 		}
-
-	public static VerticalPanel start(String ImageURL){
-		SensorPage temp = new SensorPage(ImageURL);
-		return temp.mainPanel;
-	}
 	
 	public void setHandlers(){
 		backButton.addClickHandler(new ClickHandler(){

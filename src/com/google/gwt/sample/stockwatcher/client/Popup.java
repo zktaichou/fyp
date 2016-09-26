@@ -38,7 +38,7 @@ public class Popup{
 		
 		if(!passwordDB.isAttached())
 		{
-		BasePage.panel.add(passwordDB);
+		BasePage.contentPanel.add(passwordDB);
 		}
 		
 		if(!passwordDB.isVisible())
@@ -74,19 +74,19 @@ public class Popup{
 		
 		cancel.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
-				newAccountDB.setVisible(false);
+				newAccountDB.setVisible(!newAccountDB.isVisible());
 				};
 			});
 		
 		accept.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
-				newAccountDB.setVisible(false);
+				newAccountDB.setVisible(!newAccountDB.isVisible());
 				};
 			});
 		
 		if(!newAccountDB.isAttached())
 		{
-		BasePage.panel.add(newAccountDB);
+		BasePage.contentPanel.add(newAccountDB);
 		}
 		
 		if(!newAccountDB.isVisible())
