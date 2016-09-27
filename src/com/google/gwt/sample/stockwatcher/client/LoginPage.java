@@ -6,6 +6,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -19,6 +21,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class LoginPage extends Composite { 
 	
 	VerticalPanel mainPanel = new VerticalPanel();
+	VerticalPanel msgPanel = new VerticalPanel();
 	HorizontalPanel linksPanel = new HorizontalPanel();
 	TextBox usernameTB = new TextBox();
 	PasswordTextBox passwordTB = new PasswordTextBox();
@@ -33,12 +36,15 @@ public class LoginPage extends Composite {
 	public LoginPage(){
 		setHandlers();
 		
+		msgPanel.add(new HTML(Messages.WELCOME));
+		
 		linksPanel.add(forgotPassword);
 		linksPanel.add(makeNewAccount);
 		linksPanel.setSpacing(5);
 		
 		mainPanel.setSize("100%", "100%");
 		mainPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		mainPanel.add(msgPanel);
 		mainPanel.add(new HTML(enterUsernameMsg));
 		mainPanel.add(usernameTB);
 		mainPanel.add(new HTML(enterPasswordMsg));
@@ -85,25 +91,24 @@ public class LoginPage extends Composite {
 		}
 
 		public void checkLoginInfo(){
-			Pages.enterMainMenuPage();
-			Menu.start();
-//			Utility.newRequestObj().userLogin(usernameTB.getText(),passwordTB.getText(), new AsyncCallback<Boolean>() {
-//				public void onFailure(Throwable caught) {
-//					Window.alert("Can't connect to database");
-//				}
-//				
-//				//Remember to use Object[] input to get the rest of the information for chart display
-//				public void onSuccess(Boolean result) {
-//					if(result)
-//					{
-//						Pages.enterMainMenuPage();
-//					}
-//					else
-//					{
-//						Window.alert("No such username/password combination found");
-//					}
-//				}
-//			});
+			Utility.newRequestObj().userLogin(usernameTB.getText(),passwordTB.getText(), new AsyncCallback<Boolean>() {
+				public void onFailure(Throwable caught) {
+					Window.alert("Can't connect to database");
+				}
+				
+				//Remember to use Object[] input to get the rest of the information for chart display
+				public void onSuccess(Boolean result) {
+					if(result)
+					{
+						Pages.enterMainMenuPage();
+						Menu.start();
+					}
+					else
+					{
+						Window.alert("No such username/password combination found");
+					}
+				}
+			});
 		}
 		
 	}

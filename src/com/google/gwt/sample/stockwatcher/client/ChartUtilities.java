@@ -77,8 +77,6 @@ static long getTime(String date) {
 		if(!chartPanel.isAttached())
 		BasePage.contentPanel.add(chartPanel);
 		
-		Window.alert("Sending request: "+sd.toString()+" end date: "+ed.toString());
-		
 		Utility.newRequestObj().greetServer(sn,sd,ed, new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
 				Window.alert("Data request failed");
@@ -86,7 +84,6 @@ static long getTime(String date) {
 			
 			//Remember to use Object[] input to get the rest of the information for chart display
 			public void onSuccess(String[][] result) {
-				Window.alert(result[0][0]);
 				if(currRequestID==Data.latestRequestID)
 				{
 				Number [][] data = formatData(result);

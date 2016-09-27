@@ -12,35 +12,40 @@ import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class BasePage implements EntryPoint {
-	static VerticalPanel menuPanel = new VerticalPanel();
-	static VerticalPanel headerPanel = new VerticalPanel();
-	static VerticalPanel contentPanel = new VerticalPanel();
-	static VerticalPanel footerPanel = new VerticalPanel();
+	static VerticalPanel menuContainer = new VerticalPanel();
+	static VerticalPanel headerContainer = new VerticalPanel();
+	static VerticalPanel contentContainer = new VerticalPanel();
+	static VerticalPanel footerContainer = new VerticalPanel();
+	static ContentPanel contentPanel = new ContentPanel();
+	
+	static int contentPanelHeight = Window.getClientHeight()-Menu.HEIGHT-Footer.HEIGHT;
 	
 	public void onModuleLoad() {
 		ResourcePreload.getSiteList();
 		
-		RootPanel.get("menuContainer").add(menuPanel);
-		RootPanel.get("headerContainer").add(headerPanel);
-		RootPanel.get("contentContainer").add(contentPanel);
-		RootPanel.get("footerContainer").add(footerPanel);
+		RootPanel.get("menuContainer").add(menuContainer);
+		RootPanel.get("headerContainer").add(headerContainer);
+		RootPanel.get("contentContainer").add(contentContainer);
+		RootPanel.get("footerContainer").add(footerContainer);
 
 		Menu menu = new Menu();
-		menuPanel.add(menu);
-		menuPanel.setWidth("100%");
+		menuContainer.add(menu);
+		menuContainer.setWidth("100%");
 		
-		Header header = new Header();
-		headerPanel.add(header);
-		headerPanel.setWidth("100%");
-		headerPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+//		Header header = new Header();
+//		headerContainer.add(header);
+//		headerContainer.setWidth("100%");
+//		headerContainer.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
 		LoginPage loginPage = new LoginPage();
+		
 		contentPanel.add(loginPage);
-		contentPanel.setSize("100%", "100%");
-		contentPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		contentContainer.add(contentPanel);
+		contentContainer.setSize("100%", "100%");
+		contentContainer.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		
 		Footer footer = new Footer();
-		footerPanel.add(footer);
-		footerPanel.setWidth("100%");
+		footerContainer.add(footer);
+		footerContainer.setWidth("100%");
 	}
 }

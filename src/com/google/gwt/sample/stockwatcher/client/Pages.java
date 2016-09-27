@@ -23,17 +23,10 @@ public class Pages{
 		BasePage.contentPanel.add(monitoringPage);
 	}
 
-	public static void enterControlPage(){
-		ControlPage controlPage = new ControlPage();
+	public static void enterSitePage(){
+		SitePage sitePage = new SitePage();
 		
 		BasePage.contentPanel.clear();
-		BasePage.contentPanel.add(controlPage);
-	}
-	
-	public static void enterSensorPage(String ImageURL){
-		SensorPage sensorPage = new SensorPage(ImageURL);
-		
-		BasePage.contentPanel.clear();
-		BasePage.contentPanel.add(sensorPage);
+		BasePage.contentPanel.add(sitePage);
 	}
 }

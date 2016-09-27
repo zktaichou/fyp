@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.moxieapps.gwt.highcharts.client.*;
 
+import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -14,20 +15,20 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class MonitoringPage extends Composite {
-	
+
+	ContentPanel contentPanel = new ContentPanel();
 	VerticalPanel mainPanel = new VerticalPanel();
 	VerticalPanel parameterPanel = new VerticalPanel();
-
+	
 	HorizontalPanel chartPanel = new HorizontalPanel();
 	HorizontalPanel buttonPanel = new HorizontalPanel();
 	HorizontalPanel selectionPanel = new HorizontalPanel();
-	
+
 	ListBox siteListBox = new ListBox();
 	ListBox siteControllerListBox = new ListBox();
 	ListBox controllerSensorListBox = new ListBox();
@@ -39,40 +40,34 @@ public class MonitoringPage extends Composite {
 	Button addPrediction = new Button("Add Prediction");
 	Button viewLiveChart = new Button("Sample Live Chart");
 	Button viewStaticChart = new Button("View sensor data");
-
-	SplitPanel sp = new SplitPanel();
 	
 	public MonitoringPage(){
 		
 		setHandlers();
-//		setWidgetContent();
+		setWidgetContent();
 		
-		Header.clear();
-			
-		buttonPanel.setSpacing(10);
-		buttonPanel.add(viewLiveChart);
-		buttonPanel.add(viewStaticChart);
-		buttonPanel.add(addPrediction);
-		buttonPanel.add(backButton);
-		
+		VerticalPanel selectionPanel = new VerticalPanel();
+
+		selectionPanel.add(new HTML("<h2>Selection Menu</h2></br>"));
+		selectionPanel.add(new HTML("Please select site(s):"));
 		selectionPanel.add(siteListBox);
+		selectionPanel.add(new HTML("Please select controller(s):"));
 		selectionPanel.add(siteControllerListBox);
+		selectionPanel.add(new HTML("Please select sensor(s):"));
 		selectionPanel.add(controllerSensorListBox);
 		selectionPanel.add(goButton);
+		selectionPanel.setSpacing(10);
 		
-		mainPanel.setSize("100%", "100%");
-		mainPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		mainPanel.add(buttonPanel);
-//		mainPanel.add(selectionPanel);
-		mainPanel.add(chartPanel);
-		mainPanel.add(new HTML("what happened"));
-
-		parameterPanel.add(new HTML("<h2>Monitoring Menu</h2></br>"));
+		parameterPanel.clear();
 		parameterPanel.add(selectionPanel);
+		parameterPanel.setHeight("100%");
+		parameterPanel.setStyleName("parameterPanel");
 		
-		sp.panel.addWest(parameterPanel,140);
-
-		initWidget(mainPanel);
+		contentPanel.clear();
+		contentPanel.addLeft(parameterPanel);
+		contentPanel.add(chartPanel);
+		
+		initWidget(contentPanel);
 		}
 	
 	public void setHandlers(){
@@ -88,14 +83,14 @@ public class MonitoringPage extends Composite {
 			});
 		viewLiveChart.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
-				mainPanel.add(Utility.addTimer());
+				chartPanel.add(Utility.addTimer());
 				chartPanel.clear();
 				chartPanel.add(ChartUtilities.realTimeUpdatesChart());
 				};
 			});
 		viewStaticChart.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
-				mainPanel.add(Utility.addTimer());
+				chartPanel.add(Utility.addTimer());
 				//Adds chart to chart panel in base page
 				ChartUtilities.getData("testTemp",ChartUtilities.stringToDate("01", "01","2016"),new java.sql.Date(System.currentTimeMillis()));
 				};
@@ -103,6 +98,7 @@ public class MonitoringPage extends Composite {
 		siteListBox.addChangeHandler(new ChangeHandler() {
 		      public void onChange(ChangeEvent event) {
 		          showControllers(siteControllerListBox, siteListBox.getSelectedItemText());
+		          showSensors(controllerSensorListBox, siteControllerListBox.getSelectedItemText());
 		        }
 		      });
 		siteControllerListBox.addChangeHandler(new ChangeHandler() {
@@ -112,7 +108,7 @@ public class MonitoringPage extends Composite {
 		      });
 		goButton.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
-				mainPanel.add(Utility.addTimer());
+				chartPanel.add(Utility.addTimer());
 				ChartUtilities.getData(controllerSensorListBox.getSelectedItemText(),ChartUtilities.stringToDate("01", "01","2016"),new java.sql.Date(System.currentTimeMillis()));
 				};
 			});
@@ -137,10 +133,9 @@ public class MonitoringPage extends Composite {
 	
 	private void showControllers(ListBox listBox, String category) {
 		siteControllerListBox.clear();
-	    
-	    for(String controllerName : Data.siteControllerList.get(category))
+		for(String controllerName : Data.siteControllerList.get(category))
 		{
-	    	siteControllerListBox.addItem(controllerName);
+		    	siteControllerListBox.addItem(controllerName);
 		}
 	}
 	
@@ -150,7 +145,6 @@ public class MonitoringPage extends Composite {
 	
 	private void showSensors(ListBox listBox, String category) {
 		controllerSensorListBox.clear();
-	    
 	    for(String sensorName : Data.controllerSensorList.get(category))
 		{
 	    	controllerSensorListBox.addItem(sensorName);

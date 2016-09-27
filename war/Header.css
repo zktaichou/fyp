@@ -1,5 +1,7 @@
 .header-panel {
-	
+	/* background: #BDBDBD !important; */
+	margin: 0px 10px 0px 10px;
+	border: none;
 }
 
 .header-title-panel {

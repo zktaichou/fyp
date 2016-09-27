@@ -25,7 +25,7 @@ public class Header extends Composite{
 	}
 	
 	public static void clear(){
-		BasePage.headerPanel.clear();
+		BasePage.headerContainer.clear();
 	}
 	
 	public void setTitle(String msg){

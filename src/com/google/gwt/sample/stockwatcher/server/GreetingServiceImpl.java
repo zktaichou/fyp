@@ -166,37 +166,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 	}
 	
 	public int getNewPortNumber() throws IllegalArgumentException {
-		try {
-			Socket sc=new Socket(Utility.serverIP,Utility.portNumber);
-			ArrayList<Object> toSend=new ArrayList<>();
-			toSend.add("new port number pls");
-			OutputStream os = sc.getOutputStream();
-			ObjectOutputStream oos=new ObjectOutputStream(os);
-			oos.writeObject(toSend);
-			
-			InputStream is=sc.getInputStream();
-			ObjectInputStream ois=new ObjectInputStream(is);
-			@SuppressWarnings("unchecked")
-			int port = (int) ois.readObject();
-			
-			oos.close();
-			os.close();
-			ois.close();
-			is.close();
-			
-			sc.close();
-			
-			return port;
-		} catch (Exception e) {
-			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter("getPortLog.txt")));
-				e.printStackTrace(pw);
-				pw.close();
-			} catch (Exception f) {}
-			
-		}
-		
-		return 0;
+		return Utility.portNumber;
 	}
 	
 }

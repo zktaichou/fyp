@@ -38,7 +38,7 @@ public class Popup{
 		
 		if(!passwordDB.isAttached())
 		{
-		BasePage.contentPanel.add(passwordDB);
+		BasePage.contentContainer.add(passwordDB);
 		}
 		
 		if(!passwordDB.isVisible())
@@ -86,7 +86,7 @@ public class Popup{
 		
 		if(!newAccountDB.isAttached())
 		{
-		BasePage.contentPanel.add(newAccountDB);
+		BasePage.contentContainer.add(newAccountDB);
 		}
 		
 		if(!newAccountDB.isVisible())

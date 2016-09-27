@@ -15,10 +15,12 @@ public class ResourcePreload{
 			}
 			
 			public void onSuccess(final String[][] siteResult) {
-				for(int i=0; i<siteResult.length;i++)
-				{
-					Data.siteList.put(siteResult[i][0], siteResult[i][1]);
-					getSiteControllerList(siteResult[i][0]);
+				if (siteResult!=null) {
+					for(int i=0; i<siteResult.length;i++)
+					{
+						Data.siteList.put(siteResult[i][0], siteResult[i][1]);
+						getSiteControllerList(siteResult[i][0]);
+					}
 				}
 			}
 		});
@@ -33,10 +35,12 @@ public class ResourcePreload{
 			public void onSuccess(String[][] controllerResult)
 			{
 				ArrayList<String> controller = new ArrayList<>();
-				for(int i=0; i<controllerResult.length;i++)
-				{
-					controller.add(controllerResult[i][0]);
-					getControllerSensorList(controllerResult[i][0]);
+				if (controllerResult!=null) {
+					for(int i=0; i<controllerResult.length;i++)
+					{
+						controller.add(controllerResult[i][0]);
+						getControllerSensorList(controllerResult[i][0]);
+					}
 				}
 				Data.siteControllerList.put(siteName, controller);
 			}
@@ -52,9 +56,11 @@ public class ResourcePreload{
 			public void onSuccess(String[][] sensorResult)
 			{
 				ArrayList<String> sensors = new ArrayList<>();
-				for(int i=0; i<sensorResult.length;i++)
-				{
-					sensors.add(sensorResult[i][0]);
+				if (sensorResult!=null) {
+					for(int i=0; i<sensorResult.length;i++)
+					{
+						sensors.add(sensorResult[i][0]);
+					}
 				}
 				Data.controllerSensorList.put(controllerName, sensors);
 			}

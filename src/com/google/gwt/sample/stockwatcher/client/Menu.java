@@ -104,9 +104,10 @@ public class Menu extends Composite {
 
 	// Setup Menu Item Links
 	private void setupAnchors() {
+		
 		actuatorAnchor.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
-				Pages.enterControlPage();
+				Pages.enterSitePage();
 			};
 		});
 		scheduleAnchor.addClickHandler(new ClickHandler(){

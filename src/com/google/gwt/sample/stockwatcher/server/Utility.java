@@ -71,6 +71,7 @@ public class Utility{
 	
 	static int portNumber = 40001;
 	static String serverIP = "10.100.2.56";
+	static String fsktmServerIP = "103.18.2.222";
 	
 	public static String hashSHA1CharAry (String c) {
     	try {

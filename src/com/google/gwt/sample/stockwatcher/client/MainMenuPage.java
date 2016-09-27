@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class MainMenuPage extends Composite{
 
 	VerticalPanel mainPanel = new VerticalPanel();
+	VerticalPanel msgPanel = new VerticalPanel();
 	HorizontalPanel selectionPanel = new HorizontalPanel();
 	Button monitorButton = new Button("Monitoring Page");
 	Button controlButton = new Button("Control Page");
@@ -21,9 +22,7 @@ public class MainMenuPage extends Composite{
 	public MainMenuPage(){
 		setHandlers();
 		
-		Header.clear();
-		Header header = new Header(selectTitle);
-		BasePage.headerPanel.add(header);
+		msgPanel.add(new HTML(Messages.MAIN_MENU));
 		
 		selectionPanel.add(monitorButton);
 		selectionPanel.add(controlButton);
@@ -31,8 +30,9 @@ public class MainMenuPage extends Composite{
 		
 		mainPanel.setSize("100%", "100%");
 		mainPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		mainPanel.add(selectionPanel);
-		mainPanel.add(logoutButton);
+		mainPanel.add(msgPanel);
+//		mainPanel.add(selectionPanel);
+//		mainPanel.add(logoutButton);
 		
 		initWidget(mainPanel);
 	}
@@ -45,7 +45,7 @@ public class MainMenuPage extends Composite{
 			});
 		controlButton.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
-				Pages.enterControlPage();
+				Pages.enterSitePage();
 				};
 			});
 		logoutButton.addClickHandler(new ClickHandler(){
