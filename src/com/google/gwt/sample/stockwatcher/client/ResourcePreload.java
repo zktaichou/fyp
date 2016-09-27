@@ -19,15 +19,15 @@ public class ResourcePreload{
 					for(int i=0; i<siteResult.length;i++)
 					{
 						Data.siteList.put(siteResult[i][0], siteResult[i][1]);
-						getSiteControllerList(siteResult[i][0]);
+						getControllerList(siteResult[i][0]);
 					}
 				}
 			}
 		});
 	}
 	
-	public static void getSiteControllerList(final String siteName){
-		Utility.newRequestObj().getSiteControllerList(siteName, new AsyncCallback<String[][]>() {
+	public static void getControllerList(final String siteName){
+		Utility.newRequestObj().getControllerList(siteName, new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) 
 			{
 				Window.alert("Unable to get site list");
@@ -39,7 +39,8 @@ public class ResourcePreload{
 					for(int i=0; i<controllerResult.length;i++)
 					{
 						controller.add(controllerResult[i][0]);
-						getControllerSensorList(controllerResult[i][0]);
+						getSensorList(controllerResult[i][0]);
+						getActuatorList(controllerResult[i][0]);
 					}
 				}
 				Data.siteControllerList.put(siteName, controller);
@@ -47,8 +48,8 @@ public class ResourcePreload{
 		});
 	}
 	
-	public static void getControllerSensorList(final String controllerName){
-		Utility.newRequestObj().getControllerSensorList(controllerName, new AsyncCallback<String[][]>() {
+	public static void getSensorList(final String controllerName){
+		Utility.newRequestObj().getSensorList(controllerName, new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) 
 			{
 				Window.alert("Unable to get site list");
@@ -63,6 +64,26 @@ public class ResourcePreload{
 					}
 				}
 				Data.controllerSensorList.put(controllerName, sensors);
+			}
+		});
+	}
+	
+	public static void getActuatorList(final String controllerName){
+		Utility.newRequestObj().getActuatorList(controllerName, new AsyncCallback<String[][]>() {
+			public void onFailure(Throwable caught) 
+			{
+				Window.alert("Unable to get site list");
+			}
+			public void onSuccess(String[][] actuatorResult)
+			{
+				ArrayList<String> actuators = new ArrayList<>();
+				if (actuatorResult!=null) {
+					for(int i=0; i<actuatorResult.length;i++)
+					{
+						actuators.add(actuatorResult[i][0]);
+					}
+				}
+				Data.controllerActuatorList.put(controllerName, actuators);
 			}
 		});
 	}

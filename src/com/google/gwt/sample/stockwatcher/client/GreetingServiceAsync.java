@@ -11,6 +11,7 @@ public interface GreetingServiceAsync {
 	void greetServer(String sn, Date sd, Date ed, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
 	void userLogin(String username, String password, AsyncCallback<Boolean> callback) throws IllegalArgumentException;
 	void getSiteList(AsyncCallback<String[][]> callback) throws IllegalArgumentException;
-	void getSiteControllerList(String siteName, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
-	void getControllerSensorList(String controllerName, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
+	void getControllerList(String siteName, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
+	void getSensorList(String controllerName, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
+	void getActuatorList(String controllerName, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
 }

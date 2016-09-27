@@ -13,6 +13,7 @@ public interface GreetingService extends RemoteService {
 	String [][] greetServer(String sn, Date sd, Date ed) throws IllegalArgumentException;
 	boolean userLogin(String username, String password) throws IllegalArgumentException;
 	String[][] getSiteList() throws IllegalArgumentException;
-	String[][] getSiteControllerList(String siteName) throws IllegalArgumentException;
-	String[][] getControllerSensorList(String controllerName) throws IllegalArgumentException;
+	String[][] getControllerList(String siteName) throws IllegalArgumentException;
+	String[][] getSensorList(String controllerName) throws IllegalArgumentException;
+	String[][] getActuatorList(String controllerName) throws IllegalArgumentException;
 }

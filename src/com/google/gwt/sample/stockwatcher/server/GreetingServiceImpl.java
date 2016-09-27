@@ -113,7 +113,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 		} catch (Exception e) {return null;}
 	}
 	
-	public String[][] getSiteControllerList(String siteName) throws IllegalArgumentException {
+	public String[][] getControllerList(String siteName) throws IllegalArgumentException {
 		try {
 			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
 			ArrayList<Object> toSend=new ArrayList<>();
@@ -139,11 +139,37 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 		} catch (Exception e) {return null;}
 	}
 	
-	public String[][] getControllerSensorList(String controllerName) throws IllegalArgumentException {
+	public String[][] getSensorList(String controllerName) throws IllegalArgumentException {
 		try {
 			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
 			ArrayList<Object> toSend=new ArrayList<>();
 			toSend.add("5");
+			toSend.add(controllerName);
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			@SuppressWarnings("unchecked")
+			ArrayList<Object []> data=Utility.decryptData(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return Utility.DataToString(data);
+		} catch (Exception e) {return null;}
+	}
+	
+	public String[][] getActuatorList(String controllerName) throws IllegalArgumentException {
+		try {
+			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("6");
 			toSend.add(controllerName);
 			OutputStream os = sc.getOutputStream();
 			ObjectOutputStream oos=new ObjectOutputStream(os);

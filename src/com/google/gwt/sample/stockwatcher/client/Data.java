@@ -9,4 +9,5 @@ public class Data{
 	static HashMap<String, String> siteList = new HashMap<>();
 	static HashMap<String, ArrayList<String>> siteControllerList = new HashMap<>();
 	static HashMap<String, ArrayList<String>> controllerSensorList = new HashMap<>();
+	static HashMap<String, ArrayList<String>> controllerActuatorList = new HashMap<>();
 }
