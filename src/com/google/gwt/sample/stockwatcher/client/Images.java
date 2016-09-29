@@ -14,11 +14,16 @@ public class Images{
 	public static final String LOADING2 = "images/loading2.gif";
 	public static final String ON = "images/on.png";
 	public static final String OFF = "images/off.png";
+	public static final String SELECTED = "images/selected.png";
 	public static final String FSKTM_LOGO = "images/fsktm.png";
 	public static final String GEAR_ICON = "images/gear_icon.png";
 	public static final String CURRENT_ICON = "images/current_icon.png";
 	public static final String WATER_ICON = "images/water_icon.png";
 	public static final String LIGHT_ICON = "images/light_icon.png";
+	public static final String TEMPERATURE_ICON = "images/temperature_icon.png";
+	public static final String ACTUATOR_CURRENT_ICON = "images/actuator_current_icon.png";
+	public static final String ACTUATOR_WATER_ICON = "images/actuator_water_icon.png";
+	public static final String MICROCONTROLLER_ICON = "images/microcontroller_icon.png";
 	
 	// Function to customize image width, height and image alignment
 	public static String getImage(String _path, int _width_px, int _height_px) {

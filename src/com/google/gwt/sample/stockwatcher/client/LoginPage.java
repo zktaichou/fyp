@@ -36,12 +36,15 @@ public class LoginPage extends Composite {
 	public LoginPage(){
 		setHandlers();
 		
+		msgPanel.clear();
 		msgPanel.add(new HTML(Messages.WELCOME));
 		
+		linksPanel.clear();
+		linksPanel.setSpacing(5);
 		linksPanel.add(forgotPassword);
 		linksPanel.add(makeNewAccount);
-		linksPanel.setSpacing(5);
-		
+
+		mainPanel.clear();
 		mainPanel.setSize("100%", "100%");
 		mainPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		mainPanel.add(msgPanel);
@@ -51,6 +54,7 @@ public class LoginPage extends Composite {
 		mainPanel.add(passwordTB);
 		mainPanel.add(linksPanel);
 		mainPanel.add(loginButton);
+		mainPanel.add(ChartUtilities.realTimeUpdatesChart());
 		
 		Menu.standby();
 		

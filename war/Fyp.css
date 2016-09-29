@@ -31,6 +31,10 @@ h1 {
   text-align: center;
 }
 
+.rounded {
+	border-radius: 7px;
+}
+
 .parameterPanel {
   vertical-align: top;
   height: 100%;

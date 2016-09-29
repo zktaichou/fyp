@@ -201,7 +201,7 @@ static long getTime(String date) {
     final Chart chart = new Chart()  
         .setType(Series.Type.SPLINE)  
         .setMarginRight(10)  
-        .setChartTitleText("Live random data (for now...)")  
+        .setChartTitleText("Just some sample chart~")  
         .setBarPlotOptions(new BarPlotOptions()  
             .setDataLabels(new DataLabels()  
                 .setEnabled(true)  

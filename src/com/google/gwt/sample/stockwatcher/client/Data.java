@@ -8,6 +8,9 @@ public class Data{
 	static int latestRequestID;
 	static HashMap<String, String> siteList = new HashMap<>();
 	static HashMap<String, ArrayList<String>> siteControllerList = new HashMap<>();
+	static HashMap<String, ArrayList<String>> controllerAttributeList = new HashMap<>();
 	static HashMap<String, ArrayList<String>> controllerSensorList = new HashMap<>();
+	static HashMap<String, ArrayList<String>> sensorAttributeList = new HashMap<>();
 	static HashMap<String, ArrayList<String>> controllerActuatorList = new HashMap<>();
+	static HashMap<String, ArrayList<String>> actuatorAttributeList = new HashMap<>();
 }
