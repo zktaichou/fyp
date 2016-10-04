@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import javax.crypto.SealedObject;
@@ -171,6 +172,41 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			ArrayList<Object> toSend=new ArrayList<>();
 			toSend.add("6");
 			toSend.add(controllerName);
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			@SuppressWarnings("unchecked")
+			ArrayList<Object []> data=Utility.decryptData(ois);
+
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+
+			return Utility.DataToString(data);
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter("getActuatorListLog.txt")));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+		}
+		return null;
+	}
+	
+	public String[][] actuatorSetStatus(String status) throws IllegalArgumentException {
+		try {
+			wait(10000);
+			
+			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("45");
+			toSend.add(status);
 			OutputStream os = sc.getOutputStream();
 			ObjectOutputStream oos=new ObjectOutputStream(os);
 			oos.writeObject(Utility.encryptMsg(toSend));

@@ -70,8 +70,6 @@ public class SitePage extends Composite{
 	public void setHandlers(){
 
 		renderSiteListBox();
-//		renderSensorPopups();
-//		renderActuatorPopups();
 		
 		goButton.addClickHandler(new ClickHandler() {
 		      public void onClick(ClickEvent event) {
@@ -177,7 +175,7 @@ public class SitePage extends Composite{
 				final double x = Double.parseDouble(attributes.get(9));
 				final double y = Double.parseDouble(attributes.get(10));
 				String icon = setSensorIcon(type);
-				PowerToggle temp = new PowerToggle(icon,name,toggle);
+				PowerToggle temp = new PowerToggle(icon,name);
 				
 				final PopupPanel container = new PopupPanel();
 				
@@ -226,11 +224,14 @@ public class SitePage extends Composite{
 			{
 				ArrayList<String> attributes = Data.actuatorAttributeList.get(actuators);
 				String name = attributes.get(0);
+				String status = attributes.get(2);
 				final double x = Double.parseDouble(attributes.get(3));
 				final double y = Double.parseDouble(attributes.get(4));
-				Window.alert(name+" "+x+" "+y);
+				
+				Window.alert(name+" "+status+" "+x+" "+y);
+				
 				String icon = Images.getImage(Images.ACTUATOR_CURRENT_ICON,30);
-				PowerToggle temp = new PowerToggle(icon, name, toggle);
+				PowerToggle temp = new PowerToggle(icon, name, toggle, status);
 				
 				final PopupPanel container = new PopupPanel();
 				
@@ -312,7 +313,35 @@ public class SitePage extends Composite{
 	
 	public class PowerToggle extends Composite{
 		
-		public PowerToggle(String icon, String name, final HashMap<Boolean,String> toggle){
+		public PowerToggle(String icon, String name){
+			HorizontalPanel hPanel = new HorizontalPanel();
+			hPanel.setStyleName("rounded");
+			hPanel.getElement().getStyle().setBackgroundColor("#BBEAF1");
+			hPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+			hPanel.add(new HTML(icon));
+			hPanel.add(new HTML(name));
+			
+//			final Anchor temp = new Anchor(" ");
+//			temp.getElement().getStyle().setProperty("toggleStatus","FALSE");
+//			temp.setHTML(toggle.get(Boolean.parseBoolean(temp.getElement().getStyle().getProperty("toggleStatus"))));
+//			
+//			temp.addClickHandler(new ClickHandler(){
+//				public void onClick(ClickEvent event){
+//					temp.getElement().getStyle().setProperty("toggleStatus",String.valueOf(!Boolean.parseBoolean(temp.getElement().getStyle().getProperty("toggleStatus"))));
+//					temp.setHTML(toggle.get(Boolean.parseBoolean(temp.getElement().getStyle().getProperty("toggleStatus"))));
+//				}
+//			});
+			
+			VerticalPanel vPanel = new VerticalPanel();
+			vPanel.setSpacing(5);
+			vPanel.add(hPanel);
+//			vPanel.add(temp);
+//			vPanel.setCellHorizontalAlignment(temp, HasHorizontalAlignment.ALIGN_CENTER);
+			
+			initWidget(vPanel);
+		}
+		
+		public PowerToggle(String icon, String name, final HashMap<Boolean,String> toggle, String status){
 			HorizontalPanel hPanel = new HorizontalPanel();
 			hPanel.setStyleName("rounded");
 			hPanel.getElement().getStyle().setBackgroundColor("#BBEAF1");
@@ -321,13 +350,43 @@ public class SitePage extends Composite{
 			hPanel.add(new HTML(name));
 			
 			final Anchor temp = new Anchor(" ");
-			temp.getElement().getStyle().setProperty("toggleStatus","FALSE");
+			if(status.equals("ON"))
+			{
+				temp.getElement().getStyle().setProperty("toggleStatus","TRUE");
+			}
+			else
+			{
+				temp.getElement().getStyle().setProperty("toggleStatus","FALSE");
+			}
+			
 			temp.setHTML(toggle.get(Boolean.parseBoolean(temp.getElement().getStyle().getProperty("toggleStatus"))));
 			
 			temp.addClickHandler(new ClickHandler(){
 				public void onClick(ClickEvent event){
 					temp.getElement().getStyle().setProperty("toggleStatus",String.valueOf(!Boolean.parseBoolean(temp.getElement().getStyle().getProperty("toggleStatus"))));
-					temp.setHTML(toggle.get(Boolean.parseBoolean(temp.getElement().getStyle().getProperty("toggleStatus"))));
+					temp.setHTML(Images.getImage(Images.LOADING));
+					
+					String status = "";
+					
+					if(temp.getElement().getStyle().getProperty("toggleStatus").equals("TRUE")){
+						status="ON";
+					}
+					else
+					{
+						status="OFF";
+					}
+					
+					Utility.newRequestObj().actuatorSetStatus(status, new AsyncCallback<String[][]>() {
+						public void onFailure(Throwable caught) {
+							Window.alert("Unable to update actuator status");
+							temp.setHTML(toggle.get(Boolean.parseBoolean(temp.getElement().getStyle().getProperty("toggleStatus"))));
+						}
+			
+						public void onSuccess(final String[][] controllerResult) {
+							temp.getElement().getStyle().setProperty("toggleStatus",String.valueOf(!Boolean.parseBoolean(temp.getElement().getStyle().getProperty("toggleStatus"))));
+							temp.setHTML(toggle.get(Boolean.parseBoolean(temp.getElement().getStyle().getProperty("toggleStatus"))));
+						}
+					});
 				}
 			});
 			
@@ -340,5 +399,4 @@ public class SitePage extends Composite{
 			initWidget(vPanel);
 		}
 	}
-	
 }

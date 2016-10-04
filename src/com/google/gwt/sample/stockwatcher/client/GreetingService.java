@@ -2,6 +2,7 @@ package com.google.gwt.sample.stockwatcher.client;
 
 import java.sql.Date;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -16,4 +17,5 @@ public interface GreetingService extends RemoteService {
 	String[][] getControllerList(String siteName) throws IllegalArgumentException;
 	String[][] getSensorList(String controllerName) throws IllegalArgumentException;
 	String[][] getActuatorList(String controllerName) throws IllegalArgumentException;
+	String[][] actuatorSetStatus(String status) throws IllegalArgumentException;
 }

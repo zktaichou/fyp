@@ -90,6 +90,7 @@ public class ResourcePreload{
 			}
 			public void onSuccess(String[][] actuatorResult)
 			{
+				Window.alert(actuatorResult.length+"");
 				ArrayList<String> actuators = new ArrayList<>();
 				if (actuatorResult!=null) {
 					for(int i=0; i<actuatorResult[i].length;i++)
@@ -98,7 +99,7 @@ public class ResourcePreload{
 						ArrayList<String> actuatorAttributes = new ArrayList<>();
 						for(int j=0; j<actuatorResult.length;j++)
 						{
-//							Window.alert("actuator: "+actuatorResult[i][j]);
+							Window.alert("actuator: "+actuatorResult[i][j]);
 							actuatorAttributes.add(actuatorResult[i][j]);
 						}
 						Data.actuatorAttributeList.put(actuatorResult[i][0], actuatorAttributes);

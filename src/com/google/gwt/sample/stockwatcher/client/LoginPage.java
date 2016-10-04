@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
@@ -43,10 +44,13 @@ public class LoginPage extends Composite {
 		linksPanel.setSpacing(5);
 		linksPanel.add(forgotPassword);
 		linksPanel.add(makeNewAccount);
-
+		
 		mainPanel.clear();
 		mainPanel.setSize("100%", "100%");
+		mainPanel.setWidth("100%");
 		mainPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		mainPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		mainPanel.setSpacing(3);
 		mainPanel.add(msgPanel);
 		mainPanel.add(new HTML(enterUsernameMsg));
 		mainPanel.add(usernameTB);
