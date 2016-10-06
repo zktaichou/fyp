@@ -2,6 +2,7 @@ package com.google.gwt.sample.stockwatcher.client;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
@@ -23,17 +24,12 @@ public class MainMenuPage extends Composite{
 		setHandlers();
 		
 		msgPanel.add(new HTML(Messages.MAIN_MENU));
-		
-		selectionPanel.add(monitorButton);
-		selectionPanel.add(controlButton);
-		selectionPanel.setSpacing(10);
-		
+
 		mainPanel.setSize("100%", "100%");
 		mainPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		mainPanel.add(msgPanel);
-//		mainPanel.add(selectionPanel);
-//		mainPanel.add(logoutButton);
 		
+
 		initWidget(mainPanel);
 	}
 	

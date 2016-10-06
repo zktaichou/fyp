@@ -14,7 +14,7 @@
 
 .gwt-NewMainMenuHeader {
 	color: #FFFFFF;
-	font-family: Verdana;
+	font-family: 'Play', sans-serif;
 	font-weight: bold;
 	font-size: 11pt;
 	text-decoration: none;
@@ -22,7 +22,7 @@
 
 .gwt-NewMainMenuLabel {
 	color: #FFFFFF ;
-	font-family: Verdana;
+	font-family: 'Play', sans-serif;
 	font-size: 10pt;
 	text-decoration: none;
 }
@@ -35,16 +35,17 @@
 }
 
 .gwt-MainMenuPanel {
-	background: #000000 !important;
+	background: black !important;
 	padding: 0px 10px 0px 10px;
-	/* height: 55px; */
 	border: none;
+	border-bottom-style: solid;
+	border-bottom-color: grey;
 }
 
 .gwt-MainMenuTitle {
 	padding: 0px 10px 0px 20px;
 	font-size: 12pt;
-	font-family: Verdana;
+	font-family: 'Play', sans-serif;
 	font-weight: bold;
 	color: #FFFFFF;
 	/* text-shadow: grey 0.05em 0.05em 0.05em; */
@@ -52,7 +53,7 @@
 
 /* Standard font for all GWT menu items */
 .gwt-MenuItem {
-	font-family: Verdana !important;
+	font-family: 'Play', sans-serif;
 	font-weight: normal !important;
 	color: #FFFFFF !important;
 }

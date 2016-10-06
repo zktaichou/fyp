@@ -28,6 +28,8 @@ public class BasePage implements EntryPoint {
 		RootPanel.get("contentContainer").add(contentContainer);
 		RootPanel.get("footerContainer").add(footerContainer);
 
+		RootPanel.getBodyElement().getStyle().setBackgroundImage("url(http://free.wallpaperbackgrounds.com/sci%20fi/galaxy/76257-42513.jpg)");
+
 		Menu menu = new Menu();
 		menuContainer.add(menu);
 		menuContainer.setWidth("100%");

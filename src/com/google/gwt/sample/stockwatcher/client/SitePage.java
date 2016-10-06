@@ -1,6 +1,5 @@
 package com.google.gwt.sample.stockwatcher.client;
 
-import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -22,9 +21,6 @@ public class SitePage extends Composite{
 
 	ListBox siteListBox = new ListBox();
 	
-	Button backButton = new Button("Back");
-	Button goButton = new Button("Go");
-	
 	static Image sitePic = new Image();
 	
 	static ArrayList<PopupPanel> controllerIcons = new ArrayList<>();
@@ -42,9 +38,8 @@ public class SitePage extends Composite{
 		wrapper.add(new HTML("Please select site(s):"));
 		wrapper.add(siteListBox);
 		wrapper.add(selectionPanel);
-		wrapper.add(goButton);
 		wrapper.setSpacing(10);
-		
+		  
 		parameterPanel.clear();
 		parameterPanel.add(wrapper);
 		parameterPanel.setHeight("100%");
@@ -56,8 +51,7 @@ public class SitePage extends Composite{
 
 		setHandlers();
 		
-		
-		initWidget(cPanel);
+		initWidget(cPanel); 
 		}
 	
 	public void renderSiteListBox(){
@@ -70,18 +64,17 @@ public class SitePage extends Composite{
 		}
 		
 		siteListBox.setSelectedIndex(0);
+
+		getPic(siteListBox.getSelectedItemText());
 	}
 	
 	public void setHandlers(){
 
 		renderSiteListBox();
 
-		getPic(siteListBox.getSelectedItemText());
-
-		
-		goButton.addClickHandler(new ClickHandler() {
-		      public void onClick(ClickEvent event) {
-
+		siteListBox.addChangeHandler(new ChangeHandler(){
+		      public void onChange(ChangeEvent event) {
+		    	  
 		  		hideAllIcons();
 		  		
 		  		getPic(siteListBox.getSelectedItemText());
@@ -122,7 +115,7 @@ public class SitePage extends Composite{
 				final double x = Double.parseDouble(attributes.get(2));
 				final double y = Double.parseDouble(attributes.get(3));
 				
-				ControllerToggle cToggle = new ControllerToggle(controller);
+				Controller cToggle = new Controller(controller);
 				
 				
 				final PopupPanel container = new PopupPanel();
@@ -346,7 +339,7 @@ public class SitePage extends Composite{
 			
 			//Initial status from db
 			if(status.equals("ON")) state.put(temp,true);
-			else state.put(temp,false);
+			else state.put(temp,false); 
 			
 			temp.setHTML(toggle.get(state.get(temp)));
 			
@@ -358,7 +351,7 @@ public class SitePage extends Composite{
 						//disable click until request finishes
 						temp.setName("false");
 						
-						temp.setHTML(Images.getImage(Images.LOADING, 25));
+						temp.setHTML(Images.getImage(Images.LOADING3, 25));
 	
 						String newStatus = "";
 						
@@ -369,7 +362,7 @@ public class SitePage extends Composite{
 						{
 							newStatus="OFF";
 						}
-						Window.alert("Turning "+newStatus);
+						
 						Utility.newRequestObj().actuatorSetStatus(name, newStatus, new AsyncCallback<String>() {
 							public void onFailure(Throwable caught) {
 								Window.alert("Unable to update actuator status");
@@ -378,7 +371,6 @@ public class SitePage extends Composite{
 							} 
 				 
 							public void onSuccess(final String reply) {
-								Window.alert("reply: "+reply);
 								if(reply.equals("OK"))
 								{
 									state.put(temp,!state.get(temp));
@@ -416,9 +408,9 @@ public class SitePage extends Composite{
 		}
 	}
 	
-	public class ControllerToggle extends Composite{
+	public class Controller extends Composite{
 			
-			public ControllerToggle(final String name){
+			public Controller(final String name){
 
 				final HashMap<Boolean,String> toggle=new HashMap<>();
 				toggle.put(Boolean.TRUE,Images.getImage(Images.SELECTED, 30));

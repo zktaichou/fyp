@@ -213,6 +213,7 @@ static long getTime(String date) {
         .setCredits(new Credits()  
             .setEnabled(false)  
         )  
+        .setOption("/exporting/enabled", false)
         .setToolTip(new ToolTip()  
             .setFormatter(new ToolTipFormatter() {  
                 public String format(ToolTipData toolTipData) {  

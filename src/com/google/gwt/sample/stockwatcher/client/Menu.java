@@ -71,6 +71,7 @@ public class Menu extends Composite {
 		systemTitleLabel.addStyleName("gwt-MainMenuTitle");
 		
 		HorizontalPanel leftMenuContainerPanel = new HorizontalPanel();
+		leftMenuContainerPanel.add(new HTML(Images.getImage(Images.LOADING_EPIC2,Menu.HEIGHT)));
 		leftMenuContainerPanel.add(fsktmLogo);
 		leftMenuContainerPanel.add(systemTitleLabel);
 		leftMenuContainerPanel.add(selectionPanel);
@@ -177,7 +178,7 @@ public class Menu extends Composite {
 		
 		VerticalMenu optionsMenu = new VerticalMenu();
 		Anchor anchor = new Anchor("");
-		anchor.setHTML(Images.getImage(Images.GEAR_ICON, 30));
+		anchor.setHTML(Images.getImage(Images.OPTIONS, 30));
 		
 		optionsMenu.addAnchor(logoutAnchor);
 		

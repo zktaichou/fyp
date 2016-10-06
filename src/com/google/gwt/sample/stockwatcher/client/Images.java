@@ -12,6 +12,13 @@ public class Images{
 	public static final String SAMPLE_3 = "images/sample3.png";
 	public static final String LOADING = "images/loading.gif";
 	public static final String LOADING2 = "images/loading2.gif";
+	public static final String LOADING3 = "images/loading3.gif";
+	public static final String LOADING_EPIC = "images/loading_epic.gif";
+	public static final String LOADING_EPIC2 = "images/loading_epic2.gif";
+	public static final String LOADING_EPIC3 = "images/loading_epic3.gif";
+	public static final String OPTIONS = "images/options.gif";
+	public static final String GRAPH = "images/graph.gif";
+	public static final String GRAPH2 = "images/graph2.gif";
 	public static final String ON = "images/on.png";
 	public static final String OFF = "images/off.png";
 	public static final String SELECTED = "images/selected.png";

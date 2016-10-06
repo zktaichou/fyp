@@ -1,10 +1,12 @@
 package com.google.gwt.sample.stockwatcher.client;
 
 import java.util.Date;
+import java.util.Random;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
@@ -32,14 +34,6 @@ public class Footer extends Composite {
 	
 	// 
 	public Footer() {
-		//
-		final Label dateLabel = new Label();
-		final HTML yearLabel = new HTML();
-		Date today = new Date();
-		DateTimeFormat dateFormat = DateTimeFormat.getFormat("MMMM d, yyyy h:mm a (zzzzz)");
-		DateTimeFormat yearFormat = DateTimeFormat.getFormat("yyyy");
-		dateLabel.setText("Today is " + dateFormat.format(today));
-		yearLabel.setHTML("Copyright &copy;" + yearFormat.format(today));
 		
 		// 
 		renderLeftAnchorPanel();
@@ -66,7 +60,7 @@ public class Footer extends Composite {
 	private void setupAnchors() {
 		//
 		Date today = new Date();
-		DateTimeFormat dateFormat = DateTimeFormat.getFormat("MMMM d, yyyy h:mm a (zzzzz)");
+		DateTimeFormat dateFormat = DateTimeFormat.getFormat("MMMM d, yyyy h:mm:ss a (zzzzz)");
 		DateTimeFormat yearFormat = DateTimeFormat.getFormat("yyyy");
 		
 		//
@@ -74,8 +68,19 @@ public class Footer extends Composite {
 		copyrightAnchor.addStyleName("footer-text");
 		
 		//
-		dateAnchor.setText("Today is " + dateFormat.format(today));
+		dateAnchor.setText(dateFormat.format(today));
 		dateAnchor.addStyleName("footer-text");
+		
+		Timer t = new Timer() {
+		      @Override
+		      public void run() {
+		  		Date todayzzzz = new Date();
+				DateTimeFormat dateFormat = DateTimeFormat.getFormat("MMMM d, yyyy h:mm:ss a (zzzzz)");
+				dateAnchor.setText(dateFormat.format(todayzzzz));
+		      }
+		    };
+
+		    t.scheduleRepeating(1000);
 	}
 	
 	private void renderLeftAnchorPanel() {

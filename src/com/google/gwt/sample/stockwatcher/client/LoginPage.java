@@ -1,11 +1,14 @@
 package com.google.gwt.sample.stockwatcher.client;
 
+import java.util.Random;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
@@ -20,7 +23,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class LoginPage extends Composite { 
-	
+	ContentPanel cPanel = new ContentPanel();
 	VerticalPanel mainPanel = new VerticalPanel();
 	VerticalPanel msgPanel = new VerticalPanel();
 	HorizontalPanel linksPanel = new HorizontalPanel();
@@ -38,16 +41,18 @@ public class LoginPage extends Composite {
 		setHandlers();
 		
 		msgPanel.clear();
+		msgPanel.addStyleName("mainStyle");
 		msgPanel.add(new HTML(Messages.WELCOME));
 		
 		linksPanel.clear();
+		linksPanel.addStyleName("mainStyle");
 		linksPanel.setSpacing(5);
 		linksPanel.add(forgotPassword);
 		linksPanel.add(makeNewAccount);
 		
 		mainPanel.clear();
+		mainPanel.addStyleName("mainStyle");
 		mainPanel.setSize("100%", "100%");
-		mainPanel.setWidth("100%");
 		mainPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		mainPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		mainPanel.setSpacing(3);
@@ -58,11 +63,16 @@ public class LoginPage extends Composite {
 		mainPanel.add(passwordTB);
 		mainPanel.add(linksPanel);
 		mainPanel.add(loginButton);
-		mainPanel.add(ChartUtilities.realTimeUpdatesChart());
+//		mainPanel.add(ChartUtilities.realTimeUpdatesChart());
+//		mainPanel.add(new HTML(Images.getImage(Images.GRAPH)));
+
+		cPanel.clear();
+		cPanel.addStyleName("mainStyle");
+		cPanel.add(mainPanel);
 		
 		Menu.standby();
 		
-		initWidget(mainPanel);
+		initWidget(cPanel);
 	}
 	
 	public void setHandlers(){
@@ -99,6 +109,17 @@ public class LoginPage extends Composite {
 		}
 
 		public void checkLoginInfo(){
+			ResourcePreload.getSiteList();
+			
+			msgPanel.clear();
+			msgPanel.add(new HTML(Images.getImage(Images.LOADING_EPIC,Window.getClientHeight()-Menu.HEIGHT-Footer.HEIGHT)));
+			
+			mainPanel.clear();
+			mainPanel.getElement().getStyle().setBackgroundColor("black");
+			mainPanel.setSize("100%", "100%");
+			mainPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+			mainPanel.add(msgPanel);
+			
 			Utility.newRequestObj().userLogin(usernameTB.getText(),passwordTB.getText(), new AsyncCallback<Boolean>() {
 				public void onFailure(Throwable caught) {
 					Window.alert("Can't connect to database");
@@ -108,9 +129,16 @@ public class LoginPage extends Composite {
 				public void onSuccess(Boolean result) {
 					if(result)
 					{
-						ResourcePreload.getSiteList();
-						Pages.enterMainMenuPage();
-						Menu.start();
+						Timer t = new Timer() {
+						      @Override
+						      public void run() {
+									Pages.enterMainMenuPage();
+									Menu.start();
+						      }
+						    };
+
+						    // Schedule the timer to run once in 5 seconds.
+						    t.schedule(new Random().nextInt(2001)+2000);
 					}
 					else
 					{
