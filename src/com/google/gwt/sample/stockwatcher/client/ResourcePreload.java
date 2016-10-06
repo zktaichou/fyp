@@ -40,12 +40,11 @@ public class ResourcePreload{
 					{
 						controller.add(controllerResult[i][0]);
 						ArrayList<String> controllerAttributes = new ArrayList<>();
-						for(int j=0; j<controllerResult.length;j++)
+						for(int j=0; j<controllerResult[i].length;j++)
 						{
 							controllerAttributes.add(controllerResult[i][j]);
 						}
 						Data.controllerAttributeList.put(controllerResult[i][0], controllerAttributes);
-
 						getSensorList(controllerResult[i][0]);
 						getActuatorList(controllerResult[i][0]);
 					}
@@ -90,20 +89,19 @@ public class ResourcePreload{
 			}
 			public void onSuccess(String[][] actuatorResult)
 			{
-				Window.alert(actuatorResult.length+"");
 				ArrayList<String> actuators = new ArrayList<>();
 				if (actuatorResult!=null) {
-					for(int i=0; i<actuatorResult[i].length;i++)
+					for(int i=0; i<actuatorResult.length;i++)
 					{
 						actuators.add(actuatorResult[i][0]);
 						ArrayList<String> actuatorAttributes = new ArrayList<>();
-						for(int j=0; j<actuatorResult.length;j++)
+						for(int j=0; j<actuatorResult[i].length;j++)
 						{
-							Window.alert("actuator: "+actuatorResult[i][j]);
 							actuatorAttributes.add(actuatorResult[i][j]);
 						}
+//						Window.alert("Actuator "+actuatorResult[i][0]+"->"+actuatorResult[i][2]);
 						Data.actuatorAttributeList.put(actuatorResult[i][0], actuatorAttributes);
-					}
+					} 
 				}
 				Data.controllerActuatorList.put(controllerName, actuators);
 			}

@@ -14,5 +14,5 @@ public interface GreetingServiceAsync {
 	void getControllerList(String siteName, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
 	void getSensorList(String controllerName, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
 	void getActuatorList(String controllerName, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
-	void actuatorSetStatus(String status, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
+	void actuatorSetStatus(String actuator, String status, AsyncCallback<String> callback) throws IllegalArgumentException;
 }

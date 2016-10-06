@@ -17,5 +17,5 @@ public interface GreetingService extends RemoteService {
 	String[][] getControllerList(String siteName) throws IllegalArgumentException;
 	String[][] getSensorList(String controllerName) throws IllegalArgumentException;
 	String[][] getActuatorList(String controllerName) throws IllegalArgumentException;
-	String[][] actuatorSetStatus(String status) throws IllegalArgumentException;
+	String actuatorSetStatus(String actuator, String status) throws IllegalArgumentException;
 }

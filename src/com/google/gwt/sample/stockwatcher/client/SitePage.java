@@ -30,12 +30,12 @@ public class SitePage extends Composite{
 	static ArrayList<PopupPanel> controllerIcons = new ArrayList<>();
 	static ArrayList<PopupPanel> sensorIcons = new ArrayList<>();
 	static ArrayList<PopupPanel> actuatorIcons = new ArrayList<>();
-	
+
+	HashMap <String, ArrayList<PopupPanel>> siteControllerPopupList = new HashMap<>();
 	HashMap <String, ArrayList<PopupPanel>> controllerSensorPopupList = new HashMap<>();
 	HashMap <String, ArrayList<PopupPanel>> controllerActuatorPopupList = new HashMap<>();
 	
 	public SitePage(){
-		setHandlers();
 		
 		VerticalPanel wrapper = new VerticalPanel();
 		wrapper.add(new HTML("<h2>Selection Menu</h2></br>"));
@@ -53,6 +53,9 @@ public class SitePage extends Composite{
 		cPanel.clear();
 		cPanel.addLeft(parameterPanel);
 		cPanel.add(sitePic);
+
+		setHandlers();
+		
 		
 		initWidget(cPanel);
 		}
@@ -65,104 +68,89 @@ public class SitePage extends Composite{
 			siteListBox.addItem(siteName);
 			siteListBox.setValue(count++, Data.siteList.get(siteName));
 		}
+		
+		siteListBox.setSelectedIndex(0);
 	}
 	
 	public void setHandlers(){
 
 		renderSiteListBox();
+
+		getPic(siteListBox.getSelectedItemText());
+
 		
 		goButton.addClickHandler(new ClickHandler() {
 		      public void onClick(ClickEvent event) {
-		          fireRequest();
+
+		  		hideAllIcons();
+		  		
+		  		getPic(siteListBox.getSelectedItemText());
+
+				renderControllerPopups();
+				renderSensorPopups();
+				renderActuatorPopups();
+				
+		  		popupControllers(siteListBox.getSelectedItemText());
 		      }
 		});
 	}
 	
-	public void fireRequest(){
-		cPanel.add(Utility.addTimer());
-		hideAllIcons();
-		getControllers(siteListBox.getSelectedItemText());
-	}
-	
 	public void getPic(String siteSelected){
-		sitePic.setUrl(siteSelected);
+		String url = Data.siteList.get(siteSelected);
+		sitePic.setUrl(url);
 		double width=sitePic.getWidth();
 		double height=sitePic.getHeight();
-		double screenWidth=Window.getClientWidth()*0.5;
-		double screenHeight=Window.getClientHeight()*0.5;
+		double screenWidth=Window.getClientWidth()*0.6;
+		double screenHeight=Window.getClientHeight()*0.6;
 		double resizeFactor=Math.min((screenWidth+0.0)/width,(screenHeight+0.0)/height);
 		int newW=(int)(width*resizeFactor); int newH=(int)(height*resizeFactor);
 		sitePic.setSize(newW+"px",newH+"px");	
 		sitePic.setVisible(true);
 	}
 	
-	public void getControllers(String site){
-		Utility.newRequestObj().getControllerList(site, new AsyncCallback<String[][]>() {
-			public void onFailure(Throwable caught) {
-				Window.alert("Unable to get sensor list");
-			}
+	public void renderControllerPopups(){
+		for(String site: Data.siteControllerList.keySet())
+		{
 			
-			//Remember to use Object[] input to get the rest of the information for chart display
-			public void onSuccess(final String[][] controllerResult) {
-				Utility.hideTimer();
+			ArrayList<PopupPanel> popups = new ArrayList<>();
+			
+			for(String controller: Data.siteControllerList.get(site))
+			{
+				ArrayList<String> attributes = Data.controllerAttributeList.get(controller);
+				
+				final String name = attributes.get(0);
+				final double x = Double.parseDouble(attributes.get(2));
+				final double y = Double.parseDouble(attributes.get(3));
+				
+				ControllerToggle cToggle = new ControllerToggle(controller);
+				
+				
+				final PopupPanel container = new PopupPanel();
 
-				getPic(siteListBox.getSelectedValue());
+				controllerIcons.add(container);
 				
-				renderSensorPopups();
-				renderActuatorPopups();
+				container.add(cToggle);
+				container.getElement().getStyle().setBackgroundColor("rgba(255,0,0,0.0)");
+				container.getElement().getStyle().setBorderWidth(0,Unit.PX);
+				container.setTitle(name);
 				
-				final HashMap<Boolean,String> toggle=new HashMap<>();
-				toggle.put(Boolean.TRUE,Images.getImage(Images.SELECTED, 30));
-				toggle.put(Boolean.FALSE,Images.getImage(Images.MICROCONTROLLER_ICON, 30));
-				
-				for(int i=0; i<controllerResult.length;i++)
-				{
-					final String controllerName = controllerResult[i][0];
-					
-					final Anchor temp = new Anchor(" ");
-					temp.getElement().getStyle().setProperty("toggleStatus","FALSE");
-					temp.setHTML(toggle.get(Boolean.parseBoolean(temp.getElement().getStyle().getProperty("toggleStatus"))));
-					
-					HorizontalPanel vPanel = new HorizontalPanel();
-					vPanel.setSpacing(5);
-					vPanel.add(temp);
-					vPanel.add(new HTML(controllerName));
-					
-					final PopupPanel container = new PopupPanel();
-					
-					controllerIcons.add(container);
-					
-					container.add(temp);
-					container.getElement().getStyle().setBackgroundColor("rgba(255,0,0,0.0)");
-					container.getElement().getStyle().setBorderWidth(0,Unit.PX);
-					container.setTitle(controllerName);
-					final int zzz=i;
-					container.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
-			            public void setPosition(int offsetWidth, int offsetHeight) {
-			              int left = sitePic.getAbsoluteLeft()+(int)(Double.parseDouble(controllerResult[zzz][2])*sitePic.getWidth());
-			              int top = sitePic.getAbsoluteTop()+(int)(Double.parseDouble(controllerResult[zzz][3])*sitePic.getHeight());
-			              container.setPopupPosition(left, top);
-			            }
-			          });
-					
-					temp.addClickHandler(new ClickHandler(){
-						public void onClick(ClickEvent event){
-							temp.getElement().getStyle().setProperty("toggleStatus",String.valueOf(!Boolean.parseBoolean(temp.getElement().getStyle().getProperty("toggleStatus"))));
-							temp.setHTML(toggle.get(Boolean.parseBoolean(temp.getElement().getStyle().getProperty("toggleStatus"))));
-							popupSensors(controllerName,Boolean.parseBoolean(temp.getElement().getStyle().getProperty("toggleStatus")));
-						}
-					});
-				}
+				container.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
+				         public void setPosition(int offsetWidth, int offsetHeight) {
+				              int left = sitePic.getAbsoluteLeft()+(int)(x*(double)sitePic.getWidth());
+				              int top = sitePic.getAbsoluteTop()+(int)(y*(double)sitePic.getHeight());
+				              container.setPopupPosition(left, top);
+				            }
+				          });
+				container.setVisible(false);
+				popups.add(container);
 			}
-		});
+			siteControllerPopupList.put(site, popups);
+		}
 	}
 	
 	public void renderSensorPopups(){
 		for(String controller: Data.controllerSensorList.keySet())
 		{
-			final HashMap<Boolean,String> toggle=new HashMap<>();
-			toggle.put(Boolean.TRUE,Images.getImage(Images.ON, 30));
-			toggle.put(Boolean.FALSE,Images.getImage(Images.OFF, 30));
 			
 			ArrayList<PopupPanel> popups = new ArrayList<>();
 			
@@ -175,7 +163,8 @@ public class SitePage extends Composite{
 				final double x = Double.parseDouble(attributes.get(9));
 				final double y = Double.parseDouble(attributes.get(10));
 				String icon = setSensorIcon(type);
-				PowerToggle temp = new PowerToggle(icon,name);
+				
+				Sensor temp = new Sensor(icon,name);
 				
 				final PopupPanel container = new PopupPanel();
 				
@@ -198,60 +187,60 @@ public class SitePage extends Composite{
 		}
 	}
 	
+	public void popupControllers(String siteName){
+		
+		for(PopupPanel popup: siteControllerPopupList.get(siteName)){
+			popup.setAnimationEnabled(true);
+			popup.setAnimationType(AnimationType.CENTER);
+			popup.setVisible(true);
+		}
+	}
+	
 	public void popupSensors(String controllerName, Boolean state){
 		
 		for(PopupPanel popup: controllerSensorPopupList.get(controllerName)){
 			popup.setAnimationEnabled(true);
 			popup.setAnimationType(AnimationType.CENTER);
 			popup.setVisible(state);
-//			ArrayList<String> controllerAttributes = Data.controllerAttributeList.get(controllerName);
-//
-//			Graphics g;
-//			g.drawLine(popup.getPopupLeft(), popup.getPopupTop(), Integer.parseInt(controllerAttributes.get(2)), Integer.parseInt(controllerAttributes.get(3)));
 		}
 	}
 	
 	public void renderActuatorPopups(){
 		for(String controller: Data.controllerActuatorList.keySet())
 		{
-			final HashMap<Boolean,String> toggle=new HashMap<>();
-			toggle.put(Boolean.TRUE,Images.getImage(Images.ON, 30));
-			toggle.put(Boolean.FALSE,Images.getImage(Images.OFF, 30));
-			
 			ArrayList<PopupPanel> popups = new ArrayList<>();
 			
-			for(String actuators: Data.controllerActuatorList.get(controller))
-			{
-				ArrayList<String> attributes = Data.actuatorAttributeList.get(actuators);
-				String name = attributes.get(0);
-				String status = attributes.get(2);
-				final double x = Double.parseDouble(attributes.get(3));
-				final double y = Double.parseDouble(attributes.get(4));
-				
-				Window.alert(name+" "+status+" "+x+" "+y);
-				
-				String icon = Images.getImage(Images.ACTUATOR_CURRENT_ICON,30);
-				PowerToggle temp = new PowerToggle(icon, name, toggle, status);
-				
-				final PopupPanel container = new PopupPanel();
-				
-				actuatorIcons.add(container);
-				
-				container.add(temp);
-				container.setVisible(false);
-				container.getElement().getStyle().setBackgroundColor("rgba(255,0,0,0.0)");
-				container.getElement().getStyle().setBorderWidth(0,Unit.PX);
-				container.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
-		            public void setPosition(int offsetWidth, int offsetHeight) {
-		            	int left = sitePic.getAbsoluteLeft()+(int)(x*(double)sitePic.getWidth());
-			            int top = sitePic.getAbsoluteTop()+(int)(y*(double)sitePic.getHeight());
-		              container.setPopupPosition(left, top);
-		            }
-		          });
-				
-				popups.add(container);
-			}
-			controllerActuatorPopupList.put(controller, popups);
+				for(String actuators: Data.controllerActuatorList.get(controller))
+				{
+					ArrayList<String> attributes = Data.actuatorAttributeList.get(actuators);
+					String name = attributes.get(0);
+					String status = attributes.get(2);
+					final double x = Double.parseDouble(attributes.get(3));
+					final double y = Double.parseDouble(attributes.get(4));
+					
+					String icon = Images.getImage(Images.ACTUATOR_CURRENT_ICON,25);
+					
+					Actuator temp = new Actuator(icon, name, status);
+					
+					final PopupPanel container = new PopupPanel();
+					
+					actuatorIcons.add(container);
+					
+					container.add(temp);
+					container.getElement().getStyle().setBackgroundColor("rgba(255,0,0,0.0)");
+					container.getElement().getStyle().setBorderWidth(0,Unit.PX);
+					container.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
+			            public void setPosition(int offsetWidth, int offsetHeight) {
+			            	int left = sitePic.getAbsoluteLeft()+(int)(x*(double)sitePic.getWidth());
+				            int top = sitePic.getAbsoluteTop()+(int)(y*(double)sitePic.getHeight());
+			              container.setPopupPosition(left, top);
+			            }
+			          });
+					
+					container.setVisible(false);
+					popups.add(container);
+				}
+				controllerActuatorPopupList.put(controller, popups);
 		}	
 	}
 	
@@ -311,82 +300,98 @@ public class SitePage extends Composite{
 		sitePic.setVisible(false);
 	}
 	
-	public class PowerToggle extends Composite{
+	public class Sensor extends Composite{
+			
+			public Sensor(String icon, String name){
+
+				final HashMap<Boolean,String> toggle=new HashMap<>();
+				toggle.put(Boolean.TRUE,Images.getImage(Images.ON, 30));
+				toggle.put(Boolean.FALSE,Images.getImage(Images.OFF, 30));
+				
+				HorizontalPanel hPanel = new HorizontalPanel();
+				hPanel.setStyleName("rounded");
+				hPanel.getElement().getStyle().setBackgroundColor("white");
+				hPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+				hPanel.setSpacing(3);
+				hPanel.add(new HTML(icon));
+				hPanel.add(new HTML(name));
+				
+				VerticalPanel vPanel = new VerticalPanel();
+				vPanel.setSpacing(5);
+				vPanel.add(hPanel);
+				
+				initWidget(vPanel);
+			}
+	}
+	
+	public static class Actuator extends Composite{
+		public static HashMap<Anchor,Boolean> state=new HashMap<>();
 		
-		public PowerToggle(String icon, String name){
+		public Actuator(String icon, final String name, String status){
+			final HashMap<Boolean,String> toggle=new HashMap<>();
+			toggle.put(Boolean.TRUE,Images.getImage(Images.ON, 30));
+			toggle.put(Boolean.FALSE,Images.getImage(Images.OFF, 30));
+			
 			HorizontalPanel hPanel = new HorizontalPanel();
 			hPanel.setStyleName("rounded");
-			hPanel.getElement().getStyle().setBackgroundColor("#BBEAF1");
+			hPanel.getElement().getStyle().setBackgroundColor("white");
 			hPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+			hPanel.setSpacing(3);
 			hPanel.add(new HTML(icon));
 			hPanel.add(new HTML(name));
-			
-//			final Anchor temp = new Anchor(" ");
-//			temp.getElement().getStyle().setProperty("toggleStatus","FALSE");
-//			temp.setHTML(toggle.get(Boolean.parseBoolean(temp.getElement().getStyle().getProperty("toggleStatus"))));
-//			
-//			temp.addClickHandler(new ClickHandler(){
-//				public void onClick(ClickEvent event){
-//					temp.getElement().getStyle().setProperty("toggleStatus",String.valueOf(!Boolean.parseBoolean(temp.getElement().getStyle().getProperty("toggleStatus"))));
-//					temp.setHTML(toggle.get(Boolean.parseBoolean(temp.getElement().getStyle().getProperty("toggleStatus"))));
-//				}
-//			});
-			
-			VerticalPanel vPanel = new VerticalPanel();
-			vPanel.setSpacing(5);
-			vPanel.add(hPanel);
-//			vPanel.add(temp);
-//			vPanel.setCellHorizontalAlignment(temp, HasHorizontalAlignment.ALIGN_CENTER);
-			
-			initWidget(vPanel);
-		}
-		
-		public PowerToggle(String icon, String name, final HashMap<Boolean,String> toggle, String status){
-			HorizontalPanel hPanel = new HorizontalPanel();
-			hPanel.setStyleName("rounded");
-			hPanel.getElement().getStyle().setBackgroundColor("#BBEAF1");
-			hPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-			hPanel.add(new HTML(icon));
-			hPanel.add(new HTML(name));
-			
+
 			final Anchor temp = new Anchor(" ");
-			if(status.equals("ON"))
-			{
-				temp.getElement().getStyle().setProperty("toggleStatus","TRUE");
-			}
-			else
-			{
-				temp.getElement().getStyle().setProperty("toggleStatus","FALSE");
-			}
+			//Enable click
+			temp.setName("true");
 			
-			temp.setHTML(toggle.get(Boolean.parseBoolean(temp.getElement().getStyle().getProperty("toggleStatus"))));
+			//Initial status from db
+			if(status.equals("ON")) state.put(temp,true);
+			else state.put(temp,false);
+			
+			temp.setHTML(toggle.get(state.get(temp)));
 			
 			temp.addClickHandler(new ClickHandler(){
 				public void onClick(ClickEvent event){
-					temp.getElement().getStyle().setProperty("toggleStatus",String.valueOf(!Boolean.parseBoolean(temp.getElement().getStyle().getProperty("toggleStatus"))));
-					temp.setHTML(Images.getImage(Images.LOADING));
-					
-					String status = "";
-					
-					if(temp.getElement().getStyle().getProperty("toggleStatus").equals("TRUE")){
-						status="ON";
-					}
-					else
+					//if clickable
+					if(temp.getName().equalsIgnoreCase("TRUE"))
 					{
-						status="OFF";
+						//disable click until request finishes
+						temp.setName("false");
+						
+						temp.setHTML(Images.getImage(Images.LOADING, 25));
+	
+						String newStatus = "";
+						
+						if(!state.get(temp)){
+							newStatus="ON";
+						}
+						else
+						{
+							newStatus="OFF";
+						}
+						Window.alert("Turning "+newStatus);
+						Utility.newRequestObj().actuatorSetStatus(name, newStatus, new AsyncCallback<String>() {
+							public void onFailure(Throwable caught) {
+								Window.alert("Unable to update actuator status");
+								temp.setName("true");
+								temp.setHTML(toggle.get(state.get(temp)));
+							} 
+				 
+							public void onSuccess(final String reply) {
+								Window.alert("reply: "+reply);
+								if(reply.equals("OK"))
+								{
+									state.put(temp,!state.get(temp));
+								}
+								else
+								{
+									Window.alert("Error in updating");
+								}
+								temp.setName("true");
+								temp.setHTML(toggle.get(state.get(temp)));
+							}
+						});
 					}
-					
-					Utility.newRequestObj().actuatorSetStatus(status, new AsyncCallback<String[][]>() {
-						public void onFailure(Throwable caught) {
-							Window.alert("Unable to update actuator status");
-							temp.setHTML(toggle.get(Boolean.parseBoolean(temp.getElement().getStyle().getProperty("toggleStatus"))));
-						}
-			
-						public void onSuccess(final String[][] controllerResult) {
-							temp.getElement().getStyle().setProperty("toggleStatus",String.valueOf(!Boolean.parseBoolean(temp.getElement().getStyle().getProperty("toggleStatus"))));
-							temp.setHTML(toggle.get(Boolean.parseBoolean(temp.getElement().getStyle().getProperty("toggleStatus"))));
-						}
-					});
 				}
 			});
 			
@@ -398,5 +403,53 @@ public class SitePage extends Composite{
 			
 			initWidget(vPanel);
 		}
+	}
+	
+	public String toggle(String cStatus){
+		if(cStatus.equalsIgnoreCase("true"))
+		{
+			return "false";
+		}
+		else
+		{
+			return "true";
+		}
+	}
+	
+	public class ControllerToggle extends Composite{
+			
+			public ControllerToggle(final String name){
+
+				final HashMap<Boolean,String> toggle=new HashMap<>();
+				toggle.put(Boolean.TRUE,Images.getImage(Images.SELECTED, 30));
+				toggle.put(Boolean.FALSE,Images.getImage(Images.MICROCONTROLLER_ICON, 30));
+				
+				final Anchor temp = new Anchor(" ");
+				temp.getElement().getStyle().setProperty("toggleStatus","FALSE");
+				temp.setHTML(toggle.get(Boolean.parseBoolean(temp.getElement().getStyle().getProperty("toggleStatus"))));
+				temp.addClickHandler(new ClickHandler(){
+					public void onClick(ClickEvent event){
+						temp.getElement().getStyle().setProperty("toggleStatus",String.valueOf(!Boolean.parseBoolean(temp.getElement().getStyle().getProperty("toggleStatus"))));
+						temp.setHTML(toggle.get(Boolean.parseBoolean(temp.getElement().getStyle().getProperty("toggleStatus"))));
+						popupSensors(name,Boolean.parseBoolean(temp.getElement().getStyle().getProperty("toggleStatus")));
+						popupActuators(name,Boolean.parseBoolean(temp.getElement().getStyle().getProperty("toggleStatus")));
+						}
+				});
+				
+				HorizontalPanel hPanel = new HorizontalPanel();
+				hPanel.setStyleName("rounded");
+				hPanel.getElement().getStyle().setBackgroundColor("white");
+				hPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+				hPanel.setSpacing(3);
+				hPanel.add(new HTML(name));
+				
+				VerticalPanel vPanel = new VerticalPanel();
+				vPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+				vPanel.setSpacing(5);
+				vPanel.add(hPanel);
+				vPanel.add(temp);
+				
+				initWidget(vPanel);
+			}
 	}
 }

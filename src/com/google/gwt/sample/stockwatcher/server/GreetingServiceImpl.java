@@ -52,7 +52,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return Utility.DataToString(data);
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter("requestLog.txt")));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.requestError)));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -76,7 +76,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			InputStream is=sc.getInputStream();
 			ObjectInputStream ois=new ObjectInputStream(is);
 			@SuppressWarnings("unchecked")
-			String data=Utility.decryptMsg(ois);
+			String data=Utility.decryptLogin(ois);
 			
 			oos.close();
 			os.close();
@@ -86,7 +86,13 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			sc.close();
 			
 			return data.equals("ACTIVATED");
-		} catch (Exception e) {return false;}
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userLoginError)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return false;}
 	}
 	
 	public String[][] getSiteList() throws IllegalArgumentException {
@@ -111,7 +117,13 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			sc.close();
 			
 			return Utility.DataToString(data);
-		} catch (Exception e) {return null;}
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getSiteList)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
 	}
 	
 	public String[][] getControllerList(String siteName) throws IllegalArgumentException {
@@ -137,7 +149,13 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			sc.close();
 			
 			return Utility.DataToString(data);
-		} catch (Exception e) {return null;}
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getControllerList)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
 	}
 	
 	public String[][] getSensorList(String controllerName) throws IllegalArgumentException {
@@ -163,7 +181,13 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			sc.close();
 			
 			return Utility.DataToString(data);
-		} catch (Exception e) {return null;}
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getSensorList)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
 	}
 	
 	public String[][] getActuatorList(String controllerName) throws IllegalArgumentException {
@@ -180,7 +204,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			ObjectInputStream ois=new ObjectInputStream(is);
 			@SuppressWarnings("unchecked")
 			ArrayList<Object []> data=Utility.decryptData(ois);
-
+			
 			oos.close();
 			os.close();
 			ois.close();
@@ -191,7 +215,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return Utility.DataToString(data);
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter("getActuatorListLog.txt")));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getActuatorList)));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -199,13 +223,12 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 		return null;
 	}
 	
-	public String[][] actuatorSetStatus(String status) throws IllegalArgumentException {
+	public String actuatorSetStatus(String actuator, String status) throws IllegalArgumentException {
 		try {
-			wait(10000);
-			
 			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
 			ArrayList<Object> toSend=new ArrayList<>();
 			toSend.add("45");
+			toSend.add(actuator);
 			toSend.add(status);
 			OutputStream os = sc.getOutputStream();
 			ObjectOutputStream oos=new ObjectOutputStream(os);
@@ -214,7 +237,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			InputStream is=sc.getInputStream();
 			ObjectInputStream ois=new ObjectInputStream(is);
 			@SuppressWarnings("unchecked")
-			ArrayList<Object []> data=Utility.decryptData(ois);
+			String data=Utility.decryptString(ois);
 			
 			oos.close();
 			os.close();
@@ -223,8 +246,14 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			
 			sc.close();
 			
-			return Utility.DataToString(data);
-		} catch (Exception e) {return null;}
+			return data;
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.actuatorSetStatus)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
 	}
 	
 	public int getNewPortNumber() throws IllegalArgumentException {

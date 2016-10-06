@@ -32,6 +32,8 @@ h1 {
 }
 
 .rounded {
+/*	border-style: ridge;*/
+	border-style: inset;
 	border-radius: 5px;
 }
 

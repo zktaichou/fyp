@@ -1,6 +1,9 @@
 package com.google.gwt.sample.stockwatcher.server;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.ObjectInputStream;
+import java.io.PrintWriter;
 import java.security.MessageDigest;
 import java.security.spec.KeySpec;
 import java.time.Instant;
@@ -91,7 +94,13 @@ public class Utility{
 			SecretKey secret=new SecretKeySpec(factory.generateSecret(spec).getEncoded(),"AES");
 		
 			return secret;
-		} catch (Exception e) {return null;}
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getKey)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
 	}
 
 	public static SealedObject encryptMsg(ArrayList<Object> msg){
@@ -99,16 +108,28 @@ public class Utility{
 			Cipher encrypter=Cipher.getInstance("AES");
 	        encrypter.init(Cipher.ENCRYPT_MODE,getKey());
 			return new SealedObject(msg,encrypter);
-		} catch (Exception e) {return null;}
+		} catch (Exception e) {
+			try {
+				PrintWriter p=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.failedEcryption)));
+				e.printStackTrace(p);
+				p.close();
+			} catch (Exception f) {}
+			return null;}
 	}
 	
-	public static String decryptMsg(ObjectInputStream ois){
+	public static String decryptLogin(ObjectInputStream ois){
 		try {
 	        Cipher decrypter=Cipher.getInstance("AES");
 	        decrypter.init(Cipher.DECRYPT_MODE,getKey());
 	        
 			return (String)(((SealedObject) ois.readObject()).getObject(decrypter));
-		} catch (Exception e) {return null;}
+		} catch (Exception e) {
+			try {
+				PrintWriter p=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.failedLoginDecryption)));
+				e.printStackTrace(p);
+				p.close();
+			} catch (Exception f) {}
+			return null;}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -118,7 +139,33 @@ public class Utility{
 	        decrypter.init(Cipher.DECRYPT_MODE,getKey());
 	        
 			return (ArrayList<Object []>)(((SealedObject) ois.readObject()).getObject(decrypter));
-		} catch (Exception e) {return null;}
+		} catch (Exception e) {
+			
+			try {
+				PrintWriter p=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.failedDecryption)));
+				e.printStackTrace(p);
+				p.close();
+			} catch (Exception f) {}
+			
+			return null;}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static String decryptString(ObjectInputStream ois){
+		try {
+	        Cipher decrypter=Cipher.getInstance("AES");
+	        decrypter.init(Cipher.DECRYPT_MODE,getKey());
+	        
+			return (String)(((SealedObject) ois.readObject()).getObject(decrypter));
+		} catch (Exception e) {
+			
+			try {
+				PrintWriter p=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.failedStringDecryption)));
+				e.printStackTrace(p);
+				p.close();
+			} catch (Exception f) {}
+			
+			return null;}
 	}
 	
 	public static String[][] DataToString(ArrayList<Object []> input){
@@ -138,7 +185,13 @@ public class Utility{
 			}
 			
 			return data;
-		} catch (Exception e) {return null;}
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.dataToString)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
 	}
 	
 	public static long localDateTimeToLong (LocalDateTime dt) {

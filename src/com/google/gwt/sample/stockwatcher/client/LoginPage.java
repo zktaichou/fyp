@@ -108,6 +108,7 @@ public class LoginPage extends Composite {
 				public void onSuccess(Boolean result) {
 					if(result)
 					{
+						ResourcePreload.getSiteList();
 						Pages.enterMainMenuPage();
 						Menu.start();
 					}
