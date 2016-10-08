@@ -11,40 +11,50 @@ public class ContentPanel extends Composite{
 
 	HorizontalPanel wholePanel = new HorizontalPanel();
 	HorizontalPanel leftPanel = new HorizontalPanel();
+	HorizontalPanel middlePanel = new HorizontalPanel();
 	HorizontalPanel rightPanel = new HorizontalPanel();
 	
 	public ContentPanel(){
 		wholePanel.add(leftPanel);
+		wholePanel.add(middlePanel);
 		wholePanel.add(rightPanel);
 		wholePanel.setSize("100%", BasePage.contentPanelHeight+"px");
 		wholePanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		wholePanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		wholePanel.setCellHorizontalAlignment(leftPanel, HasHorizontalAlignment.ALIGN_LEFT);
-		wholePanel.setCellHorizontalAlignment(rightPanel, HasHorizontalAlignment.ALIGN_CENTER);
-		wholePanel.setCellVerticalAlignment(rightPanel, HasVerticalAlignment.ALIGN_MIDDLE);
+		wholePanel.setCellHorizontalAlignment(middlePanel, HasHorizontalAlignment.ALIGN_CENTER);
+		wholePanel.setCellHorizontalAlignment(rightPanel, HasHorizontalAlignment.ALIGN_RIGHT);
+		wholePanel.setCellVerticalAlignment(middlePanel, HasVerticalAlignment.ALIGN_MIDDLE);
 		
 		leftPanel.setHeight("100%");
-		rightPanel.setSize("100%", "100%");
+		middlePanel.setSize("100%", "100%");
+		rightPanel.setHeight("100%");
 		
 		initWidget(wholePanel);
 	}
 	
 	public void add(Widget widget){
+		middlePanel.add(widget);
+		middlePanel.setCellHorizontalAlignment(widget, HasHorizontalAlignment.ALIGN_CENTER);
+		middlePanel.setCellVerticalAlignment(widget, HasVerticalAlignment.ALIGN_MIDDLE);
+	}
+	
+	public void addRight(Widget widget){
 		rightPanel.add(widget);
 		rightPanel.setCellHorizontalAlignment(widget, HasHorizontalAlignment.ALIGN_CENTER);
-		rightPanel.setCellVerticalAlignment(widget, HasVerticalAlignment.ALIGN_MIDDLE);
+		rightPanel.setCellVerticalAlignment(widget, HasVerticalAlignment.ALIGN_TOP);
 	}
 	
 	public void add(HorizontalPanel panel){
-		rightPanel.add(panel);
-		rightPanel.setCellHorizontalAlignment(panel, HasHorizontalAlignment.ALIGN_CENTER);
-		rightPanel.setCellVerticalAlignment(panel, HasVerticalAlignment.ALIGN_MIDDLE);
+		middlePanel.add(panel);
+		middlePanel.setCellHorizontalAlignment(panel, HasHorizontalAlignment.ALIGN_CENTER);
+		middlePanel.setCellVerticalAlignment(panel, HasVerticalAlignment.ALIGN_MIDDLE);
 	}
 	
 	public void add(VerticalPanel panel){
-		rightPanel.add(panel);
-		rightPanel.setCellHorizontalAlignment(panel, HasHorizontalAlignment.ALIGN_CENTER);
-		rightPanel.setCellVerticalAlignment(panel, HasVerticalAlignment.ALIGN_MIDDLE);
+		middlePanel.add(panel);
+		middlePanel.setCellHorizontalAlignment(panel, HasHorizontalAlignment.ALIGN_CENTER);
+		middlePanel.setCellVerticalAlignment(panel, HasVerticalAlignment.ALIGN_MIDDLE);
 	}
 	
 	public void addLeft(VerticalPanel panel){
@@ -55,6 +65,7 @@ public class ContentPanel extends Composite{
 	public void clear(){
 		SitePage.hideAllIcons(); //Manual workaround, may need to change
 		leftPanel.clear();
+		middlePanel.clear();
 		rightPanel.clear();
 	}
 }

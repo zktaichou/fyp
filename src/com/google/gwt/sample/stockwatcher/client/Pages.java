@@ -29,4 +29,11 @@ public class Pages{
 		BasePage.contentPanel.clear();
 		BasePage.contentPanel.add(sitePage);
 	}
+	
+	public static void enterSchedulePage(){
+		SchedulePage schedulePage = new SchedulePage();
+		
+		BasePage.contentPanel.clear();
+		BasePage.contentPanel.add(schedulePage);
+	}
 }

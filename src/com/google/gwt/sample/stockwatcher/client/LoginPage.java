@@ -119,33 +119,34 @@ public class LoginPage extends Composite {
 			mainPanel.setSize("100%", "100%");
 			mainPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 			mainPanel.add(msgPanel);
-			
-			Utility.newRequestObj().userLogin(usernameTB.getText(),passwordTB.getText(), new AsyncCallback<Boolean>() {
-				public void onFailure(Throwable caught) {
-					Window.alert("Can't connect to database");
-				}
-				
-				//Remember to use Object[] input to get the rest of the information for chart display
-				public void onSuccess(Boolean result) {
-					if(result)
-					{
-						Timer t = new Timer() {
-						      @Override
-						      public void run() {
-									Pages.enterMainMenuPage();
-									Menu.start();
-						      }
-						    };
-
-						    // Schedule the timer to run once in 5 seconds.
-						    t.schedule(new Random().nextInt(2001)+2000);
-					}
-					else
-					{
-						Window.alert("No such username/password combination found");
-					}
-				}
-			});
+			Pages.enterMainMenuPage();
+			Menu.start();
+//			Utility.newRequestObj().userLogin(usernameTB.getText(),passwordTB.getText(), new AsyncCallback<Boolean>() {
+//				public void onFailure(Throwable caught) {
+//					Window.alert("Can't connect to database");
+//				}
+//				
+//				//Remember to use Object[] input to get the rest of the information for chart display
+//				public void onSuccess(Boolean result) {
+//					if(result)
+//					{
+//						Timer t = new Timer() {
+//						      @Override
+//						      public void run() {
+//									Pages.enterMainMenuPage();
+//									Menu.start();
+//						      }
+//						    };
+//
+//						    // Schedule the timer to run once in 5 seconds.
+//						    t.schedule(new Random().nextInt(2001)+2000);
+//					}
+//					else
+//					{
+//						Window.alert("No such username/password combination found");
+//					}
+//				}
+//			});
 		}
 		
 	}

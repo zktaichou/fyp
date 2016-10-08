@@ -1,5 +1,21 @@
 .mainStyle {
+	color: #FFFFFF;
 	border: none;
 	font-family: 'Play', sans-serif;
 	text-decoration: none !important;
+}
+.filterMenu {
+	color: #FFFFFF;
+  	vertical-align: top !important;
+  	height: 100%;
+  	margin: 0px 10px 0px 0px;
+	font-family: 'Play', sans-serif;
+  	border-left: thin double #FFFFFF;
+	text-decoration: none !important;
+}
+
+.parameterPanel {
+  vertical-align: top;
+  height: 100%;
+  border-right: thin double #FFFFFF;
 }

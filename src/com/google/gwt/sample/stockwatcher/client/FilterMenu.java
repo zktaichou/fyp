@@ -1,6 +1,7 @@
 package com.google.gwt.sample.stockwatcher.client;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -8,7 +9,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class FilterMenu {
+public class FilterMenu extends Composite{
 	
 	int count = 0;
 	
@@ -16,6 +17,8 @@ public class FilterMenu {
 	
 	public FilterMenu(){
 		mainPanel.setSpacing(5);
+		
+		initWidget(mainPanel);
 	}
 	
 	public void addLabel(String string){
@@ -109,7 +112,7 @@ public class FilterMenu {
 		mainPanel.setCellHorizontalAlignment(widget, align);
 	}
 	
-	public void clearWidgets(){
+	public void clear(){
 		mainPanel.clear();
 	}
 	

@@ -113,7 +113,7 @@ public class Menu extends Composite {
 		});
 		scheduleAnchor.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
-				Window.alert(Messages.WIP);
+				Pages.enterSchedulePage();
 			};
 		});
 		electricAnchor.addClickHandler(new ClickHandler(){

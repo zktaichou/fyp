@@ -60,7 +60,7 @@ public class Footer extends Composite {
 	private void setupAnchors() {
 		//
 		Date today = new Date();
-		DateTimeFormat dateFormat = DateTimeFormat.getFormat("MMMM d, yyyy h:mm:ss a (zzzzz)");
+		DateTimeFormat dateFormat = DateTimeFormat.getFormat("d MMMM yyyy h:mm:ss a (zzzzz)");
 		DateTimeFormat yearFormat = DateTimeFormat.getFormat("yyyy");
 		
 		//

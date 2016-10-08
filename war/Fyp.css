@@ -37,12 +37,6 @@ h1 {
 	border-radius: 5px;
 }
 
-.parameterPanel {
-  vertical-align: top;
-  height: 100%;
-  border-right: thin double #000000;
-}
-
 .sendButton {
   display: block;
   font-size: 16pt;
