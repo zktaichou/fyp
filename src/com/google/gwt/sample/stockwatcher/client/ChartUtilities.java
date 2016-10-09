@@ -63,6 +63,8 @@ static final HorizontalPanel chartPanel = new HorizontalPanel();
 
 static final DateTimeFormat dateTimeFormat = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss");
 static final DateTimeFormat calendarFormat = DateTimeFormat.getFormat("d MMMM yyyy");
+static final DateTimeFormat requestFormat = DateTimeFormat.getFormat("dd-MM-yyyy");
+
 static long getTime(String date) {
     return dateTimeFormat.parse(date).getTime();  
 }  
@@ -72,16 +74,22 @@ static long getTime(String date) {
 	private static String updateTitle(String name, java.sql.Date sd, java.sql.Date ed){
 		return name+" reading from "+sd+" to "+ed;
 	}
-
+	
+	public static java.sql.Date stringToDate(String date){
+		String stringDate = date+" 00:00:00";
+		return new java.sql.Date(dateTimeFormat.parse(stringDate).getTime());
+	}
+	
 	//Object returned here --------------vvvvv
-	public static void getData(final String sn, final java.sql.Date sd, final java.sql.Date ed){
+	public static void getData(final String sn, final java.sql.Date sd, final java.sql.Date ed, final boolean predictionIsEnabled){
 		Data.latestRequestID++;
 		final int currRequestID=Data.latestRequestID;
+		
 		chartPanel.clear();
 		if(!chartPanel.isAttached())
 		BasePage.contentPanel.add(chartPanel);
 		
-		Utility.newRequestObj().greetServer(sn,sd,ed, new AsyncCallback<String[][]>() {
+		Utility.newRequestObj().greetServer(sn,sd,ed,predictionIsEnabled, new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
 				Window.alert("Data request failed");
 			}
@@ -91,16 +99,22 @@ static long getTime(String date) {
 				if(currRequestID==Data.latestRequestID)
 				{
 				Number [][] data = formatData(result);
-				chartPanel.add(createChart(data,updateTitle(sn,sd,ed)));
+				StockChart chart = createChart(data,updateTitle(sn,sd,ed), predictionIsEnabled);
+				if(predictionIsEnabled)
+				{
+//					chart.addSeries(series);
+				}
+				
+				chartPanel.add(chart);
 				//BasePage.panel.add(createFlexTable(result));
 				}
 			}
 		});
 	}
 	
-	public static void getAppendData(final Series s, String sn, java.sql.Date sd, java.sql.Date ed){
+	public static void getAppendData(final Series s, String sn, java.sql.Date sd, java.sql.Date ed, Boolean prediction){
 		
-		Utility.newRequestObj().greetServer(sn,sd,ed, new AsyncCallback<String[][]>() {
+		Utility.newRequestObj().greetServer(sn,sd,ed,prediction,new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
 				Window.alert("Data append fail");
 			}
@@ -118,17 +132,21 @@ static long getTime(String date) {
 	}
 	
 	public static Number[][] formatData(String [][] input){
-		Number [][] data = new Number[input.length][2];
+		int dataCount = input[0].length;
+		Number [][] data = new Number[input.length][dataCount];
 		
 		for(int i=input.length-1;i>=0;i--)
 		{
 			data[input.length-i-1][0]=DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss").parse(input[i][0]).getTime();
-			data[input.length-i-1][1]=convertToNumber(input[i][1]);
+			for(int j=1; j<dataCount;j++)
+			{
+			data[input.length-i-1][j]=convertToNumber(input[i][j]);
+			}
 		}
 		return data;
 	}
 	
-	public static StockChart createChart(Number[][] data, String title){
+	public static StockChart createChart(Number[][] data, String title, final Boolean predictionIsEnabled){
 		
 		Utility.hideTimer();
 		
@@ -180,7 +198,7 @@ static long getTime(String date) {
             	if (chart.isAttached()) {
             		if (chart.isRendered()) {
 	                	long currTime=System.currentTimeMillis();
-	                	getAppendData(series,"testTemp",lastRequestTime,new java.sql.Date(currTime));
+	                	getAppendData(series,"testTemp",lastRequestTime,new java.sql.Date(currTime),predictionIsEnabled);
 	                    lastRequestTime=new java.sql.Date(currTime+10);
             		}
                     schedule(2000);
@@ -193,11 +211,6 @@ static long getTime(String date) {
         chart.setSize(Window.getClientWidth()*2/3, Window.getClientHeight()*2/3);
 	    
 		return chart;
-	}
-	
-	public static java.sql.Date stringToDate(String day, String month, String year){
-		String stringDate = year+"-"+month+"-"+day+" 00:00:00";
-		return new java.sql.Date(dateTimeFormat.parse(stringDate).getTime());
 	}
 	
     public static Chart realTimeUpdatesChart() {

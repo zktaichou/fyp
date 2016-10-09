@@ -52,6 +52,7 @@ public class FilterMenu extends Composite{
 	
 	public void addNewRow(Widget widget){
 		HorizontalPanel panel = new HorizontalPanel();
+		panel.getElement().getStyle().setPaddingTop(8, Unit.PX);
 		panel.getElement().getStyle().setPaddingLeft(2.5, Unit.PX);
 		panel.getElement().getStyle().setPaddingRight(2.5, Unit.PX);
 		panel.add(widget);

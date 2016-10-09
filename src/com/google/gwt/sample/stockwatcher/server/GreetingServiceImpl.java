@@ -23,7 +23,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 @SuppressWarnings("serial")
 public class GreetingServiceImpl extends RemoteServiceServlet implements GreetingService {
 	
-	public String[][] greetServer(String sn, Date sd, Date ed) throws IllegalArgumentException {
+	public String[][] greetServer(String sn, Date sd, Date ed, Boolean predictionIsEnabled) throws IllegalArgumentException {
 		try {
 			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
 			ArrayList<Object> toSend=new ArrayList<>();
@@ -49,7 +49,14 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			
 			sc.close();
 			
-			return Utility.DataToString(data);
+			String[][] result = Utility.DataToString(data);
+			
+			if(predictionIsEnabled)
+			{
+				result = Weka.predict(result);
+			}
+			
+			return result;
 		} catch (Exception e) {
 			try {
 				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.requestError)));
