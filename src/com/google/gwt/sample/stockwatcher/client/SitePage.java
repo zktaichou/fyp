@@ -34,6 +34,7 @@ public class SitePage extends Composite{
 	public SitePage(){
 		
 		VerticalPanel wrapper = new VerticalPanel();
+		wrapper.setStyleName("mainStyle");
 		wrapper.add(new HTML("<h2>Selection Menu</h2></br>"));
 		wrapper.add(new HTML("Please select site(s):"));
 		wrapper.add(siteListBox);

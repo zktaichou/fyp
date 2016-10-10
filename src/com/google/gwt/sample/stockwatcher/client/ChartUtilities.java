@@ -2,6 +2,7 @@ package com.google.gwt.sample.stockwatcher.client;
 
 import com.google.gwt.i18n.client.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
@@ -63,20 +64,23 @@ static final HorizontalPanel chartPanel = new HorizontalPanel();
 
 static final DateTimeFormat dateTimeFormat = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss");
 static final DateTimeFormat calendarFormat = DateTimeFormat.getFormat("d MMMM yyyy");
-static final DateTimeFormat requestFormat = DateTimeFormat.getFormat("dd-MM-yyyy");
+static final DateTimeFormat requestFormat = DateTimeFormat.getFormat("yyyy-MM-dd");
 
 static long getTime(String date) {
     return dateTimeFormat.parse(date).getTime();  
 }  
 
-
-
 	private static String updateTitle(String name, java.sql.Date sd, java.sql.Date ed){
 		return name+" reading from "+sd+" to "+ed;
 	}
 	
-	public static java.sql.Date stringToDate(String date){
+	public static java.sql.Date stringToStartDate(String date){
 		String stringDate = date+" 00:00:00";
+		return new java.sql.Date(dateTimeFormat.parse(stringDate).getTime());
+	}
+	
+	public static java.sql.Date stringToEndDate(String date){
+		String stringDate = date+" 23:59:59";
 		return new java.sql.Date(dateTimeFormat.parse(stringDate).getTime());
 	}
 	
@@ -85,9 +89,7 @@ static long getTime(String date) {
 		Data.latestRequestID++;
 		final int currRequestID=Data.latestRequestID;
 		
-		chartPanel.clear();
-		if(!chartPanel.isAttached())
-		BasePage.contentPanel.add(chartPanel);
+		MonitoringPage.chartPanel.clear();
 		
 		Utility.newRequestObj().greetServer(sn,sd,ed,predictionIsEnabled, new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
@@ -99,13 +101,13 @@ static long getTime(String date) {
 				if(currRequestID==Data.latestRequestID)
 				{
 				Number [][] data = formatData(result);
-				StockChart chart = createChart(data,updateTitle(sn,sd,ed), predictionIsEnabled);
+				StockChart chart = createChart(sn, data,updateTitle(sn,sd,ed), predictionIsEnabled);
 				if(predictionIsEnabled)
 				{
 //					chart.addSeries(series);
 				}
 				
-				chartPanel.add(chart);
+				MonitoringPage.chartPanel.add(chart);
 				//BasePage.panel.add(createFlexTable(result));
 				}
 			}
@@ -116,7 +118,7 @@ static long getTime(String date) {
 		
 		Utility.newRequestObj().greetServer(sn,sd,ed,prediction,new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
-				Window.alert("Data append fail");
+//				Window.alert("Data append fail");
 			}
 			
 			//Remember to use Object[] input to get the rest of the information for chart display
@@ -146,7 +148,7 @@ static long getTime(String date) {
 		return data;
 	}
 	
-	public static StockChart createChart(Number[][] data, String title, final Boolean predictionIsEnabled){
+	public static StockChart createChart(final String sensorName, Number[][] data, String title, final Boolean predictionIsEnabled){
 		
 		Utility.hideTimer();
 		
@@ -168,19 +170,30 @@ static long getTime(String date) {
                 )  
         )
 	    ;
+		chart.setBackgroundColor(new Color()
+				   .setLinearGradient(0.0, 0.0, 1.0, 1.0)
+				   .addColorStop(0, 0, 0, 0, 1)
+				   .addColorStop(0, 0, 0, 0, 0)
+				 );
 		
 		chart.getXAxis().setDateTimeLabelFormats(
 				new DateTimeLabelFormats()
 				    .setSecond("%l:%M:%S %p"));
 		
-		chart.getYAxis()  
-        .setAxisTitleText("Value")  
-        .setPlotLines(  
-            chart.getYAxis().createPlotLine()  
-                .setValue(0)  
-                .setWidth(1)  
-                .setColor("#808080")  
-        );  
+		ArrayList<String> attributes = Data.sensorAttributeList.get(sensorName);
+		String unit = attributes.get(5);
+		
+//		chart.getYAxis()
+//        .setAxisTitleText(unit)
+//        .setPlotLines(  
+//            chart.getYAxis().createPlotLine()  
+//                .setValue(0)  
+//                .setWidth(1)  
+//                .setColor("#808080")  
+//        )
+//        ;  
+		
+		chart.setStyleName("whiteFonts");
 		
 		final Series series = chart.createSeries();  
 	    chart.addSeries(series.setName("data")); 
@@ -198,7 +211,7 @@ static long getTime(String date) {
             	if (chart.isAttached()) {
             		if (chart.isRendered()) {
 	                	long currTime=System.currentTimeMillis();
-	                	getAppendData(series,"testTemp",lastRequestTime,new java.sql.Date(currTime),predictionIsEnabled);
+	                	getAppendData(series,sensorName,lastRequestTime,new java.sql.Date(currTime),predictionIsEnabled);
 	                    lastRequestTime=new java.sql.Date(currTime+10);
             		}
                     schedule(2000);
@@ -212,74 +225,6 @@ static long getTime(String date) {
 	    
 		return chart;
 	}
-	
-    public static Chart realTimeUpdatesChart() {
-	
-    final Chart chart = new Chart()  
-        .setType(Series.Type.SPLINE)  
-        .setMarginRight(10)  
-        .setChartTitleText("Just some sample chart~")  
-        .setBarPlotOptions(new BarPlotOptions()  
-            .setDataLabels(new DataLabels()  
-                .setEnabled(true)  
-            )  
-        )  
-        .setLegend(new Legend()  
-            .setEnabled(false)  
-        )  
-        .setCredits(new Credits()  
-            .setEnabled(false)  
-        )  
-        .setOption("/exporting/enabled", false)
-        .setToolTip(new ToolTip()  
-            .setFormatter(new ToolTipFormatter() {  
-                public String format(ToolTipData toolTipData) {  
-                    return "<b>" + toolTipData.getSeriesName() + "</b><br/>" +  
-                        DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss")  
-                            .format(new Date(toolTipData.getXAsLong())) + "<br/>" +  
-                        NumberFormat.getFormat("0.00").format(toolTipData.getYAsDouble());  
-                }  
-            })  
-        );  
-
-    chart.getXAxis()  
-        .setType(Axis.Type.DATE_TIME)  
-        .setTickPixelInterval(150);  
- 
-    chart.getYAxis()  
-        .setAxisTitleText("Value")  
-        .setPlotLines(   
-            chart.getYAxis().createPlotLine()  
-                .setValue(0)  
-                .setWidth(1)  
-                .setColor("#808080")  
-        );  
-
-    final Series series = chart.createSeries();  
-    chart.addSeries(series  
-        .setName("Random data")  
-    );  
-
-    // Generate an array of random data  
-    long time = new Date().getTime();  
-    for(int i = -19; i <= 0; i++) {  
-        series.addPoint(time + i * 1000, com.google.gwt.user.client.Random.nextDouble());  
-    }  
-
-    Timer tempTimer = new Timer() {  
-        @Override  
-        public void run() {  
-            series.addPoint(  
-                new Date().getTime(),  
-                com.google.gwt.user.client.Random.nextDouble(),  
-                true, true, true  
-            );  
-        }  
-    };  
-    tempTimer.scheduleRepeating(1000);  
-
-    return chart;  
-}
 
 //Methods to create a flex table from an input 2D String array
 private static FlexTable createFlexTable(String data[][])

@@ -37,7 +37,7 @@ public class Weka {
 				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(tempFileName)));
 				pw.println("@relation sample");
 				pw.println();
-				pw.println("@attribute Date date 'dd-MM-yyyy'");
+				pw.println("@attribute Date date 'dd-MM-yyyy HH:mm:ss'");
 				pw.println("@attribute value numeric");
 				pw.println();
 				pw.println("@data");

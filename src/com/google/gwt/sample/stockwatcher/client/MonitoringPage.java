@@ -9,6 +9,9 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
@@ -24,11 +27,10 @@ import com.google.gwt.user.datepicker.client.DateBox;
 public class MonitoringPage extends Composite {
 
 	ContentPanel contentPanel = new ContentPanel();
-	VerticalPanel mainPanel = new VerticalPanel();
 	VerticalPanel parameterPanel = new VerticalPanel();
 	VerticalPanel filterPanel = new VerticalPanel();
 	
-	HorizontalPanel chartPanel = new HorizontalPanel();
+	public static HorizontalPanel chartPanel = new HorizontalPanel();
 	HorizontalPanel buttonPanel = new HorizontalPanel();
 	HorizontalPanel selectionPanel = new HorizontalPanel();
 
@@ -99,6 +101,7 @@ public class MonitoringPage extends Composite {
 		parameterPanel.setHeight("100%");
 		parameterPanel.setStyleName("parameterPanel");
 		
+		chartPanel.clear();
 		chartPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		chartPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		
@@ -110,11 +113,21 @@ public class MonitoringPage extends Composite {
 		initWidget(contentPanel);
 		}
 	
+	private Boolean validInputFields(){
+		if(controllerSensorListBox.getItemCount()==0)
+		{
+			Window.alert("No sensor is selected");
+			return false;
+		}
+		return true;
+	}
+	
 	public void setHandlers(){
-		filterBox.addClickHandler(new ClickHandler(){
-			public void onClick(ClickEvent event){
+		filterBox.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+			   @Override
+			   public void onValueChange(ValueChangeEvent<Boolean> event) {
 					filterMenu.setVisible(filterBox.getValue());
-				};
+			   }
 			});
 		siteListBox.addChangeHandler(new ChangeHandler() {
 		      public void onChange(ChangeEvent event) {
@@ -129,20 +142,23 @@ public class MonitoringPage extends Composite {
 		      });
 		goButton.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
-				chartPanel.add(Utility.addTimer());
+				filterBox.setValue(false, true);
 				sendDataToServer();
 				};
 			});
 		refreshButton.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
-				chartPanel.add(Utility.addTimer());
 				sendDataToServer();
 				};
 			});
 	}
 	
 	private void sendDataToServer(){
-		ChartUtilities.getData(controllerSensorListBox.getSelectedItemText(),ChartUtilities.stringToDate(getSDate()),ChartUtilities.stringToDate(getEDate()),predictionBox.getValue());
+		if(validInputFields())
+		{
+		chartPanel.add(Utility.addTimer());
+		ChartUtilities.getData(controllerSensorListBox.getSelectedItemText(),ChartUtilities.stringToStartDate(getSDate()),ChartUtilities.stringToEndDate(getEDate()),predictionBox.getValue());
+		}
 	}
 	
 	private String getSDate(){
