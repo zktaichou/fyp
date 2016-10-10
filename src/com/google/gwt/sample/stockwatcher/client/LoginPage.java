@@ -112,7 +112,7 @@ public class LoginPage extends Composite {
 		}
 
 		public void checkLoginInfo(){
-			ResourcePreload.getSiteList();
+			ResourcePreload.preloadData();
 			
 //			Pages.enterMainMenuPage();
 //			Menu.start();

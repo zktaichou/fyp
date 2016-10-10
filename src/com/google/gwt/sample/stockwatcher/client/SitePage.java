@@ -40,7 +40,7 @@ public class SitePage extends Composite{
 		wrapper.add(siteListBox);
 		wrapper.add(selectionPanel);
 		wrapper.setSpacing(10);
-		  
+		   
 		parameterPanel.clear();
 		parameterPanel.add(wrapper);
 		parameterPanel.setHeight("100%");
@@ -65,13 +65,12 @@ public class SitePage extends Composite{
 		}
 		
 		siteListBox.setSelectedIndex(0);
-
-		getPic(siteListBox.getSelectedItemText());
 	}
 	
 	public void setHandlers(){
 
 		renderSiteListBox();
+		getPic(siteListBox.getItemText(0));
 
 		siteListBox.addChangeHandler(new ChangeHandler(){
 		      public void onChange(ChangeEvent event) {
@@ -87,6 +86,7 @@ public class SitePage extends Composite{
 		  		popupControllers(siteListBox.getSelectedItemText());
 		      }
 		});
+		
 	}
 	
 	public void getPic(String siteSelected){

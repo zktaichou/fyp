@@ -1,5 +1,6 @@
 package com.google.gwt.sample.stockwatcher.server;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -18,8 +19,18 @@ public class LogFile{
 	static String actuatorSetStatus = fileName("actuatorSetStatus");
 	static String dataToString = fileName("dataToString");
 	static String getKey = fileName("getKey");
+	static String getRegularSchedules = fileName("getRegularSchedules");
+	static String getRegularScheduleByName = fileName("getRegularScheduleByName");
+	static String getSpecialSchedules = fileName("getSpecialSchedules");
+	static String getSpecialScheduleByName = fileName("getSpecialScheduleByName");
+	static String getActuatorRegularSchedule = fileName("getActuatorRegularSchedule");
+	static String getActuatorSpecialSchedule = fileName("getActuatorSpecialSchedule");
 	
 	public static String fileName(String name){
+		try{
+		File file = new File("log");
+		} catch (Exception e){}
+		
 		return "log/"+name+"_"+timeStamp+".txt";
 	}
 	

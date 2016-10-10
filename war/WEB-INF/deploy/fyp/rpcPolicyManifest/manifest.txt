@@ -1,2 +1,3 @@
 # Module fyp
 # RPC service class, partial path of RPC policy file
+com.google.gwt.sample.stockwatcher.client.GreetingService, C06D47CC132BE310EAE89A28797AC3A7.gwt.rpc

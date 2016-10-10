@@ -10,6 +10,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface GreetingServiceAsync {
 	void greetServer(String sn, Date sd, Date ed, Boolean predictionIsEnabled, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
 	void userLogin(String username, String password, AsyncCallback<Boolean> callback) throws IllegalArgumentException;
+	void getRegularSchedules(AsyncCallback<String[][]> callback) throws IllegalArgumentException;
+	void getRegularScheduleByName(String scheduleName, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
+	void getActuatorRegularSchedule(String aName, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
+	void getSpecialSchedules(AsyncCallback<String[][]> callback) throws IllegalArgumentException;
+	void getSpecialScheduleByName(String scheduleName, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
+	void getActuatorSpecialSchedule(String aName, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
 	void getSiteList(AsyncCallback<String[][]> callback) throws IllegalArgumentException;
 	void getControllerList(String siteName, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
 	void getSensorList(String controllerName, AsyncCallback<String[][]> callback) throws IllegalArgumentException;

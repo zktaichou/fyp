@@ -227,7 +227,7 @@ static long getTime(String date) {
 	}
 
 //Methods to create a flex table from an input 2D String array
-private static FlexTable createFlexTable(String data[][])
+public static FlexTable createFlexTable(String data[][])
 {
 
 	FlexTable breakdownTable = new FlexTable();

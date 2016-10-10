@@ -11,8 +11,14 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
  */
 @RemoteServiceRelativePath("greet")
 public interface GreetingService extends RemoteService {
-	String [][] greetServer(String sn, Date sd, Date ed, Boolean predictionIsEnabled) throws IllegalArgumentException;
 	boolean userLogin(String username, String password) throws IllegalArgumentException;
+	String [][] greetServer(String sn, Date sd, Date ed, Boolean predictionIsEnabled) throws IllegalArgumentException;
+	String[][] getRegularSchedules() throws IllegalArgumentException;
+	String[][] getRegularScheduleByName(String scheduleName) throws IllegalArgumentException;
+	String[][] getActuatorRegularSchedule(String aName) throws IllegalArgumentException;
+	String[][] getSpecialSchedules() throws IllegalArgumentException;
+	String[][] getSpecialScheduleByName(String scheduleName) throws IllegalArgumentException;
+	String[][] getActuatorSpecialSchedule(String aName) throws IllegalArgumentException;
 	String[][] getSiteList() throws IllegalArgumentException;
 	String[][] getControllerList(String siteName) throws IllegalArgumentException;
 	String[][] getSensorList(String controllerName) throws IllegalArgumentException;

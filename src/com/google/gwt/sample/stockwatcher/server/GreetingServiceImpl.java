@@ -102,6 +102,196 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return false;}
 	}
 	
+	public String[][] getActuatorRegularSchedule(String aName) throws IllegalArgumentException {
+		try {
+			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("11");
+			toSend.add(aName);
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			@SuppressWarnings("unchecked")
+			ArrayList<Object[]> data=Utility.decryptData(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return Utility.DataToString(data);
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getActuatorRegularSchedule)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
+	public String[][] getActuatorSpecialSchedule(String aName) throws IllegalArgumentException {
+		try {
+			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("12");
+			toSend.add(aName);
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			@SuppressWarnings("unchecked")
+			ArrayList<Object[]> data=Utility.decryptData(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return Utility.DataToString(data);
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getActuatorSpecialSchedule)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
+	public String[][] getRegularSchedules() throws IllegalArgumentException {
+		try {
+			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("13");
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			@SuppressWarnings("unchecked")
+			ArrayList<Object[]> data=Utility.decryptData(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return Utility.DataToString(data);
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getRegularSchedules)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
+	public String[][] getRegularScheduleByName(String rScheduleName) throws IllegalArgumentException {
+		try {
+			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("14");
+			toSend.add(rScheduleName);
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			@SuppressWarnings("unchecked")
+			ArrayList<Object[]> data=Utility.decryptData(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return Utility.DataToString(data);
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getRegularScheduleByName)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
+	public String[][] getSpecialSchedules() throws IllegalArgumentException {
+		try {
+			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("23");
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			@SuppressWarnings("unchecked")
+			ArrayList<Object[]> data=Utility.decryptData(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return Utility.DataToString(data);
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getSpecialSchedules)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
+	public String[][] getSpecialScheduleByName(String sScheduleName) throws IllegalArgumentException {
+		try {
+			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("24");
+			toSend.add(sScheduleName);
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			@SuppressWarnings("unchecked")
+			ArrayList<Object[]> data=Utility.decryptData(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return Utility.DataToString(data);
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getSpecialScheduleByName)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
 	public String[][] getSiteList() throws IllegalArgumentException {
 		try {
 			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
@@ -243,6 +433,8 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			
 			InputStream is=sc.getInputStream();
 			ObjectInputStream ois=new ObjectInputStream(is);
+			
+			//Special decrypt for String-based returned response
 			@SuppressWarnings("unchecked")
 			String data=Utility.decryptString(ois);
 			
