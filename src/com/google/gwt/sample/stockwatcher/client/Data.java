@@ -21,4 +21,6 @@ public class Data{
 	static HashMap<String, ArrayList<String>> regularScheduleAttributesList = new HashMap<>();
 	static HashMap<String, ArrayList<String>> actuatorSpecialScheduleList = new HashMap<>();
 	static HashMap<String, ArrayList<String>> specialScheduleAttributesList = new HashMap<>();
+	static int regularScheduleAttributeSize = 0;
+	static int specialScheduleAttributeSize = 0;
 }

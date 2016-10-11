@@ -12,6 +12,7 @@ import org.moxieapps.gwt.highcharts.client.labels.*;
 import org.moxieapps.gwt.highcharts.client.plotOptions.*;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
@@ -226,28 +227,38 @@ static long getTime(String date) {
 		return chart;
 	}
 
-//Methods to create a flex table from an input 2D String array
-public static FlexTable createFlexTable(String data[][])
-{
+	//Methods to create a flex table from an input 2D String array
+	public static FlexTable createFlexTable(String data[][])
+	{
 
-	FlexTable breakdownTable = new FlexTable();
-	breakdownTable.setBorderWidth(1);
-	breakdownTable.setCellPadding(5);
+	FlexTable table = new FlexTable();
+	table.setBorderWidth(1);
+	table.setCellPadding(5);
+	table.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
 	
-	for(int i=0;i<data.length;i++)
+//	addRegularScheduleHeaders(table);
+	
+	for(int i=table.getRowCount();i<data.length;i++)
 	{
 		for(int j=0;j<data[i].length;j++)
 		{
-			breakdownTable.setText(i, j, data[i][j]);
+			table.setText(i, j, data[i][j]);
 		}
 	}
 	
-	return breakdownTable;
-}
+	return table;
+	}
+	
+	private static void addRegularScheduleHeaders(FlexTable ft){
+		String[] header = {"Schedule Name","Actuator Name","DayMask","Rule","Actuator On?","Priority","Schedule Enabled?"};
+		for(int i=0;i<header.length;i++)
+		{
+			ft.setText(0, i, header[i]);
+		}
+	}
 
-//Methods that's made just to improve readability
-
-private static Number convertToNumber(String data){
+	//Methods that's made just to improve readability
+	private static Number convertToNumber(String data){
 	Number value ;
 	try	{
 		value = Integer.parseInt(data);

@@ -9,8 +9,8 @@ public class ResourcePreload{
 	
 	public static void preloadData(){
 		getSiteList();
-		getRegularSchedules();
-		getSpecialSchedules();
+//		getRegularSchedules();
+//		getSpecialSchedules();
 	}
 	
 	private static void getRegularSchedules(){
@@ -52,58 +52,6 @@ public class ResourcePreload{
 						Data.regularScheduleActuatorAttributeList.put(result[i][0], actuatorAttributes);
 					}
 					Data.regularScheduleActuatorList.put(scheduleName, actuators);
-				}
-			}
-		});
-	}
-	
-	private static void getActuatorRegularSchedule(final String aName){
-		
-		Utility.newRequestObj().getActuatorRegularSchedule(aName, new AsyncCallback<String[][]>() {
-			public void onFailure(Throwable caught) {
-				Window.alert("Unable to get regular schedule(s) for "+aName);
-			}
-			
-			public void onSuccess(final String[][] result) {
-				if (result!=null) {
-					ArrayList<String> rSchedules = new ArrayList<>();
-					for(int i=0; i<result.length;i++)
-					{
-						rSchedules.add(result[i][0]);
-						ArrayList<String> rScheduleAttributes = new ArrayList<>();
-						for(int j=0; j<result[i].length;j++)
-						{
-							rScheduleAttributes.add(result[i][j]);
-						}
-						Data.regularScheduleAttributesList.put(result[i][0], rScheduleAttributes);
-					}
-					Data.actuatorRegularScheduleList.put(aName, rSchedules);
-				}
-			}
-		});
-	}
-	
-	private static void getActuatorSpecialSchedule(final String aName){
-		
-		Utility.newRequestObj().getActuatorSpecialSchedule(aName, new AsyncCallback<String[][]>() {
-			public void onFailure(Throwable caught) {
-				Window.alert("Unable to get special schedule(s) for "+aName);
-			}
-			
-			public void onSuccess(final String[][] result) {
-				if (result!=null) {
-					ArrayList<String> sSchedules = new ArrayList<>();
-					for(int i=0; i<result.length;i++)
-					{
-						sSchedules.add(result[i][0]);
-						ArrayList<String> sScheduleAttributes = new ArrayList<>();
-						for(int j=0; j<result[i].length;j++)
-						{
-							sScheduleAttributes.add(result[i][j]);
-						}
-						Data.specialScheduleAttributesList.put(result[i][0], sScheduleAttributes);
-					}
-					Data.actuatorSpecialScheduleList.put(aName, sSchedules);
 				}
 			}
 		});
@@ -186,14 +134,15 @@ public class ResourcePreload{
 					for(int i=0; i<controllerResult.length;i++)
 					{
 						controller.add(controllerResult[i][0]);
+						getSensorList(controllerResult[i][0]);
+						getActuatorList(controllerResult[i][0]);
+						
 						ArrayList<String> controllerAttributes = new ArrayList<>();
 						for(int j=0; j<controllerResult[i].length;j++)
 						{
 							controllerAttributes.add(controllerResult[i][j]);
 						}
 						Data.controllerAttributeList.put(controllerResult[i][0], controllerAttributes);
-						getSensorList(controllerResult[i][0]);
-						getActuatorList(controllerResult[i][0]);
 					}
 				}
 				Data.siteControllerList.put(siteName, controller);
@@ -241,6 +190,9 @@ public class ResourcePreload{
 					for(int i=0; i<actuatorResult.length;i++)
 					{
 						actuators.add(actuatorResult[i][0]);
+						getActuatorRegularSchedule(actuatorResult[i][0]);
+						getActuatorSpecialSchedule(actuatorResult[i][0]);
+						
 						ArrayList<String> actuatorAttributes = new ArrayList<>();
 						for(int j=0; j<actuatorResult[i].length;j++)
 						{
@@ -248,12 +200,66 @@ public class ResourcePreload{
 						}
 //						Window.alert("Actuator "+actuatorResult[i][0]+"->"+actuatorResult[i][2]);
 						Data.actuatorAttributeList.put(actuatorResult[i][0], actuatorAttributes);
-						getActuatorRegularSchedule(actuatorResult[i][0]);
-						getActuatorSpecialSchedule(actuatorResult[i][0]);
 					} 
 				}
 				Data.controllerActuatorList.put(controllerName, actuators);
 			}
 		});
 	}
+	
+	private static void getActuatorRegularSchedule(final String aName){
+		
+		Utility.newRequestObj().getActuatorRegularSchedule(aName, new AsyncCallback<String[][]>() {
+			public void onFailure(Throwable caught) {
+				Window.alert("Unable to get regular schedule(s) for "+aName);
+			}
+			
+			public void onSuccess(final String[][] result) {
+				if (result!=null) {
+					Data.regularScheduleAttributeSize=result[0].length;
+					ArrayList<String> rSchedules = new ArrayList<>();
+					for(int i=0; i<result.length;i++)
+					{
+						rSchedules.add(result[i][0]);
+						ArrayList<String> rScheduleAttributes = new ArrayList<>();
+						for(int j=0; j<result[i].length;j++)
+						{
+							rScheduleAttributes.add(result[i][j]);
+						}
+						Data.regularScheduleAttributesList.put(result[i][0], rScheduleAttributes);
+					}
+					Data.actuatorRegularScheduleList.put(aName, rSchedules);
+				}
+			}
+		});
+	}
+	
+	private static void getActuatorSpecialSchedule(final String aName){
+		
+		Utility.newRequestObj().getActuatorSpecialSchedule(aName, new AsyncCallback<String[][]>() {
+			public void onFailure(Throwable caught) {
+				Window.alert("Unable to get special schedule(s) for "+aName);
+			}
+			
+			public void onSuccess(final String[][] result) {
+				if (result!=null) {
+					Data.specialScheduleAttributeSize=result[0].length;
+					ArrayList<String> sSchedules = new ArrayList<>();
+					for(int i=0; i<result.length;i++)
+					{
+						sSchedules.add(result[i][0]);
+						ArrayList<String> sScheduleAttributes = new ArrayList<>();
+						for(int j=0; j<result[i].length;j++)
+						{
+							sScheduleAttributes.add(result[i][j]);
+						}
+						Data.specialScheduleAttributesList.put(result[i][0], sScheduleAttributes);
+					}
+					Data.actuatorSpecialScheduleList.put(aName, sSchedules);
+				}
+			}
+		});
+	}
+	
+	
 }

@@ -25,6 +25,8 @@ public class LogFile{
 	static String getSpecialScheduleByName = fileName("getSpecialScheduleByName");
 	static String getActuatorRegularSchedule = fileName("getActuatorRegularSchedule");
 	static String getActuatorSpecialSchedule = fileName("getActuatorSpecialSchedule");
+	static String createRegularSchedule = fileName("createRegularSchedule");
+	static String createSpecialSchedule = fileName("createSpecialSchedule");
 	
 	public static String fileName(String name){
 		try{

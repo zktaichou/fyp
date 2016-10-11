@@ -229,6 +229,44 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return null;}
 	}
 	
+	public String createRegularSchedule(String rScheduleName, String actuatorName, int dayMask, String rule, boolean actuatorStatus, int priority, boolean actuatorEnabled) throws IllegalArgumentException {
+		try {
+			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("22");
+			toSend.add(rScheduleName);
+			toSend.add(actuatorName);
+			toSend.add(dayMask);
+			toSend.add(rule);
+			toSend.add(actuatorStatus);
+			toSend.add(priority);
+			toSend.add(actuatorEnabled);
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			@SuppressWarnings("unchecked")
+			String data=Utility.decryptString(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return data;
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.createRegularSchedule)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
 	public String[][] getSpecialSchedules() throws IllegalArgumentException {
 		try {
 			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
@@ -286,6 +324,44 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 		} catch (Exception e) {
 			try {
 				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getSpecialScheduleByName)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
+	public String createSpecialSchedule(String sScheduleName, String actuatorName, int dayMask, String rule, boolean actuatorStatus, int priority, boolean actuatorEnabled) throws IllegalArgumentException {
+		try {
+			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("32");
+			toSend.add(sScheduleName);
+			toSend.add(actuatorName);
+			toSend.add(dayMask);
+			toSend.add(rule);
+			toSend.add(actuatorStatus);
+			toSend.add(priority);
+			toSend.add(actuatorEnabled);
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			@SuppressWarnings("unchecked")
+			String data=Utility.decryptString(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return data;
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.createRegularSchedule)));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
