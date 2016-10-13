@@ -9,8 +9,51 @@ public class ResourcePreload{
 	
 	public static void preloadData(){
 		getSiteList();
+		getDayScheduleRuleAll();
 //		getRegularSchedules();
 //		getSpecialSchedules();
+	}
+	
+	private static void getDayScheduleRuleAll(){
+		
+		Utility.newRequestObj().getDayScheduleRuleAll(new AsyncCallback<String[][]>() {
+			public void onFailure(Throwable caught) {
+				Window.alert("Unable to get schedule rule list");
+			}
+			
+			public void onSuccess(String[][] ruleName) {
+				if (ruleName!=null) {
+					for(int i=0; i<ruleName.length;i++)
+					{
+						getDayScheduleRuleByName(ruleName[i][0]);
+					}
+				}
+			}
+		});
+	}
+	
+	private static void getDayScheduleRuleByName(String ruleName){
+		
+		Utility.newRequestObj().getDayScheduleRuleAll(new AsyncCallback<String[][]>() {
+			public void onFailure(Throwable caught) {
+				Window.alert("Unable to get schedule rule list");
+			}
+			
+			public void onSuccess(String[][] rules) {
+				if (rules!=null) {
+					Data.ruleAttributeSize=rules[0].length;
+					for(int i=0; i<rules.length;i++)
+					{
+						ArrayList<String> ruleAttributes = new ArrayList<>();
+						for(int j=0; j<rules[i].length;j++)
+						{
+							ruleAttributes.add(rules[i][j]);
+						}
+						Data.dayScheduleRuleAttributeList.put(rules[i][0], ruleAttributes);
+					}
+				}
+			}
+		});
 	}
 	
 	private static void getRegularSchedules(){
@@ -226,7 +269,7 @@ public class ResourcePreload{
 						{
 							rScheduleAttributes.add(result[i][j]);
 						}
-						Data.regularScheduleAttributesList.put(result[i][0], rScheduleAttributes);
+						Data.regularScheduleAttributeList.put(result[i][0], rScheduleAttributes);
 					}
 					Data.actuatorRegularScheduleList.put(aName, rSchedules);
 				}
@@ -253,7 +296,7 @@ public class ResourcePreload{
 						{
 							sScheduleAttributes.add(result[i][j]);
 						}
-						Data.specialScheduleAttributesList.put(result[i][0], sScheduleAttributes);
+						Data.specialScheduleAttributeList.put(result[i][0], sScheduleAttributes);
 					}
 					Data.actuatorSpecialScheduleList.put(aName, sSchedules);
 				}

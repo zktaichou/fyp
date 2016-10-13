@@ -23,7 +23,9 @@ public interface GreetingService extends RemoteService {
 	String[][] getControllerList(String siteName) throws IllegalArgumentException;
 	String[][] getSensorList(String controllerName) throws IllegalArgumentException;
 	String[][] getActuatorList(String controllerName) throws IllegalArgumentException;
-	String createRegularSchedule(String rScheduleName, String actuatorName, int dayMask, String rule, boolean actuatorStatus, int priority, boolean scheduleEnabled) throws IllegalArgumentException;
-	String createSpecialSchedule(String sScheduleName, String actuatorName, int dayMask, String rule, boolean actuatorStatus, int priority, boolean scheduleEnabled) throws IllegalArgumentException;
+	String createRegularSchedule(String rScheduleName, String actuatorName, int dayMask, String rule, String onStart, String onEnd, boolean lock, int priority, boolean scheduleEnabled) throws IllegalArgumentException;
+	String createSpecialSchedule(String sScheduleName, String actuatorName, int dayMask, String rule, String onStart, String onEnd, boolean lock, int priority, boolean scheduleEnabled) throws IllegalArgumentException;
 	String actuatorSetStatus(String actuator, String status) throws IllegalArgumentException;
+	String[][] getDayScheduleRuleAll() throws IllegalArgumentException;
+	String[][] getDayScheduleRuleByName(String ruleName) throws IllegalArgumentException;
 }

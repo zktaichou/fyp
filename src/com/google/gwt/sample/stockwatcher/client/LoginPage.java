@@ -53,13 +53,13 @@ public class LoginPage extends Composite {
 		VerticalPanel wrapper = new VerticalPanel();
 		wrapper.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		wrapper.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
-		wrapper.setSpacing(3);
+		wrapper.setSpacing(10);
 		wrapper.add(msgPanel);
 		wrapper.add(new HTML(enterUsernameMsg));
 		wrapper.add(usernameTB);
 		wrapper.add(new HTML(enterPasswordMsg));
 		wrapper.add(passwordTB);
-		wrapper.add(linksPanel);
+//		wrapper.add(linksPanel);
 		wrapper.add(loginButton);
 		
 		mainPanel.clear();

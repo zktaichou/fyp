@@ -94,7 +94,7 @@ public class Utility{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static ArrayList<Object []> decryptData(ObjectInputStream ois){
+	public static ArrayList<Object []> decryptToObjectArray(ObjectInputStream ois){
 		try {
 	        Cipher decrypter=Cipher.getInstance("AES");
 	        decrypter.init(Cipher.DECRYPT_MODE,getKey());
@@ -112,7 +112,7 @@ public class Utility{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static String decryptString(ObjectInputStream ois){
+	public static String decryptToString(ObjectInputStream ois){
 		try {
 	        Cipher decrypter=Cipher.getInstance("AES");
 	        decrypter.init(Cipher.DECRYPT_MODE,getKey());

@@ -90,8 +90,6 @@ static long getTime(String date) {
 		Data.latestRequestID++;
 		final int currRequestID=Data.latestRequestID;
 		
-		MonitoringPage.chartPanel.clear();
-		
 		Utility.newRequestObj().greetServer(sn,sd,ed,predictionIsEnabled, new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
 				Window.alert("Data request failed");
@@ -99,15 +97,20 @@ static long getTime(String date) {
 			
 			//Remember to use Object[] input to get the rest of the information for chart display
 			public void onSuccess(String[][] result) {
-				if(currRequestID==Data.latestRequestID)
+				if(result.length==0)
 				{
-				Number [][] data = formatData(result);
-				StockChart chart = createChart(sn, data,updateTitle(sn,sd,ed), predictionIsEnabled);
-				if(predictionIsEnabled)
-				{
-//					chart.addSeries(series);
+					Window.alert(Messages.NO_DATA);
+					Utility.hideTimer();
 				}
-				
+				else if(currRequestID==Data.latestRequestID)
+				{
+					Number [][] data = formatData(result);
+					StockChart chart = createChart(sn, data,updateTitle(sn,sd,ed), predictionIsEnabled);
+					if(predictionIsEnabled)
+					{
+	//					chart.addSeries(series);
+					}
+				Utility.hideTimer();
 				MonitoringPage.chartPanel.add(chart);
 				//BasePage.panel.add(createFlexTable(result));
 				}
@@ -138,12 +141,12 @@ static long getTime(String date) {
 		int dataCount = input[0].length;
 		Number [][] data = new Number[input.length][dataCount];
 		
-		for(int i=input.length-1;i>=0;i--)
+		for(int i=0;i<input.length;i++)
 		{
-			data[input.length-i-1][0]=DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss").parse(input[i][0]).getTime();
+			data[i][0]=DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss").parse(input[i][0]).getTime();
 			for(int j=1; j<dataCount;j++)
 			{
-			data[input.length-i-1][j]=convertToNumber(input[i][j]);
+			data[i][j]=convertToNumber(input[i][j]);
 			}
 		}
 		return data;
@@ -156,7 +159,7 @@ static long getTime(String date) {
 		final StockChart chart = new StockChart();
 		chart
 		.setType(Series.Type.SPLINE)  
-        .setMarginRight(10)  
+        .setMarginRight(30)  
         .setBarPlotOptions(new BarPlotOptions()  
                 .setDataLabels(new DataLabels()  
                     .setEnabled(true)  
@@ -184,17 +187,14 @@ static long getTime(String date) {
 		ArrayList<String> attributes = Data.sensorAttributeList.get(sensorName);
 		String unit = attributes.get(5);
 		
-//		chart.getYAxis()
-//        .setAxisTitleText(unit)
-//        .setPlotLines(  
-//            chart.getYAxis().createPlotLine()  
-//                .setValue(0)  
-//                .setWidth(1)  
-//                .setColor("#808080")  
-//        )
-//        ;  
-		
-		chart.setStyleName("whiteFonts");
+		chart.getYAxis()
+        .setAxisTitleText(unit)
+        .setPlotLines(  
+            chart.getYAxis().createPlotLine()  
+                .setValue(0)  
+                .setWidth(1)  
+                .setColor("#808080")  
+        );
 		
 		final Series series = chart.createSeries();  
 	    chart.addSeries(series.setName("data")); 
@@ -249,12 +249,23 @@ static long getTime(String date) {
 	return table;
 	}
 	
-	private static void addRegularScheduleHeaders(FlexTable ft){
-		String[] header = {"Schedule Name","Actuator Name","DayMask","Rule","Actuator On?","Priority","Schedule Enabled?"};
-		for(int i=0;i<header.length;i++)
+	public static FlexTable appendFlexTable(FlexTable ft, String data[][])
+	{
+	ft.setBorderWidth(1);
+	ft.setCellPadding(5);
+	ft.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+	
+//	addRegularScheduleHeaders(table);
+	
+	for(int i=ft.getRowCount();i<data.length;i++)
+	{
+		for(int j=0;j<data[i].length;j++)
 		{
-			ft.setText(0, i, header[i]);
+			ft.setText(i, j, data[i][j]);
 		}
+	}
+	
+	return ft;
 	}
 
 	//Methods that's made just to improve readability

@@ -1,7 +1,6 @@
 package com.google.gwt.sample.stockwatcher.client;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -12,6 +11,7 @@ import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
@@ -24,6 +24,7 @@ public class SchedulePage extends Composite{
 	ContentPanel cPanel = new ContentPanel();
 	
 	VerticalPanel leftPanel = new VerticalPanel();
+	VerticalPanel middlePanel = new VerticalPanel();
 	VerticalPanel rightPanel = new VerticalPanel();
 	
 	FilterMenu scheduleMenu = new FilterMenu();
@@ -32,22 +33,28 @@ public class SchedulePage extends Composite{
 	Button newScheduleButton = new Button("New Schedule");
 	Button createScheduleButton = new Button("Create");
 	Button cancelScheduleButton = new Button("Cancel");
+	Button newRuleButton = new Button("New Rule");
 
 	ListBox actuatorLB = new ListBox();
 	ListBox scheduleType = new ListBox();
+	ListBox ruleLB = new ListBox();
 	
 	String scheduleName;
 	String actuatorName;
 	int dayMask;
 	String rule;
-	boolean actuatorStatus;
+	String onStart;
+	String onEnd;
 	int priority;
 	boolean scheduleEnabled;
+	Boolean lock;
 	
 	TextBox scheduleNameTB = new TextBox();
-	TextBox ruleTB = new TextBox();
-	ListBox actuatorStatusLB = new ListBox();
+	ListBox scheduleActuatorLB = new ListBox();
+	ListBox actuatorOnStartLB = new ListBox();
+	ListBox actuatorOnEndLB = new ListBox();
 	ListBox priorityLB = new ListBox();
+	ListBox lockEnabledLB = new ListBox();
 	ListBox scheduleEnabledLB = new ListBox();
 	
 	CheckBox monday = new CheckBox("Monday");
@@ -59,6 +66,10 @@ public class SchedulePage extends Composite{
 	CheckBox sunday = new CheckBox("Sunday");
 	
 	PopupPanel createSchedulePopup = new PopupPanel();
+	
+	FlexTable ruleTable = new FlexTable();
+	FlexTable scheduleTable = new FlexTable();
+	ArrayList<Object> scheduleAttributeList = new ArrayList<>();
 	
 	public SchedulePage(){
 		
@@ -82,13 +93,29 @@ public class SchedulePage extends Composite{
 		leftPanel.setStyleName("parameterPanel");
 		leftPanel.add(vPanel);
 		
+		middlePanel.clear();
+		middlePanel.setStyleName("mainStyle");
+		middlePanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		middlePanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
+		middlePanel.setSpacing(10);
+
+		ruleTable=ruleTable();
+		
+		VerticalPanel v2Panel = new VerticalPanel();
+		v2Panel.setSpacing(10);
+		v2Panel.add(new HTML("Rules"));
+		v2Panel.add(ruleTable);
+		v2Panel.add(newRuleButton);
+		
 		rightPanel.clear();
-		rightPanel.setStyleName("mainStyle");
-		rightPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
+		rightPanel.setStyleName("ruleMenu");
+		rightPanel.add(v2Panel);
 		
 		cPanel.clear();
 		cPanel.addLeft(leftPanel);
-		cPanel.add(rightPanel);
+		cPanel.add(middlePanel);
+		cPanel.addRight(rightPanel);
+		cPanel.alignMiddlePanelVTop();
 		
 		initWidget(cPanel);
 	}
@@ -96,18 +123,30 @@ public class SchedulePage extends Composite{
 	private void setWidgets(){
 		
 		actuatorLB.clear();
+		scheduleActuatorLB.clear();
 		for(String aName: Data.actuatorAttributeList.keySet())
 		{
 			actuatorLB.addItem(aName);
+			scheduleActuatorLB.addItem(aName);
 		}
 		
 		scheduleType.clear();
 		scheduleType.addItem("Regular Schedule");
 		scheduleType.addItem("Special Schedule");
 		
-		actuatorStatusLB.clear();
-		actuatorStatusLB.addItem("true");
-		actuatorStatusLB.addItem("false");
+		actuatorOnStartLB.clear();
+		actuatorOnStartLB.addItem("ON");
+		actuatorOnStartLB.addItem("OFF");
+		
+		actuatorOnEndLB.clear();
+		actuatorOnEndLB.addItem("ON");
+		actuatorOnEndLB.addItem("OFF");
+		
+		ruleLB.clear();
+		for(String ruleName: Data.dayScheduleRuleAttributeList.keySet())
+		{
+			ruleLB.addItem(ruleName);
+		}
 
 		priorityLB.clear();
 		for(int i=0;i<=10;i++)
@@ -115,50 +154,46 @@ public class SchedulePage extends Composite{
 			priorityLB.addItem(""+i);
 		}
 		
+		lockEnabledLB.clear();
+		lockEnabledLB.addItem("true");
+		lockEnabledLB.addItem("false");
+		
 		scheduleEnabledLB.clear();
 		scheduleEnabledLB.addItem("true");
 		scheduleEnabledLB.addItem("false");
 		
-		scheduleMenu.clear();
-		scheduleMenu.addLabel("Input schedule name");
-		scheduleMenu.addItem(scheduleNameTB);
-		scheduleMenu.addLabel("Input schedule rule(s)");
-		scheduleMenu.addItem(ruleTB);
-		scheduleMenu.addLabel("Set actuator status");
-		scheduleMenu.addItem(actuatorStatusLB);
-		scheduleMenu.addLabel("Set schedule priority");
-		scheduleMenu.addItem(priorityLB);
-		scheduleMenu.addLabel("Schedule enabled?");
-		scheduleMenu.addItem(scheduleEnabledLB);
-		scheduleMenu.addNewRow(createScheduleButton);
-		scheduleMenu.addItem(cancelScheduleButton);
+		initializeScheduleMenu();
 		
 		createSchedulePopup.setVisible(false);
 		createSchedulePopup.setGlassEnabled(true);
 		createSchedulePopup.add(scheduleMenu);
+		
 	}
 	
 	private void setHandlers(){
 		goButton.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
-			updateTable(actuatorLB.getSelectedItemText(),scheduleType.getSelectedItemText());	
+				middlePanel.clear();
+				middlePanel.add(Utility.addTimer());
+				final String actuator=actuatorLB.getSelectedItemText();
+				
+				Utility.newRequestObj().getActuatorRegularSchedule(actuator, new AsyncCallback<String[][]>() {
+					public void onFailure(Throwable caught) {
+						Window.alert("Unable to get regular schedule");
+						Utility.hideTimer();
+					}
+					
+					public void onSuccess(String[][] result) {
+						refreshRegularScheduleData(actuator, result);
+						Utility.hideTimer();
+						updateTable(scheduleTable,result);
+					}
+				});
 			}
 		});
 		newScheduleButton.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
-				scheduleMenu.clear();
-				scheduleMenu.addLabel("Input schedule name");
-				scheduleMenu.addItem(scheduleNameTB);
-				scheduleMenu.addLabel("Input schedule rule(s)");
-				scheduleMenu.addItem(ruleTB);
-				scheduleMenu.addLabel("Set actuator status");
-				scheduleMenu.addItem(actuatorStatusLB);
-				scheduleMenu.addLabel("Set schedule priority");
-				scheduleMenu.addItem(priorityLB);
-				scheduleMenu.addLabel("Schedule enabled?");
-				scheduleMenu.addItem(scheduleEnabledLB);
-				scheduleMenu.addItem("button",createScheduleButton);
-				scheduleMenu.addItem("button",cancelScheduleButton);
+				initializeScheduleMenu();
 				
 				createSchedulePopup.setVisible(true);
 				createSchedulePopup.center();
@@ -168,35 +203,41 @@ public class SchedulePage extends Composite{
 			public void onClick(ClickEvent event){
 				scheduleName=scheduleNameTB.getText();
 				actuatorName=actuatorLB.getSelectedItemText();
-				rule=ruleTB.getText();
+				rule=ruleLB.getSelectedItemText();
 				dayMask=getSelectedDays();
-				actuatorStatus=Boolean.parseBoolean(actuatorStatusLB.getSelectedItemText());
+				onStart=actuatorOnStartLB.getSelectedItemText();
+				onEnd=actuatorOnEndLB.getSelectedItemText();
+				lock = Boolean.parseBoolean(lockEnabledLB.getSelectedItemText());
 				priority=Integer.parseInt(priorityLB.getSelectedItemText());
 				scheduleEnabled=Boolean.parseBoolean(scheduleEnabledLB.getSelectedItemText());
 				
 				if(scheduleType.getSelectedItemText().equals("Regular Schedule"))
 				{
-					Utility.newRequestObj().createRegularSchedule(scheduleName, actuatorName, dayMask, rule, actuatorStatus, priority, scheduleEnabled, new AsyncCallback<String>() {
+					Utility.newRequestObj().createRegularSchedule(scheduleName, actuatorName, dayMask, rule, onStart, onEnd, lock, priority, scheduleEnabled, new AsyncCallback<String>() {
 						public void onFailure(Throwable caught) {
 							Window.alert("Unable to create regular schedule");
 						}
 						
 						public void onSuccess(final String result) {
-							Window.alert(result);
+							Window.alert("Response: "+result);
+							localAppendTable(scheduleTable);
+							createSchedulePopup.setVisible(false);
 						}
 					});
 				}
 				else if(scheduleType.getSelectedItemText().equals("Special Schedule"))
 				{
-					Utility.newRequestObj().createSpecialSchedule(scheduleName, actuatorName, dayMask, rule, actuatorStatus, priority, scheduleEnabled, new AsyncCallback<String>() {
+					Utility.newRequestObj().createSpecialSchedule(scheduleName, actuatorName, dayMask, rule, onStart, onEnd, lock, priority, scheduleEnabled, new AsyncCallback<String>() {
 						public void onFailure(Throwable caught) {
 							Window.alert("Unable to create special schedule");
 						}
 						
 						public void onSuccess(final String result) {
-							Window.alert(result);
+							Window.alert("Response: "+result);
+							localAppendTable(scheduleTable);
+							createSchedulePopup.setVisible(false);
 						}
-					});
+					}); 
 				}
 				else
 					Window.alert("schedule type bug");
@@ -209,59 +250,114 @@ public class SchedulePage extends Composite{
 		});
 	}
 	
-	private int getSelectedDays(){
-		String selectedBits="";
+	private void localAppendTable(FlexTable flexTable){
+		scheduleAttributeList.clear();
+		scheduleAttributeList.add(scheduleName);
+		scheduleAttributeList.add(actuatorName);
+		scheduleAttributeList.add(dayMask);
+		scheduleAttributeList.add(rule);
+		scheduleAttributeList.add(actuatorOnStartLB.getSelectedItemText());
+		scheduleAttributeList.add(actuatorOnEndLB.getSelectedItemText());
+		scheduleAttributeList.add(lock);
+		scheduleAttributeList.add(priority);
+		scheduleAttributeList.add(scheduleEnabled);
 		
-		selectedBits=
-				getBit(sunday.getValue())+
-				getBit(saturday.getValue())+
-				getBit(friday.getValue())+
-				getBit(thursday.getValue())+
-				getBit(wednesday.getValue())+
-				getBit(tuesday.getValue())+
-				getBit(monday.getValue());
-		
-		return Integer.parseInt(selectedBits);
-	};
-	
-	private String getBit(Boolean checked){
-		if(checked)
+		int numRows = flexTable.getRowCount();
+		for(int i=0;i<9;i++)
 		{
-			return 1+"";
+	    flexTable.setText(numRows, i, String.valueOf(scheduleAttributeList.get(i)));
 		}
-		return 0+"";
 	}
 	
-	private void updateTable(String aName, String scheduleType){String[][]data;
+	private void setHeaders(FlexTable ft){
+		String[] header = {"Schedule Name","Actuator Name","DayMask","Rule","On Start","On End","Lock?","Priority","Schedule Enabled?"};
+		for(int i=0;i<header.length;i++)
+		{
+			ft.setText(0, i, header[i]);
+		}
+	}
+	
+	private void initializeScheduleMenu(){
+		HorizontalPanel buttonPanel = new HorizontalPanel();
+		buttonPanel.setSpacing(10);
+		buttonPanel.add(cancelScheduleButton);
+		buttonPanel.add(createScheduleButton);
 		
-		if(scheduleType.equalsIgnoreCase("Regular Schedule"))
+		scheduleMenu.clear();
+		scheduleMenu.addLabel("Select an actuator");
+		scheduleMenu.addItem(scheduleActuatorLB);
+		scheduleMenu.addLabel("Input schedule name");
+		scheduleMenu.addItem(scheduleNameTB);
+		scheduleMenu.addLabel("Select rule to be applied");
+		scheduleMenu.addItem(ruleLB);
+		scheduleMenu.addLabel("Select days");
+		scheduleMenu.addItem(sunday);
+		scheduleMenu.addItem(monday);
+		scheduleMenu.addItem(tuesday);
+		scheduleMenu.addItem(wednesday);
+		scheduleMenu.addItem(thursday);
+		scheduleMenu.addItem(friday);
+		scheduleMenu.addItem(saturday);
+		scheduleMenu.addLabel("Set actuator starting status");
+		scheduleMenu.addItem(actuatorOnStartLB);
+		scheduleMenu.addLabel("Set actuator ending status");
+		scheduleMenu.addItem(actuatorOnEndLB);
+		scheduleMenu.addLabel("Set schedule priority");
+		scheduleMenu.addItem(priorityLB);
+		scheduleMenu.addLabel("Lock enabled?");
+		scheduleMenu.addItem(lockEnabledLB);
+		scheduleMenu.addLabel("Schedule enabled?");
+		scheduleMenu.addItem(scheduleEnabledLB);
+		scheduleMenu.addItem(buttonPanel);
+	}
+	
+	private FlexTable ruleTable(){
+		String[][] data = new String[Data.dayScheduleRuleAttributeList.size()][Data.ruleAttributeSize];
+		int row=0;
+		for(String ruleName: Data.dayScheduleRuleAttributeList.keySet())
 		{
-			ArrayList<String> rSchedules = Data.actuatorRegularScheduleList.get(aName);
-			data = new String[rSchedules.size()][Data.regularScheduleAttributeSize];
-			for(int i=0; i<rSchedules.size();i++)
+			int column=0;
+			for(String rAttributes: Data.dayScheduleRuleAttributeList.get(ruleName))
 			{
-				ArrayList<String> scheduleAttribute = Data.regularScheduleAttributesList.get(rSchedules.get(i));
-				for(int j=0; j<scheduleAttribute.size();j++)
-				{
-					data[i][j]=scheduleAttribute.get(j);
-				}
+				data[row][column]=rAttributes;
+				column++;
 			}
 		}
-		else
-		{
-			ArrayList<String> sSchedules = Data.actuatorSpecialScheduleList.get(aName);
-			data = new String[sSchedules.size()][Data.specialScheduleAttributeSize];
-			for(int i=0; i<sSchedules.size();i++)
-			{
-				ArrayList<String> scheduleAttribute = Data.specialScheduleAttributesList.get(sSchedules.get(i));
-				for(int j=0; j<scheduleAttribute.size();j++)
-				{
-					data[i][j]=scheduleAttribute.get(j);
-				}
-			}
+		return ChartUtilities.createFlexTable(data);
+	}
+	
+	private int getSelectedDays(){
+		CheckBox [] chkbx={monday,tuesday,wednesday,thursday,friday,saturday,sunday};
+		int mask=0;
+		for (int i=0;i<chkbx.length;i++) {
+			if (chkbx[i].getValue()) mask=(mask | (1 << (i+1)));
 		}
-		rightPanel.clear();
-		rightPanel.add(ChartUtilities.createFlexTable(data));
+		return mask;
+	};
+	
+	private void refreshRegularScheduleData(String aName, String[][] result){
+		ArrayList<String> rSchedules = new ArrayList<>();
+		for(int i=0; i<result.length;i++)
+		{
+			rSchedules.add(result[i][0]);
+			ArrayList<String> rScheduleAttributes = new ArrayList<>();
+			for(int j=0; j<result[i].length;j++)
+			{
+				rScheduleAttributes.add(result[i][j]);
+			}
+			Data.regularScheduleAttributeList.remove(result[i][0]);
+			Data.regularScheduleAttributeList.put(result[i][0], rScheduleAttributes);
+		}
+		Data.actuatorRegularScheduleList.remove(aName);
+		Data.actuatorRegularScheduleList.put(aName, rSchedules);
+	}
+	
+	private void updateTable(FlexTable ft, String[][] result){
+		scheduleTable.clear();
+		setHeaders(scheduleTable);
+		ChartUtilities.appendFlexTable(scheduleTable,result);
+		middlePanel.clear();
+		middlePanel.add(scheduleTable);
 	}
 	
 	

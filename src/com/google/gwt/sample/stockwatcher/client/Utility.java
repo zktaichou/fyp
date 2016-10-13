@@ -40,6 +40,7 @@ public class Utility{
 
 		HorizontalPanel loadingPanel = new HorizontalPanel();
 		loadingPanel.setSpacing(5);
+		loadingPanel.getElement().getStyle().setColor("black");
 		loadingPanel.add(pic);
 		loadingPanel.add(new HTML("Loading data..."));
 

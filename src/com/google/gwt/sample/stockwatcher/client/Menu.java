@@ -177,7 +177,7 @@ public class Menu extends Composite {
 	private void renderOptionsMenu(String _title) {
 		
 		VerticalMenu optionsMenu = new VerticalMenu();
-		Anchor anchor = new Anchor("");
+		Anchor anchor = new Anchor("   ");
 		anchor.setHTML(Images.getImage(Images.OPTIONS, 30));
 		
 		optionsMenu.addAnchor(logoutAnchor);

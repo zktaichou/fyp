@@ -24,7 +24,7 @@ public class ContentPanel extends Composite{
 		wholePanel.setCellHorizontalAlignment(leftPanel, HasHorizontalAlignment.ALIGN_LEFT);
 		wholePanel.setCellHorizontalAlignment(middlePanel, HasHorizontalAlignment.ALIGN_CENTER);
 		wholePanel.setCellHorizontalAlignment(rightPanel, HasHorizontalAlignment.ALIGN_RIGHT);
-		wholePanel.setCellVerticalAlignment(middlePanel, HasVerticalAlignment.ALIGN_MIDDLE);
+		wholePanel.setCellVerticalAlignment(middlePanel, HasVerticalAlignment.ALIGN_TOP);
 		
 		leftPanel.setHeight("100%");
 		middlePanel.setSize("100%", "100%");
@@ -67,5 +67,13 @@ public class ContentPanel extends Composite{
 		leftPanel.clear();
 		middlePanel.clear();
 		rightPanel.clear();
+	}
+	
+	public void alignMiddlePanelVTop(){
+		middlePanel.setCellVerticalAlignment(middlePanel.getWidget(0), HasVerticalAlignment.ALIGN_TOP);
+	}
+	
+	public void alignMiddlePanelVMiddle(){
+		middlePanel.setCellVerticalAlignment(middlePanel.getWidget(0), HasVerticalAlignment.ALIGN_MIDDLE);
 	}
 }

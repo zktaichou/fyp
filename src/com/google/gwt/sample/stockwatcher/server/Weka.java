@@ -119,18 +119,6 @@ public class Weka {
 				pw.close();
 			} catch (Exception f) {}
 	      
-//	      try {
-//	    	    FileReader in = new FileReader(tempFileName);
-//				BufferedReader br=new BufferedReader(in);
-//				
-//				String line = "";
-//				Boolean flag = false;
-//				
-//				while ((line = br.readLine()) != null) {
-//			        System.out.println(line);
-//			    }
-//			    in.close();
-//			} catch (Exception f) {}
 	      // we can continue to use the trained forecaster for further forecasting
 	      // by priming with the most recent historical data (as it becomes available).
 	      // At some stage it becomes prudent to re-build the model using current

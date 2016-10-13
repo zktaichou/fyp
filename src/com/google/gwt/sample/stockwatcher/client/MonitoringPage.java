@@ -156,6 +156,7 @@ public class MonitoringPage extends Composite {
 	private void sendDataToServer(){
 		if(validInputFields())
 		{
+		chartPanel.clear();
 		chartPanel.add(Utility.addTimer());
 		ChartUtilities.getData(controllerSensorListBox.getSelectedItemText(),ChartUtilities.stringToStartDate(getSDate()),ChartUtilities.stringToEndDate(getEDate()),predictionBox.getValue());
 		}

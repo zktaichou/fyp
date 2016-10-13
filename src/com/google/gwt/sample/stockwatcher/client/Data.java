@@ -18,9 +18,11 @@ public class Data{
 	static HashMap<String, ArrayList<String>> specialScheduleActuatorList = new HashMap<>();
 	static HashMap<String, ArrayList<String>> specialScheduleActuatorAttributeList = new HashMap<>();
 	static HashMap<String, ArrayList<String>> actuatorRegularScheduleList = new HashMap<>();
-	static HashMap<String, ArrayList<String>> regularScheduleAttributesList = new HashMap<>();
+	static HashMap<String, ArrayList<String>> regularScheduleAttributeList = new HashMap<>();
 	static HashMap<String, ArrayList<String>> actuatorSpecialScheduleList = new HashMap<>();
-	static HashMap<String, ArrayList<String>> specialScheduleAttributesList = new HashMap<>();
+	static HashMap<String, ArrayList<String>> specialScheduleAttributeList = new HashMap<>();
+	static HashMap<String, ArrayList<String>> dayScheduleRuleAttributeList = new HashMap<>();
 	static int regularScheduleAttributeSize = 0;
 	static int specialScheduleAttributeSize = 0;
+	static int ruleAttributeSize = 0;
 }
