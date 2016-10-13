@@ -236,8 +236,6 @@ static long getTime(String date) {
 	table.setCellPadding(5);
 	table.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
 	
-//	addRegularScheduleHeaders(table);
-	
 	for(int i=table.getRowCount();i<data.length;i++)
 	{
 		for(int j=0;j<data[i].length;j++)
@@ -255,13 +253,14 @@ static long getTime(String date) {
 	ft.setCellPadding(5);
 	ft.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
 	
-//	addRegularScheduleHeaders(table);
+	int rowCount = ft.getRowCount();
 	
-	for(int i=ft.getRowCount();i<data.length;i++)
+	//WHY IS IT BREAKING WHEN +1 TO I????
+	for(int i=rowCount;i<data.length;i++)
 	{
 		for(int j=0;j<data[i].length;j++)
 		{
-			ft.setText(i, j, data[i][j]);
+			ft.setText(i, j, data[i-rowCount][j]);
 		}
 	}
 	

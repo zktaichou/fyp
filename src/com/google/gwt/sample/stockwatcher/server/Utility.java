@@ -130,6 +130,8 @@ public class Utility{
 	}
 	
 	public static String[][] DataToString(ArrayList<Object []> input){
+		if(input!=null && input.size()>0)
+		{
 		try {
 			DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 			String [][] data = new String[input.size()][input.get(0).length];
@@ -138,21 +140,22 @@ public class Utility{
 			{
 				for (int i2=0;i2<input.get(i).length;i2++) {
 					if (input.get(i)[i2] instanceof LocalDateTime) {
-				    	data[i][i2]=df.format(((LocalDateTime)input.get(i)[i2]).plusHours(8));
+					    data[i][i2]=df.format(((LocalDateTime)input.get(i)[i2]).plusHours(8));
 					} else {
-				    	data[i][i2]=input.get(i)[i2].toString();
+					    data[i][i2]=input.get(i)[i2].toString();
 					}
 				}
 			}
-			
 			return data;
 		} catch (Exception e) {
 			try {
 				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.dataToString)));
 				e.printStackTrace(pw);
 				pw.close();
-			} catch (Exception f) {}
-			return null;}
+				} catch (Exception f) {}
+			}
+		}
+		return null;
 	}
 	
 	public static long localDateTimeToLong (LocalDateTime dt) {
