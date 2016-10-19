@@ -27,9 +27,9 @@ public class SitePage extends Composite{
 	static ArrayList<PopupPanel> sensorIcons = new ArrayList<>();
 	static ArrayList<PopupPanel> actuatorIcons = new ArrayList<>();
 
-	HashMap <String, ArrayList<PopupPanel>> siteControllerPopupList = new HashMap<>();
-	HashMap <String, ArrayList<PopupPanel>> controllerSensorPopupList = new HashMap<>();
-	HashMap <String, ArrayList<PopupPanel>> controllerActuatorPopupList = new HashMap<>();
+	static HashMap <String, ArrayList<PopupPanel>> siteControllerPopupList = new HashMap<>();
+	static HashMap <String, ArrayList<PopupPanel>> controllerSensorPopupList = new HashMap<>();
+	static HashMap <String, ArrayList<PopupPanel>> controllerActuatorPopupList = new HashMap<>();
 	
 	public SitePage(){
 		
@@ -314,6 +314,22 @@ public class SitePage extends Composite{
 				vPanel.setSpacing(5);
 				vPanel.add(hPanel);
 				
+//				FocusPanel wrapper = new FocusPanel();
+//				wrapper.add(vPanel);
+//				wrapper.addClickHandler(new ClickHandler() {
+//				  @Override
+//				  public void onClick(ClickEvent event) {
+//					  for(String controller: controllerSensorPopupList.keySet())
+//					  {
+//						  for(PopupPanel popup: controllerSensorPopupList.get(controller))
+//						  {
+//							  popup.getElement().getStyle().setZIndex(0);
+//						  }
+//					  }
+//					  event.getRelativeElement().getStyle().setZIndex(1000);
+//				  }
+//				});
+				
 				initWidget(vPanel);
 			}
 	}
@@ -393,6 +409,22 @@ public class SitePage extends Composite{
 			vPanel.add(hPanel);
 			vPanel.add(temp);
 			vPanel.setCellHorizontalAlignment(temp, HasHorizontalAlignment.ALIGN_CENTER);
+			
+//			FocusPanel wrapper = new FocusPanel();
+//			wrapper.add(vPanel);
+//			wrapper.addClickHandler(new ClickHandler() {
+//			  @Override
+//			  public void onClick(ClickEvent event) {
+//				  for(String controller: controllerActuatorPopupList.keySet())
+//				  {
+//					  for(PopupPanel popup: controllerActuatorPopupList.get(controller))
+//					  {
+//						  popup.getElement().getStyle().setZIndex(0);
+//					  }
+//				  }
+//				  event.getRelativeElement().getStyle().setZIndex(1000);
+//			  }
+//			});
 			
 			initWidget(vPanel);
 		}

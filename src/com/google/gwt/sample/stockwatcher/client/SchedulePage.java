@@ -1,6 +1,7 @@
 package com.google.gwt.sample.stockwatcher.client;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -87,6 +88,7 @@ public class SchedulePage extends Composite{
 	FlexTable scheduleTable = new FlexTable();
 	
 	ArrayList<Object> scheduleAttributeList = new ArrayList<>();
+	ArrayList<Object> ruleAttributeList = new ArrayList<>();
 	
 	public SchedulePage(){
 		
@@ -271,7 +273,7 @@ public class SchedulePage extends Composite{
 						if(result.equalsIgnoreCase("OK"))
 						{
 							refreshRuleData(ruleName, sH, sM, eH, eM);
-							localAppendTable(ruleTable);
+							localAppendRuleTable(ruleTable);
 							rulePopup.setVisible(false);
 						}
 					}
@@ -315,7 +317,7 @@ public class SchedulePage extends Composite{
 							Window.alert("Response: "+result);
 							if(result.equalsIgnoreCase("OK"))
 							{
-								localAppendTable(scheduleTable);
+								localAppendScheduleTable(scheduleTable);
 								schedulePopup.setVisible(false);
 							}
 						}
@@ -332,7 +334,7 @@ public class SchedulePage extends Composite{
 							Window.alert("Response: "+result);
 							if(result.equalsIgnoreCase("OK"))
 							{
-								localAppendTable(scheduleTable);
+								localAppendScheduleTable(scheduleTable);
 								schedulePopup.setVisible(false);
 							}
 						}
@@ -349,7 +351,7 @@ public class SchedulePage extends Composite{
 		});
 	}
 	
-	private void localAppendTable(FlexTable flexTable){
+	private void localAppendScheduleTable(FlexTable flexTable){
 		scheduleAttributeList.clear();
 		scheduleAttributeList.add(scheduleName);
 		scheduleAttributeList.add(actuatorName);
@@ -362,9 +364,24 @@ public class SchedulePage extends Composite{
 		scheduleAttributeList.add(scheduleEnabled);
 		
 		int numRows = flexTable.getRowCount();
-		for(int i=0;i<9;i++)
+		for(int i=0;i<scheduleAttributeList.size();i++)
 		{
 			flexTable.setText(numRows, i, String.valueOf(scheduleAttributeList.get(i)));
+		}
+	}
+	
+	private void localAppendRuleTable(FlexTable flexTable){
+		ruleAttributeList.clear();
+		ruleAttributeList.add(ruleName);
+		ruleAttributeList.add(sH);
+		ruleAttributeList.add(sM);
+		ruleAttributeList.add(eH);
+		ruleAttributeList.add(eM);
+		
+		int numRows = flexTable.getRowCount();
+		for(int i=0;i<ruleAttributeList.size();i++)
+		{
+			flexTable.setText(numRows, i, String.valueOf(ruleAttributeList.get(i)));
 		}
 	}
 	
@@ -481,6 +498,38 @@ public class SchedulePage extends Composite{
 		return mask;
 	};
 	
+	private String formatDayMask(String dayMask){
+		int dayMaskInt = Integer.parseInt(dayMask);
+		boolean[] bits = new boolean[7];
+	    for (int i = 6; i >= 0; i--) {
+	        bits[i] = (dayMaskInt & (1 << i)) != 0;
+	    }
+
+		String myString = "MTWTFSS";
+		String result = "";
+		StringBuilder sb = new StringBuilder();
+		int count = 0;
+		
+	    for(Character c: myString.toCharArray()){
+	    	String colour;
+	    	if(bits[count])
+	    	{
+	    		colour = "green";
+	    	}
+	    	else
+	    	{
+	    		colour = "white";
+	    	}
+	    	
+	    	sb.append("<font color=\""+colour+"\">");
+			sb.append(c);
+			sb.append("</font>");
+		    result += sb.toString();
+	    }
+	    Window.alert(result);
+	    return result;
+	}
+	
 	private void refreshRuleData(String name, int a, int b, int c, int d){
 		ArrayList<String> list = new ArrayList<>();
 		list.add(ruleName);
@@ -526,11 +575,15 @@ public class SchedulePage extends Composite{
 	}
 	
 	private void updateTable(FlexTable ft, String[][] result){
-		scheduleTable.clear();
-		setScheduleHeaders(scheduleTable);
-		ChartUtilities.appendFlexTable(scheduleTable,result);
+		scheduleTable.setStyleName("fancyTable");
+		
+		FlexTable newTable = new FlexTable();
+		setScheduleHeaders(newTable);
+		scheduleTable = ChartUtilities.appendFlexTable(newTable, result);
+		
 		middlePanel.clear();
 		middlePanel.add(scheduleTable);
+		
 	}
 	
 	

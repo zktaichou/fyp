@@ -172,6 +172,7 @@ public class ResourcePreload{
 			}
 			public void onSuccess(String[][] controllerResult)
 			{
+//				Window.alert("controller count: "+controllerResult.length);
 				ArrayList<String> controller = new ArrayList<>();
 				if (controllerResult!=null) {
 					for(int i=0; i<controllerResult.length;i++)
@@ -194,6 +195,7 @@ public class ResourcePreload{
 	}
 	
 	private static void getSensorList(final String controllerName){
+//		Window.alert("getting sensors");
 		Utility.newRequestObj().getSensorList(controllerName, new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) 
 			{
@@ -201,6 +203,7 @@ public class ResourcePreload{
 			}
 			public void onSuccess(String[][] sensorResult)
 			{
+//				Window.alert("sensor count: "+sensorResult.length);
 				ArrayList<String> sensors = new ArrayList<>();
 				if (sensorResult!=null) {
 					for(int i=0; i<sensorResult.length;i++)
@@ -221,6 +224,7 @@ public class ResourcePreload{
 	}
 	
 	private static void getActuatorList(final String controllerName){
+//		Window.alert("getting actuators");
 		Utility.newRequestObj().getActuatorList(controllerName, new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) 
 			{
@@ -228,6 +232,7 @@ public class ResourcePreload{
 			}
 			public void onSuccess(String[][] actuatorResult)
 			{
+//				Window.alert("actuator count: "+actuatorResult.length);
 				ArrayList<String> actuators = new ArrayList<>();
 				if (actuatorResult!=null) {
 					for(int i=0; i<actuatorResult.length;i++)
