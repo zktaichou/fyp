@@ -14,16 +14,12 @@ import org.moxieapps.gwt.highcharts.client.plotOptions.*;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.*;
 
 public class ChartUtilities{
@@ -267,10 +263,9 @@ static long getTime(String date) {
 	}
 	
 //	Window.alert(data[rowCount][0]+"");
-	
 	return ft;
 	}
-
+	
 	//Methods that's made just to improve readability
 	private static Number convertToNumber(String data){
 	Number value ;

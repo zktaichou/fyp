@@ -9,10 +9,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.sql.Date;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-
-import javax.crypto.SealedObject;
 
 import com.google.gwt.sample.stockwatcher.client.GreetingService;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -23,24 +20,19 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 @SuppressWarnings("serial")
 public class GreetingServiceImpl extends RemoteServiceServlet implements GreetingService {
 	
-	public String[][] greetServer(String sn, Date sd, Date ed, Boolean predictionIsEnabled) throws IllegalArgumentException {
+	public String[][] getSiteList() throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();
-			toSend.add("37");
-			toSend.add(sn);
-			toSend.add(Utility.dateToLocalDateTime(sd));
-			toSend.add(Utility.dateToLocalDateTime(ed));
+			toSend.add("3");
 			
-			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
 			OutputStream os = sc.getOutputStream();
 			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
 			
 			InputStream is=sc.getInputStream();
 			ObjectInputStream ois=new ObjectInputStream(is);
 			
-			oos.writeObject(Utility.encryptMsg(toSend));
-			
-			@SuppressWarnings("unchecked")
 			ArrayList<Object []> data=Utility.decryptToObjectArray(ois);
 			
 			oos.close();
@@ -50,21 +42,178 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			
 			sc.close();
 			
-			String[][] result = Utility.DataToString(data);
-			
-			if(predictionIsEnabled)
-			{
-				result = Weka.predict(result);
-			}
-			
-			return result;
+			return Utility.DataToString(data);
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.requestError)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getSiteList)));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
+			return null;}
+	}
+	
+	public String[][] getControllerList(String siteName) throws IllegalArgumentException {
+		try {
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("4");
+			toSend.add(siteName);
 			
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			
+			ArrayList<Object []> data=Utility.decryptToObjectArray(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return Utility.DataToString(data);
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getControllerList)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
+	public String[][] getSensorList(String controllerName) throws IllegalArgumentException {
+		try {
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("5");
+			toSend.add(controllerName);
+
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			
+			ArrayList<Object []> data=Utility.decryptToObjectArray(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return Utility.DataToString(data);
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getSensorList)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
+	public String[][] getActuatorList(String controllerName) throws IllegalArgumentException {
+		try {
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("6");
+			toSend.add(controllerName);
+
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			
+			ArrayList<Object []> data=Utility.decryptToObjectArray(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+
+			return Utility.DataToString(data);
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getActuatorList)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+		}
+		return null;
+	}
+	
+	public String[][] getDayScheduleRuleAll() throws IllegalArgumentException {
+		try {
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("7");
+			
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			
+			ArrayList<Object []> data=Utility.decryptToObjectArray(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return Utility.DataToString(data);
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getDayScheduleRuleAll)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
+	public String[][] getDayScheduleRuleByName(String rulename) throws IllegalArgumentException {
+		try {
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("8");
+			toSend.add(rulename);
+			
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			
+			ArrayList<Object []> data=Utility.decryptToObjectArray(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return Utility.DataToString(data);
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getDayScheduleRuleByName)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
 			return null;}
 	}
 	
@@ -76,14 +225,14 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			toSend.add(username);
 			toSend.add(hashedPassword);
 			
-			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
 			OutputStream os = sc.getOutputStream();
 			ObjectOutputStream oos=new ObjectOutputStream(os);
 			oos.writeObject(Utility.encryptMsg(toSend));
 			
 			InputStream is=sc.getInputStream();
 			ObjectInputStream ois=new ObjectInputStream(is);
-			@SuppressWarnings("unchecked")
+			
 			String data=Utility.decryptLogin(ois);
 			
 			oos.close();
@@ -113,14 +262,14 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			toSend.add(eH);
 			toSend.add(eM);
 
-			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
 			OutputStream os = sc.getOutputStream();
 			ObjectOutputStream oos=new ObjectOutputStream(os);
 			oos.writeObject(Utility.encryptMsg(toSend));
 			
 			InputStream is=sc.getInputStream();
 			ObjectInputStream ois=new ObjectInputStream(is);
-			@SuppressWarnings("unchecked")
+			 
 			String data=Utility.decryptToString(ois);
 			
 			oos.close();
@@ -146,14 +295,14 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			toSend.add("11");
 			toSend.add(aName);
 			
-			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
 			OutputStream os = sc.getOutputStream();
 			ObjectOutputStream oos=new ObjectOutputStream(os);
 			oos.writeObject(Utility.encryptMsg(toSend));
 			
 			InputStream is=sc.getInputStream();
 			ObjectInputStream ois=new ObjectInputStream(is);
-			@SuppressWarnings("unchecked")
+			 
 			ArrayList<Object[]> data=Utility.decryptToObjectArray(ois);
 			
 			oos.close();
@@ -179,14 +328,14 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			toSend.add("12");
 			toSend.add(aName);
 			
-			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
 			OutputStream os = sc.getOutputStream();
 			ObjectOutputStream oos=new ObjectOutputStream(os);
 			oos.writeObject(Utility.encryptMsg(toSend));
 			
 			InputStream is=sc.getInputStream();
 			ObjectInputStream ois=new ObjectInputStream(is);
-			@SuppressWarnings("unchecked")
+			 
 			ArrayList<Object[]> data=Utility.decryptToObjectArray(ois);
 			
 			oos.close();
@@ -211,14 +360,14 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			ArrayList<Object> toSend=new ArrayList<>();
 			toSend.add("13");
 
-			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
 			OutputStream os = sc.getOutputStream();
 			ObjectOutputStream oos=new ObjectOutputStream(os);
 			oos.writeObject(Utility.encryptMsg(toSend));
 			
 			InputStream is=sc.getInputStream();
 			ObjectInputStream ois=new ObjectInputStream(is);
-			@SuppressWarnings("unchecked")
+			 
 			ArrayList<Object[]> data=Utility.decryptToObjectArray(ois);
 			
 			oos.close();
@@ -244,14 +393,14 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			toSend.add("14");
 			toSend.add(rScheduleName);
 
-			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
 			OutputStream os = sc.getOutputStream();
 			ObjectOutputStream oos=new ObjectOutputStream(os);
 			oos.writeObject(Utility.encryptMsg(toSend));
 			
 			InputStream is=sc.getInputStream();
 			ObjectInputStream ois=new ObjectInputStream(is);
-			@SuppressWarnings("unchecked")
+			 
 			ArrayList<Object[]> data=Utility.decryptToObjectArray(ois);
 			
 			oos.close();
@@ -274,7 +423,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 	public String createRegularSchedule(String rScheduleName, String actuatorName, int dayMask, String rule, String onStart, String onEnd, boolean lock, int priority, boolean actuatorEnabled) throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();
-			toSend.add("22");
+			toSend.add("22a");
 			toSend.add(rScheduleName);
 			toSend.add(actuatorName);
 			toSend.add(dayMask);
@@ -285,14 +434,14 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			toSend.add(priority);
 			toSend.add(actuatorEnabled);
 
-			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
 			OutputStream os = sc.getOutputStream();
 			ObjectOutputStream oos=new ObjectOutputStream(os);
 			oos.writeObject(Utility.encryptMsg(toSend));
 			
 			InputStream is=sc.getInputStream();
 			ObjectInputStream ois=new ObjectInputStream(is);
-			@SuppressWarnings("unchecked")
+			 
 			String data=Utility.decryptToString(ois);
 			
 			oos.close();
@@ -312,19 +461,52 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return null;}
 	}
 	
-	public String[][] getSpecialSchedules() throws IllegalArgumentException {
+	public String deleteRegularSchedule(String rScheduleName) throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();
-			toSend.add("23");
+			toSend.add("22b");
+			toSend.add(rScheduleName);
 
-			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
 			OutputStream os = sc.getOutputStream();
 			ObjectOutputStream oos=new ObjectOutputStream(os);
 			oos.writeObject(Utility.encryptMsg(toSend));
 			
 			InputStream is=sc.getInputStream();
 			ObjectInputStream ois=new ObjectInputStream(is);
-			@SuppressWarnings("unchecked")
+			 
+			String data=Utility.decryptToString(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return data;
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.deleteRegularSchedule)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
+	public String[][] getSpecialSchedules() throws IllegalArgumentException {
+		try {
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("23");
+
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			
 			ArrayList<Object[]> data=Utility.decryptToObjectArray(ois);
 			
 			oos.close();
@@ -350,14 +532,14 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			toSend.add("24");
 			toSend.add(sScheduleName);
 
-			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
 			OutputStream os = sc.getOutputStream();
 			ObjectOutputStream oos=new ObjectOutputStream(os);
 			oos.writeObject(Utility.encryptMsg(toSend));
 			
 			InputStream is=sc.getInputStream();
 			ObjectInputStream ois=new ObjectInputStream(is);
-			@SuppressWarnings("unchecked")
+			
 			ArrayList<Object[]> data=Utility.decryptToObjectArray(ois);
 			
 			oos.close();
@@ -380,7 +562,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 	public String createSpecialSchedule(String sScheduleName, String actuatorName, int dayMask, String rule, String onStart, String onEnd, boolean lock, int priority, boolean actuatorEnabled) throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();
-			toSend.add("32");
+			toSend.add("32a");
 			toSend.add(sScheduleName);
 			toSend.add(actuatorName);
 			toSend.add(dayMask);
@@ -391,14 +573,14 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			toSend.add(priority);
 			toSend.add(actuatorEnabled);
 
-			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
 			OutputStream os = sc.getOutputStream();
 			ObjectOutputStream oos=new ObjectOutputStream(os);
 			oos.writeObject(Utility.encryptMsg(toSend));
 			
 			InputStream is=sc.getInputStream();
 			ObjectInputStream ois=new ObjectInputStream(is);
-			@SuppressWarnings("unchecked")
+			 
 			String data=Utility.decryptToString(ois);
 			
 			oos.close();
@@ -418,86 +600,21 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return null;}
 	}
 	
-	public String[][] getSiteList() throws IllegalArgumentException {
+	public String deleteSpecialSchedule(String sScheduleName) throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();
-			toSend.add("3");
-			
-			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
-			OutputStream os = sc.getOutputStream();
-			ObjectOutputStream oos=new ObjectOutputStream(os);
-			oos.writeObject(Utility.encryptMsg(toSend));
-			
-			InputStream is=sc.getInputStream();
-			ObjectInputStream ois=new ObjectInputStream(is);
-			@SuppressWarnings("unchecked")
-			ArrayList<Object []> data=Utility.decryptToObjectArray(ois);
-			
-			oos.close();
-			os.close();
-			ois.close();
-			is.close();
-			
-			sc.close();
-			
-			return Utility.DataToString(data);
-		} catch (Exception e) {
-			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getSiteList)));
-				e.printStackTrace(pw);
-				pw.close();
-			} catch (Exception f) {}
-			return null;}
-	}
-	
-	public String[][] getControllerList(String siteName) throws IllegalArgumentException {
-		try {
-			ArrayList<Object> toSend=new ArrayList<>();
-			toSend.add("4");
-			toSend.add(siteName);
-			
-			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
-			OutputStream os = sc.getOutputStream();
-			ObjectOutputStream oos=new ObjectOutputStream(os);
-			oos.writeObject(Utility.encryptMsg(toSend));
-			
-			InputStream is=sc.getInputStream();
-			ObjectInputStream ois=new ObjectInputStream(is);
-			@SuppressWarnings("unchecked")
-			ArrayList<Object []> data=Utility.decryptToObjectArray(ois);
-			
-			oos.close();
-			os.close();
-			ois.close();
-			is.close();
-			
-			sc.close();
-			
-			return Utility.DataToString(data);
-		} catch (Exception e) {
-			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getControllerList)));
-				e.printStackTrace(pw);
-				pw.close();
-			} catch (Exception f) {}
-			return null;}
-	}
-	
-	public String[][] getSensorList(String controllerName) throws IllegalArgumentException {
-		try {
-			ArrayList<Object> toSend=new ArrayList<>();
-			toSend.add("5");
-			toSend.add(controllerName);
+			toSend.add("32b");
+			toSend.add(sScheduleName);
 
-			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
 			OutputStream os = sc.getOutputStream();
 			ObjectOutputStream oos=new ObjectOutputStream(os);
 			oos.writeObject(Utility.encryptMsg(toSend));
 			
 			InputStream is=sc.getInputStream();
 			ObjectInputStream ois=new ObjectInputStream(is);
-			@SuppressWarnings("unchecked")
-			ArrayList<Object []> data=Utility.decryptToObjectArray(ois);
+			 
+			String data=Utility.decryptToString(ois);
 			
 			oos.close();
 			os.close();
@@ -506,63 +623,34 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			
 			sc.close();
 			
-			return Utility.DataToString(data);
+			return data;
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getSensorList)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.deleteSpecialSchedule)));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
 			return null;}
 	}
 	
-	public String[][] getActuatorList(String controllerName) throws IllegalArgumentException {
+	public String[][] greetServer(String sn, Date sd, Date ed, Boolean predictionIsEnabled) throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();
-			toSend.add("6");
-			toSend.add(controllerName);
-
-			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
+			toSend.add("37");
+			toSend.add(sn);
+			toSend.add(Utility.dateToLocalDateTime(sd));
+			toSend.add(Utility.dateToLocalDateTime(ed));
+			
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
 			OutputStream os = sc.getOutputStream();
 			ObjectOutputStream oos=new ObjectOutputStream(os);
-			oos.writeObject(Utility.encryptMsg(toSend));
 			
 			InputStream is=sc.getInputStream();
 			ObjectInputStream ois=new ObjectInputStream(is);
-			@SuppressWarnings("unchecked")
-			ArrayList<Object []> data=Utility.decryptToObjectArray(ois);
 			
-			oos.close();
-			os.close();
-			ois.close();
-			is.close();
-			
-			sc.close();
-
-			return Utility.DataToString(data);
-		} catch (Exception e) {
-			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getActuatorList)));
-				e.printStackTrace(pw);
-				pw.close();
-			} catch (Exception f) {}
-		}
-		return null;
-	}
-	
-	public String[][] getDayScheduleRuleAll() throws IllegalArgumentException {
-		try {
-			ArrayList<Object> toSend=new ArrayList<>();
-			toSend.add("7");
-			
-			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
-			OutputStream os = sc.getOutputStream();
-			ObjectOutputStream oos=new ObjectOutputStream(os);
 			oos.writeObject(Utility.encryptMsg(toSend));
 			
-			InputStream is=sc.getInputStream();
-			ObjectInputStream ois=new ObjectInputStream(is);
-			@SuppressWarnings("unchecked")
+			 
 			ArrayList<Object []> data=Utility.decryptToObjectArray(ois);
 			
 			oos.close();
@@ -572,46 +660,21 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			
 			sc.close();
 			
-			return Utility.DataToString(data);
+			String[][] result = Utility.DataToString(data);
+			
+			if(predictionIsEnabled)
+			{
+				result = Weka.predict(result);
+			}
+			
+			return result;
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getDayScheduleRuleAll)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.requestError)));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
-			return null;}
-	}
-	
-	public String[][] getDayScheduleRuleByName(String rulename) throws IllegalArgumentException {
-		try {
-			ArrayList<Object> toSend=new ArrayList<>();
-			toSend.add("7");
-			toSend.add(rulename);
 			
-			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
-			OutputStream os = sc.getOutputStream();
-			ObjectOutputStream oos=new ObjectOutputStream(os);
-			oos.writeObject(Utility.encryptMsg(toSend));
-			
-			InputStream is=sc.getInputStream();
-			ObjectInputStream ois=new ObjectInputStream(is);
-			@SuppressWarnings("unchecked")
-			ArrayList<Object []> data=Utility.decryptToObjectArray(ois);
-			
-			oos.close();
-			os.close();
-			ois.close();
-			is.close();
-			
-			sc.close();
-			
-			return Utility.DataToString(data);
-		} catch (Exception e) {
-			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getDayScheduleRuleByName)));
-				e.printStackTrace(pw);
-				pw.close();
-			} catch (Exception f) {}
 			return null;}
 	}
 	
@@ -622,7 +685,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			toSend.add(actuator);
 			toSend.add(status);
 
-			Socket sc=new Socket(Utility.serverIP,getNewPortNumber());
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
 			OutputStream os = sc.getOutputStream();
 			ObjectOutputStream oos=new ObjectOutputStream(os);
 			oos.writeObject(Utility.encryptMsg(toSend));
@@ -631,7 +694,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			ObjectInputStream ois=new ObjectInputStream(is);
 			
 			//Special decrypt for String-based returned response
-			@SuppressWarnings("unchecked")
+			 
 			String data=Utility.decryptToString(ois);
 			
 			oos.close();
@@ -651,7 +714,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return null;}
 	}
 	
-	public int getNewPortNumber() throws IllegalArgumentException {
+	public int getPortNumber() throws IllegalArgumentException {
 		return Utility.portNumber;
 	}
 	
