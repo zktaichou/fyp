@@ -494,6 +494,48 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return null;}
 	}
 	
+	public String updateRegularSchedule(String rScheduleOldName, String rScheduleNewName,String actuatorName, int dayMask, String rule, String onStart, String onEnd, boolean lock, int priority, boolean actuatorEnabled) throws IllegalArgumentException {
+		try {
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("22c");
+			toSend.add(rScheduleOldName);
+			toSend.add(rScheduleNewName);
+			toSend.add(actuatorName);
+			toSend.add(dayMask);
+			toSend.add(rule);
+			toSend.add(onStart);
+			toSend.add(onEnd);
+			toSend.add(lock);
+			toSend.add(priority);
+			toSend.add(actuatorEnabled);
+
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			 
+			String data=Utility.decryptToString(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return data;
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.updateRegularSchedule)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
 	public String[][] getSpecialSchedules() throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();
@@ -593,7 +635,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return data;
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.createRegularSchedule)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.createSpecialSchedule)));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -627,6 +669,48 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 		} catch (Exception e) {
 			try {
 				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.deleteSpecialSchedule)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
+	public String updateSpecialSchedule(String sScheduleOldName, String sScheduleNewName,String actuatorName, int dayMask, String rule, String onStart, String onEnd, boolean lock, int priority, boolean actuatorEnabled) throws IllegalArgumentException {
+		try {
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("32c");
+			toSend.add(sScheduleOldName);
+			toSend.add(sScheduleNewName);
+			toSend.add(actuatorName);
+			toSend.add(dayMask);
+			toSend.add(rule);
+			toSend.add(onStart);
+			toSend.add(onEnd);
+			toSend.add(lock);
+			toSend.add(priority);
+			toSend.add(actuatorEnabled);
+
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			 
+			String data=Utility.decryptToString(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return data;
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.updateSpecialSchedule)));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}

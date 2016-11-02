@@ -32,6 +32,8 @@ public class LogFile{
 	static String getDayScheduleRuleAll = fileName("getDayScheduleRuleAll");
 	static String getDayScheduleRuleByName = fileName("getDayScheduleRuleByName");
 	static String createDayScheduleRule = fileName("createDayScheduleRule");
+	static String updateRegularSchedule = fileName("updateRegularSchedule");
+	static String updateSpecialSchedule = fileName("updateSpecialSchedule");
 	
 	public static String fileName(String name){
 		try{

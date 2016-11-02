@@ -331,7 +331,7 @@ public class SchedulePage extends Composite{
 		});
 		deleteEditScheduleButton.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
-				Window.alert("add delete function later");
+				sendDeleteRequest();
 			}
 		});
 	}
@@ -584,16 +584,16 @@ public class SchedulePage extends Composite{
 	}
 	
 	private void updateScheduleTable(FlexTable ft, String[][] result){
-		scheduleTable.setStyleName("fancyTable");
+		ft.setStyleName("fancyTable");
 		
 		FlexTable newTable = new FlexTable();
 		setScheduleHeaders(newTable);
-		scheduleTable = ChartUtilities.appendFlexTable(newTable, result);
-		addEditScheduleColumnAllRow(scheduleTable);
-		convertDayMaskToString(scheduleTable);
+		ft = ChartUtilities.appendFlexTable(newTable, result);
+		addEditScheduleColumnAllRow(ft);
+		convertDayMaskToString(ft);
 		
 		middlePanel.clear();
-		middlePanel.add(scheduleTable);
+		middlePanel.add(ft);
 	}
 	
 	private void addEditScheduleColumnAllRow(FlexTable ft){
@@ -705,6 +705,17 @@ public class SchedulePage extends Composite{
 		sendEditScheduleRequest(currentScheduleView);
 	}
 	
+	private void sendDeleteRequest(){
+		if(currentScheduleView.equals("Regular Schedule"))
+		{
+			deleteRegularSchedule(currentSelectedScheduleName);
+		}
+		else if(currentScheduleView.equals("Special Schedule"))
+		{
+			deleteSpecialSchedule(currentSelectedScheduleName);
+		}
+	}
+	
 	private void extractEditData(){
 		scheduleName=scheduleNameTB.getText();
 		actuatorName=currentActuatorView;
@@ -734,11 +745,11 @@ public class SchedulePage extends Composite{
 		{
 			Utility.newRequestObj().deleteRegularSchedule(currentSelectedScheduleName, new AsyncCallback<String>() {
 				public void onFailure(Throwable caught) {
-					Window.alert("Unable to delete regular schedule");
+					Window.alert("Unable to edit regular schedule");
 				}
 				
 				public void onSuccess(final String result) {
-					Window.alert("deletion "+result);
+					Window.alert("Editing: "+result);
 					if(result.equalsIgnoreCase("OK"))
 					{
 						ArrayList<String> lol = new ArrayList<>();
@@ -759,10 +770,11 @@ public class SchedulePage extends Composite{
 		{
 			Utility.newRequestObj().deleteSpecialSchedule(currentSelectedScheduleName, new AsyncCallback<String>() {
 				public void onFailure(Throwable caught) {
-					Window.alert("Unable to delete special schedule");
+					Window.alert("Unable to edit special schedule");
 				}
 				
 				public void onSuccess(final String result) {
+					Window.alert("Editing: "+result);
 					if(result.equalsIgnoreCase("OK"))
 					{
 						ArrayList<String> lol = new ArrayList<>();
@@ -801,7 +813,7 @@ public class SchedulePage extends Composite{
 			}
 			
 			public void onSuccess(final String result) {
-				Window.alert("creating regular schedule: "+result);
+				Window.alert("Creating regular schedule: "+result);
 				if(result.equalsIgnoreCase("OK"))
 				{
 //					localAppendScheduleTable(scheduleTable);
@@ -819,7 +831,7 @@ public class SchedulePage extends Composite{
 			}
 			
 			public void onSuccess(final String result) {
-				Window.alert("creating special schedule: "+result);
+				Window.alert("Creating special schedule: "+result);
 				if(result.equalsIgnoreCase("OK"))
 				{
 //					localAppendScheduleTable(scheduleTable);
@@ -828,6 +840,54 @@ public class SchedulePage extends Composite{
 				}
 			}
 		}); 
+	}
+	
+	private void deleteRegularSchedule(final String scheduleName){
+		Utility.newRequestObj().deleteRegularSchedule(scheduleName, new AsyncCallback<String>() {
+			public void onFailure(Throwable caught) {
+				Window.alert("Unable to delete regular schedule");
+			}
+			
+			public void onSuccess(final String result) {
+				Window.alert("Deletion: "+result);
+				if(result.equalsIgnoreCase("OK"))
+				{
+					ArrayList<String> data = Data.actuatorRegularScheduleList.get(actuatorName);
+					data.remove(scheduleName);
+					
+					Data.actuatorRegularScheduleList.remove(actuatorName);
+					Data.actuatorRegularScheduleList.put(actuatorName, data);
+					
+					Data.regularScheduleAttributeList.remove(scheduleName);
+					
+					updateScheduleTable(scheduleTable,regularScheduleCache());
+				}
+			}
+		});
+	}
+	
+	private void deleteSpecialSchedule(final String scheduleName){
+		Utility.newRequestObj().deleteSpecialSchedule(scheduleName, new AsyncCallback<String>() {
+			public void onFailure(Throwable caught) {
+				Window.alert("Unable to delete special schedule");
+			}
+			
+			public void onSuccess(final String result) {
+				Window.alert("Deletion: "+result);
+				if(result.equalsIgnoreCase("OK"))
+				{
+					ArrayList<String> data = Data.actuatorSpecialScheduleList.get(actuatorName);
+					data.remove(scheduleName);
+					
+					Data.actuatorSpecialScheduleList.remove(actuatorName);
+					Data.actuatorSpecialScheduleList.put(actuatorName, data);
+					
+					Data.specialScheduleAttributeList.remove(scheduleName);
+					
+					updateScheduleTable(scheduleTable,specialScheduleCache());
+				}
+			}
+		});
 	}
 	
 	private void getActuatorRegularSchedule(final String actuator){
@@ -862,6 +922,36 @@ public class SchedulePage extends Composite{
 				updateScheduleTable(scheduleTable,result);
 			}
 		});
+	}
+	
+	public String[][] regularScheduleCache(){
+		String[][] temp = new String[Data.regularScheduleAttributeList.size()][Data.regularScheduleAttributeSize];
+		int row=0;
+		for(String schedule: Data.regularScheduleAttributeList.keySet())
+		{
+			ArrayList<String> attributes = Data.regularScheduleAttributeList.get(schedule);
+			for(int i=0; i<attributes.size();i++)
+			{
+				temp[row][i]=attributes.get(i);
+			}
+			row++;
+		}
+		return temp;
+	}
+	
+	public String[][] specialScheduleCache(){
+		String[][] temp = new String[Data.specialScheduleAttributeList.size()][Data.specialScheduleAttributeSize];
+		int row=0;
+		for(String schedule: Data.specialScheduleAttributeList.keySet())
+		{
+			ArrayList<String> attributes = Data.specialScheduleAttributeList.get(schedule);
+			for(int i=0; i<attributes.size();i++)
+			{
+				temp[row][i]=attributes.get(i);
+			}
+			row++;
+		}
+		return temp;
 	}
 	
 }
