@@ -1,8 +1,6 @@
 package com.google.gwt.sample.stockwatcher.client;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -21,7 +19,6 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 public class SchedulePage extends Composite{
 	
@@ -43,6 +40,10 @@ public class SchedulePage extends Composite{
 	Button updateEditScheduleButton = new Button("Update");
 	Button cancelEditScheduleButton = new Button("Cancel");
 	Button deleteEditScheduleButton = new Button("Delete");
+	
+	Button updateEditRuleButton = new Button("Update");
+	Button cancelEditRuleButton = new Button("Cancel");
+	Button deleteEditRuleButton = new Button("Delete");
 	
 	Button newRuleButton = new Button("New Rule");
 	Button createRuleButton = new Button("Create");
@@ -75,6 +76,7 @@ public class SchedulePage extends Composite{
 	String currentActuatorView;
 	String currentScheduleView;
 	String currentSelectedScheduleName;
+	String currentSelectedRuleName;
 	
 	TextBox ruleNameTB = new TextBox();
 	TextBox scheduleNameTB = new TextBox();
@@ -94,6 +96,7 @@ public class SchedulePage extends Composite{
 	CheckBox saturday = new CheckBox("Saturday");
 	CheckBox sunday = new CheckBox("Sunday");
 	CheckBox [] chkbx={monday,tuesday,wednesday,thursday,friday,saturday,sunday};
+	
 	String [] DaysShort={"Mo","Tu","We","Th","Fr","Sa","Su"};
 	
 	PopupPanel schedulePopup = new PopupPanel();
@@ -152,12 +155,24 @@ public class SchedulePage extends Composite{
 		initWidget(cPanel);
 	}
 	
+	private void refreshRuleTable(){
+		VerticalPanel v2Panel = new VerticalPanel();
+		v2Panel.setSpacing(10);
+		v2Panel.add(new HTML("Rules"));
+		v2Panel.add(ruleTable);
+		v2Panel.add(newRuleButton);
+		
+		rightPanel.clear();
+		rightPanel.setStyleName("ruleMenu");
+		rightPanel.add(v2Panel);
+	}
+	
 	private void setWidgets(){
 		initializeScheduleMenu();
 		initializeRuleMenu();
 		initializeRuleTable();
 
-		schedulePopup.setVisible(false);
+		
 		schedulePopup.setGlassEnabled(true);
 		schedulePopup.add(scheduleMenu);
 
@@ -231,6 +246,14 @@ public class SchedulePage extends Composite{
 		scheduleEnabledLB.addItem("false");
 	}
 	
+	private void refreshRuleMenuWidgets(){
+		ruleNameTB.setText("");
+		sHLB.setSelectedIndex(0);
+		sMLB.setSelectedIndex(0);
+		eHLB.setSelectedIndex(0);
+		eMLB.setSelectedIndex(0);
+	};
+	
 	private void refreshRuleLB(){
 		ruleLB.clear();
 		for(String ruleName: Data.dayScheduleRuleAttributeList.keySet())
@@ -273,27 +296,29 @@ public class SchedulePage extends Composite{
 				eH = Integer.parseInt(eHLB.getSelectedItemText());
 				eM = Integer.parseInt(eMLB.getSelectedItemText());
 				
-				Utility.newRequestObj().createDayScheduleRule(ruleName, sH, sM, eH, eM, new AsyncCallback<String>() {
-					public void onFailure(Throwable caught) {
-						Window.alert("Unable to create rule");
-					}
-					
-					public void onSuccess(final String result) {
-						Window.alert("Response: "+result);
-						if(result.equalsIgnoreCase("OK"))
-						{
-							refreshRuleData(ruleName, sH, sM, eH, eM);
-							localAppendRuleTable(ruleTable);
-							rulePopup.setVisible(false);
-						}
-					}
-				});
+				createRule();
 			}
 		});
 		
 		cancelRuleButton.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
 				rulePopup.setVisible(false);
+			}
+		});
+		
+		cancelEditRuleButton.addClickHandler(new ClickHandler(){
+			public void onClick(ClickEvent event){
+				rulePopup.setVisible(false);
+			}
+		});
+		updateEditRuleButton.addClickHandler(new ClickHandler(){
+			public void onClick(ClickEvent event){
+				sendUpdateRuleRequest();
+			}
+		});
+		deleteEditRuleButton.addClickHandler(new ClickHandler(){
+			public void onClick(ClickEvent event){
+				deleteRule();
 			}
 		});
 		
@@ -326,12 +351,12 @@ public class SchedulePage extends Composite{
 		});
 		updateEditScheduleButton.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
-				sendUpdateRequest();
+				sendUpdateScheduleRequest();
 			}
 		});
 		deleteEditScheduleButton.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
-				sendDeleteRequest();
+				sendDeleteScheduleRequest();
 			}
 		});
 	}
@@ -485,6 +510,9 @@ public class SchedulePage extends Composite{
 	}
 	
 	private void initializeRuleMenu(){
+
+		refreshRuleMenuWidgets();
+		
 		HorizontalPanel buttonPanel = new HorizontalPanel();
 		buttonPanel.setSpacing(10);
 		buttonPanel.add(cancelRuleButton);
@@ -517,9 +545,52 @@ public class SchedulePage extends Composite{
 		ruleMenu.addNewRow(buttonPanel);
 	}
 	
+	private void initializeEditRuleMenu(String rule){
+		HorizontalPanel buttonPanel = new HorizontalPanel();
+		buttonPanel.setSpacing(10);
+		buttonPanel.add(cancelEditRuleButton);
+		buttonPanel.add(updateEditRuleButton);
+		buttonPanel.add(deleteEditRuleButton);
+		
+		VerticalPanel hourPanel = new VerticalPanel();
+		hourPanel.setSpacing(10);
+		hourPanel.add(new HTML("Set start hour"));
+		hourPanel.add(sHLB);
+		hourPanel.add(new HTML("Set end hour"));
+		hourPanel.add(eHLB);
+		
+		VerticalPanel minutePanel = new VerticalPanel();
+		minutePanel.setSpacing(10);
+		minutePanel.add(new HTML("Set start minute"));
+		minutePanel.add(sMLB);
+		minutePanel.add(new HTML("Set end minute"));
+		minutePanel.add(eMLB);
+		
+		HorizontalPanel wrapper = new HorizontalPanel();
+		wrapper.add(hourPanel);
+		wrapper.add(minutePanel);
+		
+		ruleMenu.clear();
+		ruleMenu.addLabel("Input rule name");
+		ruleMenu.addItem(ruleNameTB);
+		ruleMenu.addSeparator();
+		ruleMenu.addNewRow(wrapper);
+		ruleMenu.addSeparator();
+		ruleMenu.addNewRow(buttonPanel);
+		
+		ArrayList<String> scheduleParam = Data.dayScheduleRuleAttributeList.get(rule);
+		ruleNameTB.setText(scheduleParam.get(0));
+		sHLB.setSelectedIndex(getIndexOfTextInWidget(sHLB,scheduleParam.get(1)));
+		sMLB.setSelectedIndex(getIndexOfTextInWidget(sMLB,scheduleParam.get(2)));
+		eHLB.setSelectedIndex(getIndexOfTextInWidget(eHLB,scheduleParam.get(3)));
+		eMLB.setSelectedIndex(getIndexOfTextInWidget(eMLB,scheduleParam.get(4)));
+	}
+	
 	private void initializeRuleTable(){
-		ruleTable.clear();
-		setRuleHeaders(ruleTable);
+		rulePopup.setVisible(false);
+		
+		FlexTable ft = new FlexTable();
+		setRuleHeaders(ft);
 		
 		String[][] data = new String[Data.dayScheduleRuleAttributeList.size()][Data.ruleAttributeSize];
 		int row=0;
@@ -533,11 +604,24 @@ public class SchedulePage extends Composite{
 			}
 			row++;
 		}
-		ChartUtilities.appendFlexTable(ruleTable,data);
+		ruleTable = ChartUtilities.appendFlexTable(ft,data);
 		addEditRuleColumnAllRow(ruleTable);
+		
+		refreshRuleTable();
 	}
 	
-	private void refreshRuleData(String name, int a, int b, int c, int d){
+	private void updateRuleTable(String[][] result){
+		rulePopup.setVisible(false);
+		
+		FlexTable newTable = new FlexTable();
+		setScheduleHeaders(newTable);
+		ruleTable = ChartUtilities.appendFlexTable(newTable, result);
+		addEditRuleColumnAllRow(ruleTable);
+		
+		refreshRuleTable();
+	}
+	
+	private void addRuleData(String name, int a, int b, int c, int d){
 		ArrayList<String> list = new ArrayList<>();
 		list.add(ruleName);
 		list.add(Integer.toString(a));
@@ -584,6 +668,8 @@ public class SchedulePage extends Composite{
 	}
 	
 	private void updateScheduleTable(FlexTable ft, String[][] result){
+		schedulePopup.setVisible(false);
+		
 		ft.setStyleName("fancyTable");
 		
 		FlexTable newTable = new FlexTable();
@@ -626,6 +712,18 @@ public class SchedulePage extends Composite{
 				}
 			});
 	}
+	
+	private void setEditRuleClickHandler(final Anchor anchor){
+		anchor.addClickHandler(new ClickHandler(){
+			public void onClick(ClickEvent event){
+				currentSelectedRuleName=anchor.getName();
+				initializeEditRuleMenu(anchor.getName());
+				
+				rulePopup.setVisible(true);
+				rulePopup.center();
+				}
+			});
+	}
 
 	private void addEditRuleColumnAllRow(FlexTable ft){
 		for(int i=1; i<ft.getRowCount(); i++)
@@ -633,11 +731,7 @@ public class SchedulePage extends Composite{
 			final Anchor edit = new Anchor("Edit");
 			ft.setWidget(i, ft.getCellCount(i), edit);
 			edit.setName(ft.getText(i, 0));
-			edit.addClickHandler(new ClickHandler(){
-				public void onClick(ClickEvent event){
-					Window.alert(edit.getName());
-					}
-				});
+			setEditRuleClickHandler(edit);
 		}
 	}
 	
@@ -648,11 +742,7 @@ public class SchedulePage extends Composite{
 		final Anchor edit = new Anchor("Edit");
 		ft.setWidget(lastRow, ft.getCellCount(lastRow), edit);
 		edit.setName(ft.getText(lastRow, 0));
-		edit.addClickHandler(new ClickHandler(){
-			public void onClick(ClickEvent event){
-				Window.alert(edit.getName());
-				}
-			});
+		setEditRuleClickHandler(edit);
 		}
 	
 	private void convertDayMaskToString(FlexTable ft){
@@ -688,6 +778,90 @@ public class SchedulePage extends Composite{
 		}
 	};
 	
+	private void extractEditRuleData(){
+		ruleName = ruleNameTB.getText();
+		sH = Integer.parseInt(sHLB.getSelectedItemText());
+		sM = Integer.parseInt(sMLB.getSelectedItemText());
+		eH = Integer.parseInt(eHLB.getSelectedItemText());
+		eM = Integer.parseInt(eMLB.getSelectedItemText());
+	}
+	
+	private void sendUpdateRuleRequest(){
+		extractEditRuleData();
+		updateRule();
+	}
+	
+	private void createRule(){
+		Utility.newRequestObj().createDayScheduleRule(ruleName, sH, sM, eH, eM, new AsyncCallback<String>() {
+			public void onFailure(Throwable caught) {
+				Window.alert("Unable to create rule");
+			}
+			
+			public void onSuccess(String result) {
+				Window.alert("Creating rule: "+result);
+				if(result.equalsIgnoreCase("OK"))
+				{
+					addRuleData(ruleName, sH, sM, eH, eM);
+					localAppendRuleTable(ruleTable);
+					rulePopup.setVisible(false);
+				}
+			}
+		});
+	}
+	
+	private void deleteRule(){
+		Utility.newRequestObj().deleteDayScheduleRule(currentSelectedRuleName, new AsyncCallback<String>() {
+			public void onFailure(Throwable caught) {
+				Window.alert("Unable to delete rule");
+			}
+			
+			public void onSuccess(String result) {
+				Window.alert("Deleting rule: "+result);
+				if(result.equalsIgnoreCase("OK"))
+				{
+					Data.dayScheduleRuleAttributeList.remove(currentSelectedRuleName);
+					initializeRuleTable();
+				}
+			}
+		});
+	}
+	
+	private void updateRule(){
+		Utility.newRequestObj().updateDayScheduleRule(currentSelectedRuleName, ruleName, sH, sM, eH, eM, new AsyncCallback<String>() {
+			public void onFailure(Throwable caught) {
+				Window.alert("Unable to update rule");
+			}
+			
+			public void onSuccess(final String result) {
+				Window.alert("Updating rule: "+result);
+				if(result.equalsIgnoreCase("OK"))
+				{
+					ArrayList<String> temp = new ArrayList<>();
+					temp.add(ruleName);
+					temp.add(String.valueOf(sH));
+					temp.add(String.valueOf(sM));
+					temp.add(String.valueOf(eH));
+					temp.add(String.valueOf(eM));
+					Data.dayScheduleRuleAttributeList.remove(currentSelectedRuleName);
+					Data.dayScheduleRuleAttributeList.put(ruleName, temp);
+
+					initializeRuleTable();
+					
+//					Utility.newRequestObj().getDayScheduleRuleAll(new AsyncCallback<String[][]>() {
+//						public void onFailure(Throwable caught) {
+//							Window.alert("Unable to update rule");
+//						}
+//						public void onSuccess(String result[][]) {
+//							updateRuleTable(result);
+//						}
+//					});
+				}
+			}
+		});
+	}
+	
+	//-------------------------------------------------Scheduling Methods------------------------------------------------------//
+	
 	private void setCreateScheduleParam(){
 		scheduleName=scheduleNameTB.getText();
 		actuatorName=actuatorLB.getSelectedItemText();
@@ -700,12 +874,13 @@ public class SchedulePage extends Composite{
 		scheduleEnabled=Boolean.parseBoolean(scheduleEnabledLB.getSelectedItemText());
 	}
 	
-	private void sendUpdateRequest(){
-		extractEditData();
-		sendEditScheduleRequest(currentScheduleView);
+	private void sendUpdateScheduleRequest(){
+		extractEditScheduleData();
+		sendUpdateScheduleRequest(currentScheduleView);
+//		sendEditScheduleRequest(currentScheduleView);
 	}
 	
-	private void sendDeleteRequest(){
+	private void sendDeleteScheduleRequest(){
 		if(currentScheduleView.equals("Regular Schedule"))
 		{
 			deleteRegularSchedule(currentSelectedScheduleName);
@@ -716,7 +891,7 @@ public class SchedulePage extends Composite{
 		}
 	}
 	
-	private void extractEditData(){
+	private void extractEditScheduleData(){
 		scheduleName=scheduleNameTB.getText();
 		actuatorName=currentActuatorView;
 		dayMask=getSelectedDays();
@@ -738,58 +913,15 @@ public class SchedulePage extends Composite{
 		scheduleAttributeList.add(priority);
 		scheduleAttributeList.add(scheduleEnabled);
 	}
-	
-	private void sendEditScheduleRequest(String scheduleType){
-		Window.alert("Editing Schedule: "+currentSelectedScheduleName);
+
+	private void sendUpdateScheduleRequest(String scheduleType){
 		if(scheduleType.equals("Regular Schedule"))
 		{
-			Utility.newRequestObj().deleteRegularSchedule(currentSelectedScheduleName, new AsyncCallback<String>() {
-				public void onFailure(Throwable caught) {
-					Window.alert("Unable to edit regular schedule");
-				}
-				
-				public void onSuccess(final String result) {
-					Window.alert("Editing: "+result);
-					if(result.equalsIgnoreCase("OK"))
-					{
-						ArrayList<String> lol = new ArrayList<>();
-						for(Object o: scheduleAttributeList)
-						{
-							lol.add(String.valueOf(o));
-						}
-
-						Data.regularScheduleAttributeList.remove(currentSelectedScheduleName);
-						Data.regularScheduleAttributeList.put(currentSelectedScheduleName,lol);
-						
-						createRegularSchedule();
-					}
-				}
-			});
+			updateRegularSchedule();
 		}
 		else if(scheduleType.equals("Special Schedule"))
 		{
-			Utility.newRequestObj().deleteSpecialSchedule(currentSelectedScheduleName, new AsyncCallback<String>() {
-				public void onFailure(Throwable caught) {
-					Window.alert("Unable to edit special schedule");
-				}
-				
-				public void onSuccess(final String result) {
-					Window.alert("Editing: "+result);
-					if(result.equalsIgnoreCase("OK"))
-					{
-						ArrayList<String> lol = new ArrayList<>();
-						for(Object o: scheduleAttributeList)
-						{
-							lol.add(String.valueOf(o));
-						}
-
-						Data.specialScheduleAttributeList.remove(currentSelectedScheduleName);
-						Data.specialScheduleAttributeList.put(currentSelectedScheduleName,lol);
-						
-						createSpecialSchedule();
-					}
-				}
-			});
+			updateSpecialSchedule();
 		}
 	}
 	
@@ -816,9 +948,7 @@ public class SchedulePage extends Composite{
 				Window.alert("Creating regular schedule: "+result);
 				if(result.equalsIgnoreCase("OK"))
 				{
-//					localAppendScheduleTable(scheduleTable);
 					getActuatorRegularSchedule(actuatorName);
-					schedulePopup.setVisible(false);
 				}
 			}
 		});
@@ -834,9 +964,39 @@ public class SchedulePage extends Composite{
 				Window.alert("Creating special schedule: "+result);
 				if(result.equalsIgnoreCase("OK"))
 				{
-//					localAppendScheduleTable(scheduleTable);
 					getActuatorSpecialSchedule(actuatorName);
-					schedulePopup.setVisible(false);
+				}
+			}
+		}); 
+	}
+	
+	private void updateRegularSchedule(){
+		Utility.newRequestObj().updateRegularSchedule(currentSelectedScheduleName ,scheduleName, actuatorName, dayMask, rule, onStart, onEnd, lock, priority, scheduleEnabled, new AsyncCallback<String>() {
+			public void onFailure(Throwable caught) {
+				Window.alert("Unable to create regular schedule");
+			}
+			
+			public void onSuccess(final String result) {
+				Window.alert("Updating regular schedule: "+result);
+				if(result.equalsIgnoreCase("OK"))
+				{
+					getActuatorRegularSchedule(actuatorName);
+				}
+			}
+		});
+	}
+	
+	private void updateSpecialSchedule(){
+		Utility.newRequestObj().updateSpecialSchedule(currentSelectedScheduleName, scheduleName, actuatorName, dayMask, rule, onStart, onEnd, lock, priority, scheduleEnabled, new AsyncCallback<String>() {
+			public void onFailure(Throwable caught) {
+				Window.alert("Unable to update special schedule");
+			}
+			
+			public void onSuccess(final String result) {
+				Window.alert("Updating special schedule: "+result);
+				if(result.equalsIgnoreCase("OK"))
+				{
+					getActuatorSpecialSchedule(actuatorName);
 				}
 			}
 		}); 

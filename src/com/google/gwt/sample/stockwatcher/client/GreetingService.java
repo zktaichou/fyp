@@ -33,4 +33,6 @@ public interface GreetingService extends RemoteService {
 	String deleteSpecialSchedule(String sScheduleName) throws IllegalArgumentException;
 	String updateRegularSchedule(String rScheduleOldName, String rScheduleNewName, String actuatorName, int dayMask, String rule, String onStart, String onEnd, boolean lock, int priority, boolean scheduleEnabled) throws IllegalArgumentException;
 	String updateSpecialSchedule(String sScheduleName, String sScheduleNewName, String actuatorName, int dayMask, String rule, String onStart, String onEnd, boolean lock, int priority, boolean scheduleEnabled) throws IllegalArgumentException;
+	String deleteDayScheduleRule(String rName) throws IllegalArgumentException;
+	String updateDayScheduleRule(String rOldName, String rNewName, int sH, int sM, int eH, int eM) throws IllegalArgumentException;
 }

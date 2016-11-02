@@ -252,6 +252,77 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return null;}
 	}
 	
+	public String updateDayScheduleRule(String rOldName, String rNewName, int sH, int sM, int eH, int eM) throws IllegalArgumentException {
+		try {
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("9a");
+			toSend.add(rOldName);
+			toSend.add(rNewName);
+			toSend.add(sH);
+			toSend.add(sM);
+			toSend.add(eH);
+			toSend.add(eM);
+
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			 
+			String data=Utility.decryptToString(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return data;
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.updateDayScheduleRule)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
+	public String deleteDayScheduleRule(String rName) throws IllegalArgumentException {
+		try {
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("9b");
+			toSend.add(rName);
+
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			 
+			String data=Utility.decryptToString(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return data;
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.deleteDayScheduleRule)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
 	public String createDayScheduleRule(String rName, int sH, int sM, int eH, int eM) throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();
