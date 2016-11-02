@@ -29,4 +29,6 @@ public interface GreetingService extends RemoteService {
 	String[][] getDayScheduleRuleAll() throws IllegalArgumentException;
 	String[][] getDayScheduleRuleByName(String ruleName) throws IllegalArgumentException;
 	String createDayScheduleRule(String rName, int sH, int sM, int eH, int eM) throws IllegalArgumentException;
+	String deleteRegularSchedule(String rScheduleName) throws IllegalArgumentException;
+	String deleteSpecialSchedule(String sScheduleName) throws IllegalArgumentException;
 }

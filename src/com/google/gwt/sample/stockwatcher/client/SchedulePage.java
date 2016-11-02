@@ -2,6 +2,7 @@ package com.google.gwt.sample.stockwatcher.client;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -70,6 +71,10 @@ public class SchedulePage extends Composite{
 	int priority;
 	boolean scheduleEnabled;
 	Boolean lock;
+
+	String currentActuatorView;
+	String currentScheduleView;
+	String currentSelectedScheduleName;
 	
 	TextBox ruleNameTB = new TextBox();
 	TextBox scheduleNameTB = new TextBox();
@@ -88,6 +93,8 @@ public class SchedulePage extends Composite{
 	CheckBox friday = new CheckBox("Friday");
 	CheckBox saturday = new CheckBox("Saturday");
 	CheckBox sunday = new CheckBox("Sunday");
+	CheckBox [] chkbx={monday,tuesday,wednesday,thursday,friday,saturday,sunday};
+	String [] DaysShort={"Mo","Tu","We","Th","Fr","Sa","Su"};
 	
 	PopupPanel schedulePopup = new PopupPanel();
 	PopupPanel rulePopup = new PopupPanel();
@@ -149,7 +156,7 @@ public class SchedulePage extends Composite{
 		initializeScheduleMenu();
 		initializeRuleMenu();
 		initializeRuleTable();
-		
+
 		schedulePopup.setVisible(false);
 		schedulePopup.setGlassEnabled(true);
 		schedulePopup.add(scheduleMenu);
@@ -175,10 +182,16 @@ public class SchedulePage extends Composite{
 		scheduleNameTB.setText("");
 		actuatorLB.clear();
 		scheduleActuatorLB.clear();
+		
 		for(String aName: Data.actuatorAttributeList.keySet())
 		{
 			actuatorLB.addItem(aName);
 			scheduleActuatorLB.addItem(aName);
+		}
+		
+		for(CheckBox chk: chkbx)
+		{
+			chk.setValue(false);
 		}
 		
 		scheduleType.clear();
@@ -231,36 +244,14 @@ public class SchedulePage extends Composite{
 			public void onClick(ClickEvent event){
 				middlePanel.clear();
 				middlePanel.add(Utility.addTimer());
-				final String actuator=actuatorLB.getSelectedItemText();
+				String actuator=actuatorLB.getSelectedItemText();
 				if(scheduleType.getSelectedItemText().equals("Regular Schedule"))
 				{
-					Utility.newRequestObj().getActuatorRegularSchedule(actuator, new AsyncCallback<String[][]>() {
-						public void onFailure(Throwable caught) {
-							Window.alert("Unable to get regular schedule");
-							Utility.hideTimer();
-						}
-						
-						public void onSuccess(String[][] result) {
-							refreshRegularScheduleData(actuator, result);
-							Utility.hideTimer();
-							updateScheduleTable(scheduleTable,result);
-						}
-					});
+					getActuatorRegularSchedule(actuator);
 				}
 				else if(scheduleType.getSelectedItemText().equals("Special Schedule"))
 				{
-					Utility.newRequestObj().getActuatorSpecialSchedule(actuator, new AsyncCallback<String[][]>() {
-						public void onFailure(Throwable caught) {
-							Window.alert("Unable to get special schedule");
-							Utility.hideTimer();
-						}
-						
-						public void onSuccess(String[][] result) {
-							refreshSpecialScheduleData(actuator, result);
-							Utility.hideTimer();
-							updateScheduleTable(scheduleTable,result);
-						}
-					});
+					getActuatorSpecialSchedule(actuator);
 				}
 			}
 		});
@@ -317,52 +308,8 @@ public class SchedulePage extends Composite{
 		
 		createScheduleButton.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
-				scheduleName=scheduleNameTB.getText();
-				actuatorName=actuatorLB.getSelectedItemText();
-				rule=ruleLB.getSelectedItemText();
-				dayMask=getSelectedDays();
-				onStart=actuatorOnStartLB.getSelectedItemText();
-				onEnd=actuatorOnEndLB.getSelectedItemText();
-				lock = Boolean.parseBoolean(lockEnabledLB.getSelectedItemText());
-				priority=Integer.parseInt(priorityLB.getSelectedItemText());
-				scheduleEnabled=Boolean.parseBoolean(scheduleEnabledLB.getSelectedItemText());
-				
-				if(createScheduleType.getSelectedItemText().equals("Regular Schedule"))
-				{
-					Utility.newRequestObj().createRegularSchedule(scheduleName, actuatorName, dayMask, rule, onStart, onEnd, lock, priority, scheduleEnabled, new AsyncCallback<String>() {
-						public void onFailure(Throwable caught) {
-							Window.alert("Unable to create regular schedule");
-						}
-						
-						public void onSuccess(final String result) {
-							Window.alert("Response: "+result);
-							if(result.equalsIgnoreCase("OK"))
-							{
-								localAppendScheduleTable(scheduleTable);
-								schedulePopup.setVisible(false);
-							}
-						}
-					});
-				}
-				else if(createScheduleType.getSelectedItemText().equals("Special Schedule"))
-				{
-					Utility.newRequestObj().createSpecialSchedule(scheduleName, actuatorName, dayMask, rule, onStart, onEnd, lock, priority, scheduleEnabled, new AsyncCallback<String>() {
-						public void onFailure(Throwable caught) {
-							Window.alert("Unable to create special schedule");
-						}
-						
-						public void onSuccess(final String result) {
-							Window.alert("Response: "+result);
-							if(result.equalsIgnoreCase("OK"))
-							{
-								localAppendScheduleTable(scheduleTable);
-								schedulePopup.setVisible(false);
-							}
-						}
-					}); 
-				}
-				else
-					Window.alert("schedule type bug");
+				setCreateScheduleParam();
+				sendCreateScheduleRequest();
 			}
 		});
 		
@@ -379,7 +326,7 @@ public class SchedulePage extends Composite{
 		});
 		updateEditScheduleButton.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
-				Window.alert("add update function later");
+				sendUpdateRequest();
 			}
 		});
 		deleteEditScheduleButton.addClickHandler(new ClickHandler(){
@@ -407,6 +354,7 @@ public class SchedulePage extends Composite{
 			flexTable.setText(numRows, i, String.valueOf(scheduleAttributeList.get(i)));
 		}
 		addEditScheduleColumnLatestRow(flexTable);
+		convertDayMaskToString(flexTable);
 	}
 	
 	private void localAppendRuleTable(FlexTable flexTable){
@@ -426,7 +374,7 @@ public class SchedulePage extends Composite{
 	}
 	
 	private void setScheduleHeaders(FlexTable ft){
-		String[] header = {"Schedule Name","Actuator Name","DayMask","Rule","On Start","On End","Lock?","Priority","Schedule Enabled?"};
+		String[] header = {"Schedule","Actuator","Day Enabled","Rule","On Start","On End","Lock?","Priority","Schedule Enabled?"};
 		for(int i=0;i<header.length;i++)
 		{
 			ft.setText(0, i, header[i]);
@@ -434,7 +382,7 @@ public class SchedulePage extends Composite{
 	}
 	
 	private void setRuleHeaders(FlexTable ft){
-		String[] header = {"Rule Name","Start Hour","Start Minute","End Hour","End Minute"};
+		String[] header = {"Rule","Start Hour","Start Minute","End Hour","End Minute"};
 		for(int i=0;i<header.length;i++)
 		{
 			ft.setText(0, i, header[i]);
@@ -481,6 +429,7 @@ public class SchedulePage extends Composite{
 	}
 	
 	private void initializeEditScheduleMenu(String schedule){
+		
 		HorizontalPanel buttonPanel = new HorizontalPanel();
 		buttonPanel.setSpacing(10);
 		buttonPanel.add(cancelEditScheduleButton);
@@ -514,6 +463,7 @@ public class SchedulePage extends Composite{
 		
 		ArrayList<String> scheduleParam = Data.regularScheduleAttributeList.get(schedule);
 		scheduleNameTB.setText(scheduleParam.get(0));
+		setSelectedDays(scheduleParam.get(2));
 		ruleLB.setSelectedIndex(getIndexOfTextInWidget(ruleLB,scheduleParam.get(3)));
 		actuatorOnStartLB.setSelectedIndex(getIndexOfTextInWidget(actuatorOnStartLB,scheduleParam.get(4)));
 		actuatorOnEndLB.setSelectedIndex(getIndexOfTextInWidget(actuatorOnEndLB,scheduleParam.get(5)));
@@ -587,43 +537,6 @@ public class SchedulePage extends Composite{
 		addEditRuleColumnAllRow(ruleTable);
 	}
 	
-	private int getSelectedDays(){
-		CheckBox [] chkbx={monday,tuesday,wednesday,thursday,friday,saturday,sunday};
-		int mask=0;
-		for (int i=0;i<chkbx.length;i++) {
-			if (chkbx[i].getValue()) mask=(mask | (1 << (i+1)));
-		}
-		return mask;
-	};
-	
-	private String formatDayMask(String dayMask){
-		int dayMaskInt = Integer.parseInt(dayMask);
-		boolean[] bits = new boolean[7];
-	    for (int i = 6; i >= 0; i--) {
-	        bits[i] = (dayMaskInt & (1 << i)) != 0;
-	    }
-
-		String myString = "MTWTFSS";
-		String result = "";
-		StringBuilder sb = new StringBuilder();
-		int count = 0;
-		
-	    for(Character c: myString.toCharArray()){
-	    	String colour = "white";
-	    	if(bits[count])
-	    	{
-	    		colour = "green";
-	    	}
-	    	
-	    	sb.append("<font color=\""+colour+"\">");
-			sb.append(c);
-			sb.append("</font>");
-		    result += sb.toString();
-	    }
-	    Window.alert(result);
-	    return result;
-	}
-	
 	private void refreshRuleData(String name, int a, int b, int c, int d){
 		ArrayList<String> list = new ArrayList<>();
 		list.add(ruleName);
@@ -673,12 +586,11 @@ public class SchedulePage extends Composite{
 	private void updateScheduleTable(FlexTable ft, String[][] result){
 		scheduleTable.setStyleName("fancyTable");
 		
-//		FlexTable newTable = new FlexTable();
-//		setScheduleHeaders(newTable);
-//		scheduleTable = ChartUtilities.appendFlexTable(newTable, result);
-		setScheduleHeaders(scheduleTable);
-		ChartUtilities.appendFlexTable(scheduleTable, result);
+		FlexTable newTable = new FlexTable();
+		setScheduleHeaders(newTable);
+		scheduleTable = ChartUtilities.appendFlexTable(newTable, result);
 		addEditScheduleColumnAllRow(scheduleTable);
+		convertDayMaskToString(scheduleTable);
 		
 		middlePanel.clear();
 		middlePanel.add(scheduleTable);
@@ -706,8 +618,11 @@ public class SchedulePage extends Composite{
 	private void setEditScheduleClickHandler(final Anchor anchor){
 		anchor.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
+				currentSelectedScheduleName=anchor.getName();
 				initializeEditScheduleMenu(anchor.getName());
+				
 				schedulePopup.setVisible(true);
+				schedulePopup.center();
 				}
 			});
 	}
@@ -739,5 +654,214 @@ public class SchedulePage extends Composite{
 				}
 			});
 		}
+	
+	private void convertDayMaskToString(FlexTable ft){
+		for(int i=1; i<ft.getRowCount(); i++)
+		{
+			StringBuilder sb=new StringBuilder();
+			String dayMask = ft.getText(i, 2);
+			int dayMaskInt = Integer.parseInt(dayMask);
+			
+			for (int j=1;j<=7;j++) { //1 = Monday, 7 = Sunday
+				if ((dayMaskInt & (1 << j))!=0) {
+					sb.append(DaysShort[j-1]);
+					sb.append(',');
+				}
+			}
+			String s=sb.toString();
+			ft.setText(i, 2, s.substring(0,s.length()-1));
+		}
+	}
+	
+	private int getSelectedDays(){
+		int mask=0;
+		for (int i=0;i<chkbx.length;i++) {
+			if (chkbx[i].getValue()) mask=(mask | (1 << (i+1)));
+		}
+		return mask;
+	};
+	
+	private void setSelectedDays(String mask){
+		int dayMaskInt = Integer.parseInt(mask);
+		for (int i=1;i<=7;i++) { //1 = Monday, 7 = Sunday
+			chkbx[i-1].setValue((dayMaskInt & (1 << i))!=0);
+		}
+	};
+	
+	private void setCreateScheduleParam(){
+		scheduleName=scheduleNameTB.getText();
+		actuatorName=actuatorLB.getSelectedItemText();
+		rule=ruleLB.getSelectedItemText();
+		dayMask=getSelectedDays();
+		onStart=actuatorOnStartLB.getSelectedItemText();
+		onEnd=actuatorOnEndLB.getSelectedItemText();
+		lock = Boolean.parseBoolean(lockEnabledLB.getSelectedItemText());
+		priority=Integer.parseInt(priorityLB.getSelectedItemText());
+		scheduleEnabled=Boolean.parseBoolean(scheduleEnabledLB.getSelectedItemText());
+	}
+	
+	private void sendUpdateRequest(){
+		extractEditData();
+		sendEditScheduleRequest(currentScheduleView);
+	}
+	
+	private void extractEditData(){
+		scheduleName=scheduleNameTB.getText();
+		actuatorName=currentActuatorView;
+		dayMask=getSelectedDays();
+		rule=ruleLB.getSelectedItemText();
+		onStart=actuatorOnStartLB.getSelectedItemText();
+		onEnd=actuatorOnEndLB.getSelectedItemText();
+		lock = Boolean.parseBoolean(lockEnabledLB.getSelectedItemText());
+		priority=Integer.parseInt(priorityLB.getSelectedItemText());
+		scheduleEnabled=Boolean.parseBoolean(scheduleEnabledLB.getSelectedItemText());
+		
+		scheduleAttributeList.clear();
+		scheduleAttributeList.add(scheduleName);
+		scheduleAttributeList.add(actuatorName);
+		scheduleAttributeList.add(dayMask);
+		scheduleAttributeList.add(rule);
+		scheduleAttributeList.add(actuatorOnStartLB.getSelectedItemText());
+		scheduleAttributeList.add(actuatorOnEndLB.getSelectedItemText());
+		scheduleAttributeList.add(lock);
+		scheduleAttributeList.add(priority);
+		scheduleAttributeList.add(scheduleEnabled);
+	}
+	
+	private void sendEditScheduleRequest(String scheduleType){
+		Window.alert("Editing Schedule: "+currentSelectedScheduleName);
+		if(scheduleType.equals("Regular Schedule"))
+		{
+			Utility.newRequestObj().deleteRegularSchedule(currentSelectedScheduleName, new AsyncCallback<String>() {
+				public void onFailure(Throwable caught) {
+					Window.alert("Unable to delete regular schedule");
+				}
+				
+				public void onSuccess(final String result) {
+					Window.alert("deletion "+result);
+					if(result.equalsIgnoreCase("OK"))
+					{
+						ArrayList<String> lol = new ArrayList<>();
+						for(Object o: scheduleAttributeList)
+						{
+							lol.add(String.valueOf(o));
+						}
+
+						Data.regularScheduleAttributeList.remove(currentSelectedScheduleName);
+						Data.regularScheduleAttributeList.put(currentSelectedScheduleName,lol);
+						
+						createRegularSchedule();
+					}
+				}
+			});
+		}
+		else if(scheduleType.equals("Special Schedule"))
+		{
+			Utility.newRequestObj().deleteSpecialSchedule(currentSelectedScheduleName, new AsyncCallback<String>() {
+				public void onFailure(Throwable caught) {
+					Window.alert("Unable to delete special schedule");
+				}
+				
+				public void onSuccess(final String result) {
+					if(result.equalsIgnoreCase("OK"))
+					{
+						ArrayList<String> lol = new ArrayList<>();
+						for(Object o: scheduleAttributeList)
+						{
+							lol.add(String.valueOf(o));
+						}
+
+						Data.specialScheduleAttributeList.remove(currentSelectedScheduleName);
+						Data.specialScheduleAttributeList.put(currentSelectedScheduleName,lol);
+						
+						createSpecialSchedule();
+					}
+				}
+			});
+		}
+	}
+	
+	private void sendCreateScheduleRequest(){
+		if(createScheduleType.getSelectedItemText().equals("Regular Schedule"))
+		{
+			createRegularSchedule();
+		}
+		else if(createScheduleType.getSelectedItemText().equals("Special Schedule"))
+		{
+			createSpecialSchedule();
+		}
+		else
+			Window.alert("schedule type bug");
+	}
+	
+	private void createRegularSchedule(){
+		Utility.newRequestObj().createRegularSchedule(scheduleName, actuatorName, dayMask, rule, onStart, onEnd, lock, priority, scheduleEnabled, new AsyncCallback<String>() {
+			public void onFailure(Throwable caught) {
+				Window.alert("Unable to create regular schedule");
+			}
+			
+			public void onSuccess(final String result) {
+				Window.alert("creating regular schedule: "+result);
+				if(result.equalsIgnoreCase("OK"))
+				{
+//					localAppendScheduleTable(scheduleTable);
+					getActuatorRegularSchedule(actuatorName);
+					schedulePopup.setVisible(false);
+				}
+			}
+		});
+	}
+	
+	private void createSpecialSchedule(){
+		Utility.newRequestObj().createSpecialSchedule(scheduleName, actuatorName, dayMask, rule, onStart, onEnd, lock, priority, scheduleEnabled, new AsyncCallback<String>() {
+			public void onFailure(Throwable caught) {
+				Window.alert("Unable to create special schedule");
+			}
+			
+			public void onSuccess(final String result) {
+				Window.alert("creating special schedule: "+result);
+				if(result.equalsIgnoreCase("OK"))
+				{
+//					localAppendScheduleTable(scheduleTable);
+					getActuatorSpecialSchedule(actuatorName);
+					schedulePopup.setVisible(false);
+				}
+			}
+		}); 
+	}
+	
+	private void getActuatorRegularSchedule(final String actuator){
+		Utility.newRequestObj().getActuatorRegularSchedule(actuator, new AsyncCallback<String[][]>() {
+			public void onFailure(Throwable caught) {
+				Window.alert("Unable to get regular schedule");
+				Utility.hideTimer();
+			}
+			
+			public void onSuccess(String[][] result) {
+				currentActuatorView=actuatorLB.getSelectedItemText();
+				currentScheduleView=scheduleType.getSelectedItemText();
+				refreshRegularScheduleData(actuator, result);
+				Utility.hideTimer();
+				updateScheduleTable(scheduleTable,result);
+			}
+		});
+	}
+	
+	private void getActuatorSpecialSchedule(final String actuator){
+		Utility.newRequestObj().getActuatorSpecialSchedule(actuator, new AsyncCallback<String[][]>() {
+			public void onFailure(Throwable caught) {
+				Window.alert("Unable to get special schedule");
+				Utility.hideTimer();
+			}
+			
+			public void onSuccess(String[][] result) {
+				currentActuatorView=actuatorLB.getSelectedItemText();
+				currentScheduleView=scheduleType.getSelectedItemText();
+				refreshSpecialScheduleData(actuator, result);
+				Utility.hideTimer();
+				updateScheduleTable(scheduleTable,result);
+			}
+		});
+	}
 	
 }

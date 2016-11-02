@@ -19,6 +19,41 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
  */
 @SuppressWarnings("serial")
 public class GreetingServiceImpl extends RemoteServiceServlet implements GreetingService {
+
+	public boolean userLogin(String username, String password) throws IllegalArgumentException {
+		try {
+			String hashedPassword = Utility.hashSHA1CharAry(password);
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("2");
+			toSend.add(username);
+			toSend.add(hashedPassword);
+			
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			
+			String data=Utility.decryptLogin(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return data.equals("ACTIVATED");
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userLoginError)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return false;}
+	}
 	
 	public String[][] getSiteList() throws IllegalArgumentException {
 		try {
@@ -215,41 +250,6 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 				pw.close();
 			} catch (Exception f) {}
 			return null;}
-	}
-	
-	public boolean userLogin(String username, String password) throws IllegalArgumentException {
-		try {
-			String hashedPassword = Utility.hashSHA1CharAry(password);
-			ArrayList<Object> toSend=new ArrayList<>();
-			toSend.add("2");
-			toSend.add(username);
-			toSend.add(hashedPassword);
-			
-			Socket sc=new Socket(Utility.serverIP,getPortNumber());
-			OutputStream os = sc.getOutputStream();
-			ObjectOutputStream oos=new ObjectOutputStream(os);
-			oos.writeObject(Utility.encryptMsg(toSend));
-			
-			InputStream is=sc.getInputStream();
-			ObjectInputStream ois=new ObjectInputStream(is);
-			
-			String data=Utility.decryptLogin(ois);
-			
-			oos.close();
-			os.close();
-			ois.close();
-			is.close();
-			
-			sc.close();
-			
-			return data.equals("ACTIVATED");
-		} catch (Exception e) {
-			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userLoginError)));
-				e.printStackTrace(pw);
-				pw.close();
-			} catch (Exception f) {}
-			return false;}
 	}
 	
 	public String createDayScheduleRule(String rName, int sH, int sM, int eH, int eM) throws IllegalArgumentException {
