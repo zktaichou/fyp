@@ -93,7 +93,7 @@ static long getTime(String date) {
 			
 			//Remember to use Object[] input to get the rest of the information for chart display
 			public void onSuccess(String[][] result) {
-				if(result.length==0)
+				if(Utility.isNull(result))
 				{
 					Window.alert(Messages.NO_DATA);
 					Utility.hideTimer();

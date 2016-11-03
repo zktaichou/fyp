@@ -21,7 +21,7 @@ public interface GreetingServiceAsync {
 	void getSensorList(String controllerName, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
 	void getActuatorList(String controllerName, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
 	void createRegularSchedule(String rScheduleName, String actuatorName, int dayMask, String rule, String onStart, String onEnd, boolean lock, int priority, boolean scheduleEnabled, AsyncCallback<String> callback) throws IllegalArgumentException;
-	void createSpecialSchedule(String sScheduleName, String actuatorName, int dayMask, String rule, String onStart, String onEnd, boolean lock, int priority, boolean scheduleEnabled, AsyncCallback<String> callback) throws IllegalArgumentException;
+	void createSpecialSchedule(String sScheduleName, String actuatorName, int year, int month, int day, String rule, String onStart, String onEnd, boolean lock, int priority, boolean scheduleEnabled, AsyncCallback<String> callback) throws IllegalArgumentException;
 	void createDayScheduleRule(String rName, int sH, int sM, int eH, int eM, AsyncCallback<String> callback) throws IllegalArgumentException;
 	void actuatorSetStatus(String actuator, String status, AsyncCallback<String> callback) throws IllegalArgumentException;
 	void getDayScheduleRuleAll(AsyncCallback<String[][]> callback) throws IllegalArgumentException;
@@ -29,7 +29,7 @@ public interface GreetingServiceAsync {
 	void deleteRegularSchedule(String rScheduleName, AsyncCallback<String> callback) throws IllegalArgumentException;
 	void deleteSpecialSchedule(String sScheduleName, AsyncCallback<String> callback) throws IllegalArgumentException;
 	void updateRegularSchedule(String rScheduleOldName, String rScheduleNewName, String actuatorName, int dayMask, String rule, String onStart, String onEnd, boolean lock, int priority, boolean scheduleEnabled, AsyncCallback<String> callback) throws IllegalArgumentException;
-	void updateSpecialSchedule(String sScheduleOldName, String sScheduleNewName, String actuatorName, int dayMask, String rule, String onStart, String onEnd, boolean lock, int priority, boolean scheduleEnabled,  AsyncCallback<String> callback) throws IllegalArgumentException;
+	void updateSpecialSchedule(String sScheduleOldName, String sScheduleNewName, String actuatorName, int year, int month, int day, String rule, String onStart, String onEnd, boolean lock, int priority, boolean scheduleEnabled,  AsyncCallback<String> callback) throws IllegalArgumentException;
 	void deleteDayScheduleRule(String rName, AsyncCallback<String> callback) throws IllegalArgumentException;
 	void updateDayScheduleRule(String rOldName, String rNewName, int sH, int sM, int eH, int eM, AsyncCallback<String> callback) throws IllegalArgumentException;
 }

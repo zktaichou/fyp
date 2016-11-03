@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class LogFile{
-	static String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
 	static String getSiteList = fileName("getSiteList");
 	static String getControllerList = fileName("getControllerList");
 	static String getSensorList = fileName("getSensorList");
@@ -42,7 +41,11 @@ public class LogFile{
 		File file = new File("log");
 		} catch (Exception e){}
 		
-		return "log/"+name+"_"+timeStamp+".txt";
+		return "log/"+name+"_"+timestamp()+".txt";
+	}
+	
+	private static String timestamp(){
+		return new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
 	}
 	
 }

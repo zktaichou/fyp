@@ -24,7 +24,7 @@ public interface GreetingService extends RemoteService {
 	String[][] getSensorList(String controllerName) throws IllegalArgumentException;
 	String[][] getActuatorList(String controllerName) throws IllegalArgumentException;
 	String createRegularSchedule(String rScheduleName, String actuatorName, int dayMask, String rule, String onStart, String onEnd, boolean lock, int priority, boolean scheduleEnabled) throws IllegalArgumentException;
-	String createSpecialSchedule(String sScheduleName, String actuatorName, int dayMask, String rule, String onStart, String onEnd, boolean lock, int priority, boolean scheduleEnabled) throws IllegalArgumentException;
+	String createSpecialSchedule(String sScheduleName, String actuatorName, int year, int month, int day, String rule, String onStart, String onEnd, boolean lock, int priority, boolean scheduleEnabled) throws IllegalArgumentException;
 	String actuatorSetStatus(String actuator, String status) throws IllegalArgumentException;
 	String[][] getDayScheduleRuleAll() throws IllegalArgumentException;
 	String[][] getDayScheduleRuleByName(String ruleName) throws IllegalArgumentException;
@@ -32,7 +32,7 @@ public interface GreetingService extends RemoteService {
 	String deleteRegularSchedule(String rScheduleName) throws IllegalArgumentException;
 	String deleteSpecialSchedule(String sScheduleName) throws IllegalArgumentException;
 	String updateRegularSchedule(String rScheduleOldName, String rScheduleNewName, String actuatorName, int dayMask, String rule, String onStart, String onEnd, boolean lock, int priority, boolean scheduleEnabled) throws IllegalArgumentException;
-	String updateSpecialSchedule(String sScheduleName, String sScheduleNewName, String actuatorName, int dayMask, String rule, String onStart, String onEnd, boolean lock, int priority, boolean scheduleEnabled) throws IllegalArgumentException;
+	String updateSpecialSchedule(String sScheduleName, String sScheduleNewName, String actuatorName, int year, int month, int day, String rule, String onStart, String onEnd, boolean lock, int priority, boolean scheduleEnabled) throws IllegalArgumentException;
 	String deleteDayScheduleRule(String rName) throws IllegalArgumentException;
 	String updateDayScheduleRule(String rOldName, String rNewName, int sH, int sM, int eH, int eM) throws IllegalArgumentException;
 }

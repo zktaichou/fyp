@@ -101,11 +101,11 @@ public class Utility{
 	        
 			return (ArrayList<Object []>)(((SealedObject) ois.readObject()).getObject(decrypter));
 		} catch (Exception e) {
-			
 			try {
 				PrintWriter p=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.failedDecryption)));
 				e.printStackTrace(p);
 				p.close();
+				return null;
 			} catch (Exception f) {}
 			
 			return null;}
@@ -124,6 +124,7 @@ public class Utility{
 				PrintWriter p=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.failedStringDecryption)));
 				e.printStackTrace(p);
 				p.close();
+				return null;
 			} catch (Exception f) {}
 			
 			return null;}

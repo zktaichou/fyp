@@ -56,4 +56,12 @@ public class Utility{
 		loadingTimer.cancel();
 	}
 	
+	public static Boolean isNull(String[][] result){
+		return result==null;
+	}
+	
+	public static Boolean isNull(String result){
+		return result==null;
+	}
+	
 }

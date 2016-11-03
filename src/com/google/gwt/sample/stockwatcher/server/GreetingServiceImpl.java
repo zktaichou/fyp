@@ -406,7 +406,6 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			
 			InputStream is=sc.getInputStream();
 			ObjectInputStream ois=new ObjectInputStream(is);
-			 
 			ArrayList<Object[]> data=Utility.decryptToObjectArray(ois);
 			
 			oos.close();
@@ -415,6 +414,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			is.close();
 			
 			sc.close();
+			
 			
 			return Utility.DataToString(data);
 		} catch (Exception e) {
@@ -672,13 +672,15 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return null;}
 	}
 	
-	public String createSpecialSchedule(String sScheduleName, String actuatorName, int dayMask, String rule, String onStart, String onEnd, boolean lock, int priority, boolean actuatorEnabled) throws IllegalArgumentException {
+	public String createSpecialSchedule(String sScheduleName, String actuatorName, int year, int month, int day, String rule, String onStart, String onEnd, boolean lock, int priority, boolean actuatorEnabled) throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();
 			toSend.add("32a");
 			toSend.add(sScheduleName);
 			toSend.add(actuatorName);
-			toSend.add(dayMask);
+			toSend.add(year);
+			toSend.add(month);
+			toSend.add(day);
 			toSend.add(rule);
 			toSend.add(onStart);
 			toSend.add(onEnd);
@@ -746,14 +748,16 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return null;}
 	}
 	
-	public String updateSpecialSchedule(String sScheduleOldName, String sScheduleNewName,String actuatorName, int dayMask, String rule, String onStart, String onEnd, boolean lock, int priority, boolean actuatorEnabled) throws IllegalArgumentException {
+	public String updateSpecialSchedule(String sScheduleOldName, String sScheduleNewName,String actuatorName, int year, int month, int day, String rule, String onStart, String onEnd, boolean lock, int priority, boolean actuatorEnabled) throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();
 			toSend.add("32c");
 			toSend.add(sScheduleOldName);
 			toSend.add(sScheduleNewName);
 			toSend.add(actuatorName);
-			toSend.add(dayMask);
+			toSend.add(year);
+			toSend.add(month);
+			toSend.add(day);
 			toSend.add(rule);
 			toSend.add(onStart);
 			toSend.add(onEnd);

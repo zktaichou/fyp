@@ -1,7 +1,10 @@
 package com.google.gwt.sample.stockwatcher.client;
 
 import java.util.ArrayList;
+import java.util.Date;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -19,6 +22,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.datepicker.client.DateBox;
 
 public class SchedulePage extends Composite{
 	
@@ -58,6 +62,9 @@ public class SchedulePage extends Composite{
 	ListBox scheduleType = new ListBox();
 	ListBox ruleLB = new ListBox();
 	
+	int year;
+	int month;
+	int day;
 	int sH;
 	int sM;
 	int eH;
@@ -73,10 +80,15 @@ public class SchedulePage extends Composite{
 	boolean scheduleEnabled;
 	Boolean lock;
 
+    DateBox dateBox = new DateBox();
+    DateBox formatHolder = new DateBox();
+
 	String currentActuatorView;
 	String currentScheduleView;
 	String currentSelectedScheduleName;
 	String currentSelectedRuleName;
+	String dayGroup;
+	String sDayGroup;
 	
 	TextBox ruleNameTB = new TextBox();
 	TextBox scheduleNameTB = new TextBox();
@@ -98,6 +110,7 @@ public class SchedulePage extends Composite{
 	CheckBox [] chkbx={monday,tuesday,wednesday,thursday,friday,saturday,sunday};
 	
 	String [] DaysShort={"Mo","Tu","We","Th","Fr","Sa","Su"};
+	String [] monthName={"January","February","March","April","May","June","July","August","September","October","November","December"};
 	
 	PopupPanel schedulePopup = new PopupPanel();
 	PopupPanel rulePopup = new PopupPanel();
@@ -172,7 +185,15 @@ public class SchedulePage extends Composite{
 		initializeRuleMenu();
 		initializeRuleTable();
 
+		scheduleType.setSelectedIndex(0);
 		
+		Date today = new Date();
+		
+		formatHolder.setFormat(new DateBox.DefaultFormat(ChartUtilities.requestFormat));
+
+		dateBox.setFormat(new DateBox.DefaultFormat(ChartUtilities.calendarFormat));
+		dateBox.getDatePicker().setYearArrowsVisible(true);
+		dateBox.setValue(today);
 		schedulePopup.setGlassEnabled(true);
 		schedulePopup.add(scheduleMenu);
 
@@ -209,9 +230,12 @@ public class SchedulePage extends Composite{
 			chk.setValue(false);
 		}
 		
+		int selectedSchedule = scheduleType.getSelectedIndex();
+		
 		scheduleType.clear();
 		scheduleType.addItem("Regular Schedule");
 		scheduleType.addItem("Special Schedule");
+		scheduleType.setSelectedIndex(selectedSchedule);
 		
 		createScheduleType.clear();
 		createScheduleType.addItem("Regular Schedule");
@@ -359,27 +383,23 @@ public class SchedulePage extends Composite{
 				sendDeleteScheduleRequest();
 			}
 		});
-	}
-	
-	private void localAppendScheduleTable(FlexTable flexTable){
-		scheduleAttributeList.clear();
-		scheduleAttributeList.add(scheduleName);
-		scheduleAttributeList.add(actuatorName);
-		scheduleAttributeList.add(dayMask);
-		scheduleAttributeList.add(rule);
-		scheduleAttributeList.add(actuatorOnStartLB.getSelectedItemText());
-		scheduleAttributeList.add(actuatorOnEndLB.getSelectedItemText());
-		scheduleAttributeList.add(lock);
-		scheduleAttributeList.add(priority);
-		scheduleAttributeList.add(scheduleEnabled);
 		
-		int numRows = flexTable.getRowCount();
-		for(int i=0;i<scheduleAttributeList.size();i++)
-		{
-			flexTable.setText(numRows, i, String.valueOf(scheduleAttributeList.get(i)));
-		}
-		addEditScheduleColumnLatestRow(flexTable);
-		convertDayMaskToString(flexTable);
+		createScheduleType.addChangeHandler(new ChangeHandler(){
+			public void onChange(ChangeEvent evenet){
+				if(createScheduleType.getSelectedItemText().equals("Regular Schedule"))
+				{
+					scheduleMenu.showGroup(dayGroup);
+					scheduleMenu.hideGroup(sDayGroup);
+				}
+				else if(createScheduleType.getSelectedItemText().equals("Special Schedule"))
+				{
+					scheduleMenu.showGroup(sDayGroup);
+					scheduleMenu.hideGroup(dayGroup);
+					
+				}
+				schedulePopup.center();
+			}
+		});
 	}
 	
 	private void localAppendRuleTable(FlexTable flexTable){
@@ -398,8 +418,16 @@ public class SchedulePage extends Composite{
 		addEditRuleColumnLatestRow(flexTable);
 	}
 	
-	private void setScheduleHeaders(FlexTable ft){
+	private void setRegularScheduleHeaders(FlexTable ft){
 		String[] header = {"Schedule","Actuator","Day Enabled","Rule","On Start","On End","Lock?","Priority","Schedule Enabled?"};
+		for(int i=0;i<header.length;i++)
+		{
+			ft.setText(0, i, header[i]);
+		}
+	}
+	
+	private void setSpecialScheduleHeaders(FlexTable ft){
+		String[] header = {"Schedule","Actuator","Year","Month","Day","Rule","On Start","On End","Lock?","Priority","Schedule Enabled?"};
 		for(int i=0;i<header.length;i++)
 		{
 			ft.setText(0, i, header[i]);
@@ -423,6 +451,18 @@ public class SchedulePage extends Composite{
 		buttonPanel.add(cancelScheduleButton);
 		buttonPanel.add(createScheduleButton);
 		
+		dayGroup = "Day Group";
+		sDayGroup = "Special Date Group";
+		
+		VerticalPanel dayCheckBoxes = new VerticalPanel();
+		dayCheckBoxes.add(sunday);
+		dayCheckBoxes.add(monday);
+		dayCheckBoxes.add(tuesday);
+		dayCheckBoxes.add(wednesday);
+		dayCheckBoxes.add(thursday);
+		dayCheckBoxes.add(friday);
+		dayCheckBoxes.add(saturday);
+		
 		scheduleMenu.clear();
 		scheduleMenu.addLabel("Select an actuator");
 		scheduleMenu.addItem(scheduleActuatorLB);
@@ -432,14 +472,10 @@ public class SchedulePage extends Composite{
 		scheduleMenu.addItem(createScheduleType);
 		scheduleMenu.addLabel("Select rule to be applied");
 		scheduleMenu.addItem(ruleLB);
-		scheduleMenu.addLabel("Select days");
-		scheduleMenu.addItem(sunday);
-		scheduleMenu.addItem(monday);
-		scheduleMenu.addItem(tuesday);
-		scheduleMenu.addItem(wednesday);
-		scheduleMenu.addItem(thursday);
-		scheduleMenu.addItem(friday);
-		scheduleMenu.addItem(saturday);
+		scheduleMenu.addLabel(dayGroup,"Select days");
+		scheduleMenu.addItem(dayGroup,dayCheckBoxes);
+		scheduleMenu.addLabel(sDayGroup,"Scheduled date");
+		scheduleMenu.addItem(sDayGroup,dateBox);
 		scheduleMenu.addLabel("Set actuator starting status");
 		scheduleMenu.addItem(actuatorOnStartLB);
 		scheduleMenu.addLabel("Set actuator ending status");
@@ -451,9 +487,11 @@ public class SchedulePage extends Composite{
 		scheduleMenu.addLabel("Schedule enabled?");
 		scheduleMenu.addItem(scheduleEnabledLB);
 		scheduleMenu.addItem(buttonPanel);
+		
+		scheduleMenu.hideGroup(sDayGroup);
 	}
 	
-	private void initializeEditScheduleMenu(String schedule){
+	private void initializeEditRegularScheduleMenu(String schedule){
 		
 		HorizontalPanel buttonPanel = new HorizontalPanel();
 		buttonPanel.setSpacing(10);
@@ -492,10 +530,58 @@ public class SchedulePage extends Composite{
 		ruleLB.setSelectedIndex(getIndexOfTextInWidget(ruleLB,scheduleParam.get(3)));
 		actuatorOnStartLB.setSelectedIndex(getIndexOfTextInWidget(actuatorOnStartLB,scheduleParam.get(4)));
 		actuatorOnEndLB.setSelectedIndex(getIndexOfTextInWidget(actuatorOnEndLB,scheduleParam.get(5)));
-		priorityLB.setSelectedIndex(getIndexOfTextInWidget(priorityLB,scheduleParam.get(7)));
 		lockEnabledLB.setSelectedIndex(getIndexOfTextInWidget(lockEnabledLB,scheduleParam.get(6)));
+		priorityLB.setSelectedIndex(getIndexOfTextInWidget(priorityLB,scheduleParam.get(7)));
 		scheduleEnabledLB.setSelectedIndex(getIndexOfTextInWidget(scheduleEnabledLB,scheduleParam.get(8)));
 		
+	}
+	
+	private void initializeEditSpecialScheduleMenu(String schedule){
+		
+		HorizontalPanel buttonPanel = new HorizontalPanel();
+		buttonPanel.setSpacing(10);
+		buttonPanel.add(cancelEditScheduleButton);
+		buttonPanel.add(updateEditScheduleButton);
+		buttonPanel.add(deleteEditScheduleButton);
+		
+		scheduleMenu.clear();
+		scheduleMenu.addLabel("Schedule name");
+		scheduleMenu.addItem(scheduleNameTB);
+		scheduleMenu.addLabel("Rule");
+		scheduleMenu.addItem(ruleLB);
+		scheduleMenu.addLabel("Scheduled date");
+		scheduleMenu.addItem(dateBox);
+		scheduleMenu.addLabel("Actuator starting status");
+		scheduleMenu.addItem(actuatorOnStartLB);
+		scheduleMenu.addLabel("Actuator ending status");
+		scheduleMenu.addItem(actuatorOnEndLB);
+		scheduleMenu.addLabel("Set schedule priority");
+		scheduleMenu.addItem(priorityLB);
+		scheduleMenu.addLabel("Lock enabled?");
+		scheduleMenu.addItem(lockEnabledLB);
+		scheduleMenu.addLabel("Schedule enabled?");
+		scheduleMenu.addItem(scheduleEnabledLB);
+		scheduleMenu.addItem(buttonPanel);
+		
+		ArrayList<String> scheduleParam = Data.specialScheduleAttributeList.get(schedule);
+		scheduleNameTB.setText(scheduleParam.get(0));
+		ruleLB.setSelectedIndex(getIndexOfTextInWidget(ruleLB,scheduleParam.get(5)));
+		actuatorOnStartLB.setSelectedIndex(getIndexOfTextInWidget(actuatorOnStartLB,scheduleParam.get(6)));
+		actuatorOnEndLB.setSelectedIndex(getIndexOfTextInWidget(actuatorOnEndLB,scheduleParam.get(7)));
+		lockEnabledLB.setSelectedIndex(getIndexOfTextInWidget(lockEnabledLB,scheduleParam.get(8)));
+		priorityLB.setSelectedIndex(getIndexOfTextInWidget(priorityLB,scheduleParam.get(9)));
+		scheduleEnabledLB.setSelectedIndex(getIndexOfTextInWidget(scheduleEnabledLB,scheduleParam.get(10)));
+		
+		year=Integer.parseInt(scheduleParam.get(2));
+		month=Integer.parseInt(scheduleParam.get(3));
+		day=Integer.parseInt(scheduleParam.get(4));
+
+		Date date = new Date();
+		date.setYear(year-1900);
+		date.setMonth(month-1);
+		date.setDate(day);
+
+		dateBox.setValue(date);
 	}
 	
 	private int getIndexOfTextInWidget(ListBox lb, String text){
@@ -610,17 +696,6 @@ public class SchedulePage extends Composite{
 		refreshRuleTable();
 	}
 	
-	private void updateRuleTable(String[][] result){
-		rulePopup.setVisible(false);
-		
-		FlexTable newTable = new FlexTable();
-		setScheduleHeaders(newTable);
-		ruleTable = ChartUtilities.appendFlexTable(newTable, result);
-		addEditRuleColumnAllRow(ruleTable);
-		
-		refreshRuleTable();
-	}
-	
 	private void addRuleData(String name, int a, int b, int c, int d){
 		ArrayList<String> list = new ArrayList<>();
 		list.add(ruleName);
@@ -667,45 +742,79 @@ public class SchedulePage extends Composite{
 		Data.actuatorSpecialScheduleList.put(aName, rSchedules);
 	}
 	
-	private void updateScheduleTable(FlexTable ft, String[][] result){
+	private void updateRegularScheduleTable(FlexTable ft, String[][] result){
 		schedulePopup.setVisible(false);
 		
 		ft.setStyleName("fancyTable");
 		
 		FlexTable newTable = new FlexTable();
-		setScheduleHeaders(newTable);
+		setRegularScheduleHeaders(newTable);
 		ft = ChartUtilities.appendFlexTable(newTable, result);
-		addEditScheduleColumnAllRow(ft);
+		addEditRegularScheduleColumnAllRow(ft);
 		convertDayMaskToString(ft);
 		
 		middlePanel.clear();
 		middlePanel.add(ft);
+		
+		scheduleType.setSelectedIndex(0);
+		currentScheduleView=scheduleType.getSelectedItemText();
 	}
 	
-	private void addEditScheduleColumnAllRow(FlexTable ft){
+	private void updateSpecialScheduleTable(FlexTable ft, String[][] result){
+		schedulePopup.setVisible(false);
+		
+		ft.setStyleName("fancyTable");
+		
+		FlexTable newTable = new FlexTable();
+		setSpecialScheduleHeaders(newTable);
+		ft = ChartUtilities.appendFlexTable(newTable, result);
+		addEditSpecialScheduleColumnAllRow(ft);
+		formatMonth(ft);
+		
+		middlePanel.clear();
+		middlePanel.add(ft);
+		
+		scheduleType.setSelectedIndex(1);
+		currentScheduleView=scheduleType.getSelectedItemText();
+	}
+	
+	private void addEditRegularScheduleColumnAllRow(FlexTable ft){
 		for(int i=1; i<ft.getRowCount(); i++)
 		{
 			Anchor edit = new Anchor("Edit");
 			ft.setWidget(i, ft.getCellCount(i), edit);
 			edit.setName(ft.getText(i, 0));
-			setEditScheduleClickHandler(edit);
+			setEditRegularScheduleClickHandler(edit);
 		}
 	}
 	
-	private void addEditScheduleColumnLatestRow(FlexTable ft){
-		int lastRow = ft.getRowCount()-1;
-		
-		Anchor edit = new Anchor("Edit");
-		ft.setWidget(lastRow, ft.getCellCount(lastRow), edit);
-		edit.setName(ft.getText(lastRow, 0));
-		setEditScheduleClickHandler(edit);
+	private void addEditSpecialScheduleColumnAllRow(FlexTable ft){
+		for(int i=1; i<ft.getRowCount(); i++)
+		{
+			Anchor edit = new Anchor("Edit");
+			ft.setWidget(i, ft.getCellCount(i), edit);
+			edit.setName(ft.getText(i, 0));
+			setEditSpecialScheduleClickHandler(edit);
 		}
+	}
 	
-	private void setEditScheduleClickHandler(final Anchor anchor){
+	private void setEditRegularScheduleClickHandler(final Anchor anchor){
 		anchor.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
 				currentSelectedScheduleName=anchor.getName();
-				initializeEditScheduleMenu(anchor.getName());
+				initializeEditRegularScheduleMenu(anchor.getName());
+				
+				schedulePopup.setVisible(true);
+				schedulePopup.center();
+				}
+			});
+	}
+	
+	private void setEditSpecialScheduleClickHandler(final Anchor anchor){
+		anchor.addClickHandler(new ClickHandler(){
+			public void onClick(ClickEvent event){
+				currentSelectedScheduleName=anchor.getName();
+				initializeEditSpecialScheduleMenu(anchor.getName());
 				
 				schedulePopup.setVisible(true);
 				schedulePopup.center();
@@ -760,6 +869,15 @@ public class SchedulePage extends Composite{
 			}
 			String s=sb.toString();
 			ft.setText(i, 2, s.substring(0,s.length()-1));
+		}
+	}
+	
+	private void formatMonth(FlexTable ft){
+		for(int i=1; i<ft.getRowCount(); i++)
+		{
+			
+			int monthInt = Integer.parseInt(ft.getText(i, 3));
+			ft.setText(i, 3, monthName[monthInt-1]);
 		}
 	}
 	
@@ -846,18 +964,13 @@ public class SchedulePage extends Composite{
 					Data.dayScheduleRuleAttributeList.put(ruleName, temp);
 
 					initializeRuleTable();
-					
-//					Utility.newRequestObj().getDayScheduleRuleAll(new AsyncCallback<String[][]>() {
-//						public void onFailure(Throwable caught) {
-//							Window.alert("Unable to update rule");
-//						}
-//						public void onSuccess(String result[][]) {
-//							updateRuleTable(result);
-//						}
-//					});
 				}
 			}
 		});
+	}
+	
+	private String getSpecialDate(){
+		return (formatHolder.getFormat().format(dateBox, dateBox.getValue())+"");
 	}
 	
 	//-------------------------------------------------Scheduling Methods------------------------------------------------------//
@@ -866,16 +979,25 @@ public class SchedulePage extends Composite{
 		scheduleName=scheduleNameTB.getText();
 		actuatorName=actuatorLB.getSelectedItemText();
 		rule=ruleLB.getSelectedItemText();
-		dayMask=getSelectedDays();
 		onStart=actuatorOnStartLB.getSelectedItemText();
 		onEnd=actuatorOnEndLB.getSelectedItemText();
 		lock = Boolean.parseBoolean(lockEnabledLB.getSelectedItemText());
 		priority=Integer.parseInt(priorityLB.getSelectedItemText());
 		scheduleEnabled=Boolean.parseBoolean(scheduleEnabledLB.getSelectedItemText());
+		
+		if(createScheduleType.getSelectedItemText().equals("Regular Schedule")){
+			dayMask=getSelectedDays();
+		}
+		else if(createScheduleType.getSelectedItemText().equals("Special Schedule")){
+			String[] temp = getSpecialDate().split("-");
+			year = Integer.parseInt(temp[0]);
+			month = Integer.parseInt(temp[1]);
+			day = Integer.parseInt(temp[2]);
+		}
 	}
 	
 	private void sendUpdateScheduleRequest(){
-		extractEditScheduleData();
+		extractEditScheduleData(currentScheduleView);
 		sendUpdateScheduleRequest(currentScheduleView);
 //		sendEditScheduleRequest(currentScheduleView);
 	}
@@ -891,16 +1013,25 @@ public class SchedulePage extends Composite{
 		}
 	}
 	
-	private void extractEditScheduleData(){
+	private void extractEditScheduleData(String scheduleType){
 		scheduleName=scheduleNameTB.getText();
 		actuatorName=currentActuatorView;
-		dayMask=getSelectedDays();
 		rule=ruleLB.getSelectedItemText();
 		onStart=actuatorOnStartLB.getSelectedItemText();
 		onEnd=actuatorOnEndLB.getSelectedItemText();
 		lock = Boolean.parseBoolean(lockEnabledLB.getSelectedItemText());
 		priority=Integer.parseInt(priorityLB.getSelectedItemText());
 		scheduleEnabled=Boolean.parseBoolean(scheduleEnabledLB.getSelectedItemText());
+		
+		if(scheduleType.equals("Regular Schedule")){
+			dayMask=getSelectedDays();
+		}
+		else if(scheduleType.equals("Special Schedule")){
+			String[] temp = getSpecialDate().split("-");
+			year = Integer.parseInt(temp[0]);
+			month = Integer.parseInt(temp[1]);
+			day = Integer.parseInt(temp[2]);
+		}
 		
 		scheduleAttributeList.clear();
 		scheduleAttributeList.add(scheduleName);
@@ -955,7 +1086,7 @@ public class SchedulePage extends Composite{
 	}
 	
 	private void createSpecialSchedule(){
-		Utility.newRequestObj().createSpecialSchedule(scheduleName, actuatorName, dayMask, rule, onStart, onEnd, lock, priority, scheduleEnabled, new AsyncCallback<String>() {
+		Utility.newRequestObj().createSpecialSchedule(scheduleName, actuatorName, year, month, day, rule, onStart, onEnd, lock, priority, scheduleEnabled, new AsyncCallback<String>() {
 			public void onFailure(Throwable caught) {
 				Window.alert("Unable to create special schedule");
 			}
@@ -987,7 +1118,7 @@ public class SchedulePage extends Composite{
 	}
 	
 	private void updateSpecialSchedule(){
-		Utility.newRequestObj().updateSpecialSchedule(currentSelectedScheduleName, scheduleName, actuatorName, dayMask, rule, onStart, onEnd, lock, priority, scheduleEnabled, new AsyncCallback<String>() {
+		Utility.newRequestObj().updateSpecialSchedule(currentSelectedScheduleName, scheduleName, actuatorName, year, month, day, rule, onStart, onEnd, lock, priority, scheduleEnabled, new AsyncCallback<String>() {
 			public void onFailure(Throwable caught) {
 				Window.alert("Unable to update special schedule");
 			}
@@ -1020,7 +1151,7 @@ public class SchedulePage extends Composite{
 					
 					Data.regularScheduleAttributeList.remove(scheduleName);
 					
-					updateScheduleTable(scheduleTable,regularScheduleCache());
+					updateRegularScheduleTable(scheduleTable,regularScheduleCache());
 				}
 			}
 		});
@@ -1044,7 +1175,7 @@ public class SchedulePage extends Composite{
 					
 					Data.specialScheduleAttributeList.remove(scheduleName);
 					
-					updateScheduleTable(scheduleTable,specialScheduleCache());
+					updateSpecialScheduleTable(scheduleTable,specialScheduleCache());
 				}
 			}
 		});
@@ -1058,11 +1189,18 @@ public class SchedulePage extends Composite{
 			}
 			
 			public void onSuccess(String[][] result) {
+				if(Utility.isNull(result))
+				{
+					Window.alert("No regular schedule found");
+					Utility.hideTimer();
+				}
+				else
+				{
 				currentActuatorView=actuatorLB.getSelectedItemText();
-				currentScheduleView=scheduleType.getSelectedItemText();
 				refreshRegularScheduleData(actuator, result);
 				Utility.hideTimer();
-				updateScheduleTable(scheduleTable,result);
+				updateRegularScheduleTable(scheduleTable,result);
+				}
 			}
 		});
 	}
@@ -1075,11 +1213,18 @@ public class SchedulePage extends Composite{
 			}
 			
 			public void onSuccess(String[][] result) {
-				currentActuatorView=actuatorLB.getSelectedItemText();
-				currentScheduleView=scheduleType.getSelectedItemText();
-				refreshSpecialScheduleData(actuator, result);
-				Utility.hideTimer();
-				updateScheduleTable(scheduleTable,result);
+				if(Utility.isNull(result))
+				{
+					Window.alert("No special schedule found");
+					Utility.hideTimer();
+				}
+				else
+				{
+					currentActuatorView=actuatorLB.getSelectedItemText();
+					refreshSpecialScheduleData(actuator, result);
+					Utility.hideTimer();
+					updateSpecialScheduleTable(scheduleTable,result);
+				}
 			}
 		});
 	}
@@ -1113,5 +1258,35 @@ public class SchedulePage extends Composite{
 		}
 		return temp;
 	}
+	
+//	private void localAppendScheduleTable(FlexTable flexTable){
+//		scheduleAttributeList.clear();
+//		scheduleAttributeList.add(scheduleName);
+//		scheduleAttributeList.add(actuatorName);
+//		scheduleAttributeList.add(dayMask);
+//		scheduleAttributeList.add(rule);
+//		scheduleAttributeList.add(actuatorOnStartLB.getSelectedItemText());
+//		scheduleAttributeList.add(actuatorOnEndLB.getSelectedItemText());
+//		scheduleAttributeList.add(lock);
+//		scheduleAttributeList.add(priority);
+//		scheduleAttributeList.add(scheduleEnabled);
+//		
+//		int numRows = flexTable.getRowCount();
+//		for(int i=0;i<scheduleAttributeList.size();i++)
+//		{
+//			flexTable.setText(numRows, i, String.valueOf(scheduleAttributeList.get(i)));
+//		}
+//		addEditScheduleColumnLatestRow(flexTable);
+//		convertDayMaskToString(flexTable);
+//	}
+	
+//	private void addEditScheduleColumnLatestRow(FlexTable ft){
+//		int lastRow = ft.getRowCount()-1;
+//		
+//		Anchor edit = new Anchor("Edit");
+//		ft.setWidget(lastRow, ft.getCellCount(lastRow), edit);
+//		edit.setName(ft.getText(lastRow, 0));
+//		setEditScheduleClickHandler(edit);
+//		}
 	
 }
