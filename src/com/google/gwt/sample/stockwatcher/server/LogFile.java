@@ -35,6 +35,11 @@ public class LogFile{
 	static String updateSpecialSchedule = fileName("updateSpecialSchedule");
 	static String updateDayScheduleRule = fileName("updateDayScheduleRule");
 	static String deleteDayScheduleRule = fileName("deleteDayScheduleRule");
+	static String sensorActuatorResponseGetAll = fileName("sensorActuatorResponseGetAll");
+	static String sensorActuatorResponseCreate = fileName("sensorActuatorResponseCreate");
+	static String sensorActuatorResponseUpdate = fileName("sensorActuatorResponseUpdate");
+	static String sensorActuatorResponseDelete = fileName("sensorActuatorResponseDelete");
+	
 	
 	public static String fileName(String name){
 		try{

@@ -873,6 +873,159 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return null;}
 	}
 	
+	public String[][] sensorActuatorResponseGetAll() throws IllegalArgumentException {
+		try {
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("46");
+			
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			 
+			ArrayList<Object []> data=Utility.decryptToObjectArray(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			String[][] result = Utility.DataToString(data);
+			
+			return result;
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.sensorActuatorResponseGetAll)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			
+			return null;}
+	}
+	
+	public String sensorActuatorResponseCreate(String actuator, String onTrigger, String onNotTrigger, String expression, boolean enabled, int timeout) throws IllegalArgumentException {
+		try {
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("48a");
+			toSend.add(actuator);
+			toSend.add(onTrigger);
+			toSend.add(onNotTrigger);
+			toSend.add(expression);
+			toSend.add(enabled);
+			toSend.add(timeout);
+
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			
+			//Special decrypt for String-based returned response
+			 
+			String data=Utility.decryptToString(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return data;
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.sensorActuatorResponseCreate)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
+	public String sensorActuatorResponseUpdate(int id, String actuator, String onTrigger, String onNotTrigger, String expression, boolean enabled, int timeout) throws IllegalArgumentException {
+		try {
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("48b");
+			toSend.add(id);
+			toSend.add(actuator);
+			toSend.add(onTrigger);
+			toSend.add(onNotTrigger);
+			toSend.add(expression);
+			toSend.add(enabled);
+			toSend.add(timeout);
+
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			
+			//Special decrypt for String-based returned response
+			 
+			String data=Utility.decryptToString(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return data;
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.sensorActuatorResponseUpdate)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
+	public String sensorActuatorResponseDelete(int id) throws IllegalArgumentException {
+		try {
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("48c");
+			toSend.add(id);
+
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			
+			//Special decrypt for String-based returned response
+			 
+			String data=Utility.decryptToString(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return data;
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.sensorActuatorResponseDelete)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
 	public int getPortNumber() throws IllegalArgumentException {
 		return Utility.portNumber;
 	}

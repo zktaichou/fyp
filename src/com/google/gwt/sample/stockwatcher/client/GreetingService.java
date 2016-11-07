@@ -35,4 +35,8 @@ public interface GreetingService extends RemoteService {
 	String updateSpecialSchedule(String sScheduleName, String sScheduleNewName, String actuatorName, int year, int month, int day, String rule, String onStart, String onEnd, boolean lock, int priority, boolean scheduleEnabled) throws IllegalArgumentException;
 	String deleteDayScheduleRule(String rName) throws IllegalArgumentException;
 	String updateDayScheduleRule(String rOldName, String rNewName, int sH, int sM, int eH, int eM) throws IllegalArgumentException;
+	String[][] sensorActuatorResponseGetAll() throws IllegalArgumentException;
+	String sensorActuatorResponseCreate(String actuator, String onTrigger, String onNotTrigger, String expression, boolean enabled, int timeout) throws IllegalArgumentException;
+	String sensorActuatorResponseUpdate(int id, String actuator, String onTrigger, String onNotTrigger, String expression, boolean enabled, int timeout) throws IllegalArgumentException;
+	String sensorActuatorResponseDelete(int id) throws IllegalArgumentException;
 }

@@ -32,4 +32,8 @@ public interface GreetingServiceAsync {
 	void updateSpecialSchedule(String sScheduleOldName, String sScheduleNewName, String actuatorName, int year, int month, int day, String rule, String onStart, String onEnd, boolean lock, int priority, boolean scheduleEnabled,  AsyncCallback<String> callback) throws IllegalArgumentException;
 	void deleteDayScheduleRule(String rName, AsyncCallback<String> callback) throws IllegalArgumentException;
 	void updateDayScheduleRule(String rOldName, String rNewName, int sH, int sM, int eH, int eM, AsyncCallback<String> callback) throws IllegalArgumentException;
+	void sensorActuatorResponseGetAll(AsyncCallback<String[][]> callback) throws IllegalArgumentException;
+	void sensorActuatorResponseCreate(String actuator, String onTrigger, String onNotTrigger, String expression, boolean enabled, int timeout, AsyncCallback<String> callback) throws IllegalArgumentException;
+	void sensorActuatorResponseUpdate(int id, String actuator, String onTrigger, String onNotTrigger, String expression, boolean enabled, int timeout, AsyncCallback<String> callback) throws IllegalArgumentException;
+	void sensorActuatorResponseDelete(int id, AsyncCallback<String> callback) throws IllegalArgumentException;
 }

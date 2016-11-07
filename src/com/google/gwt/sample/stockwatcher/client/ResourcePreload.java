@@ -10,8 +10,33 @@ public class ResourcePreload{
 	public static void preloadData(){
 		getSiteList();
 		getDayScheduleRuleAll();
+		getSensorActuatorResponseAll();
 //		getRegularSchedules();
 //		getSpecialSchedules();
+	}
+	
+	private static void getSensorActuatorResponseAll(){
+		
+		Utility.newRequestObj().sensorActuatorResponseGetAll(new AsyncCallback<String[][]>() {
+			public void onFailure(Throwable caught) {
+				Window.alert("Unable to get sensor/actuator response list");
+			}
+			
+			public void onSuccess(String[][] reponseList) {
+				if (reponseList!=null) {
+					Data.responseAttributeSize=reponseList[0].length;
+					for(int i=0; i<reponseList.length;i++)
+					{
+						ArrayList<String> attributes = new ArrayList<>();
+						for(int j=0; j<reponseList[i].length;j++)
+						{
+							attributes.add(reponseList[i][j]);
+						}
+						Data.sensorAcutatorResponseAttributeList.put(reponseList[i][0], attributes);
+					}
+				}
+			}
+		});
 	}
 	
 	private static void getDayScheduleRuleAll(){

@@ -250,19 +250,15 @@ static long getTime(String date) {
 	ft.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
 	
 	int rowCount = ft.getRowCount();
-//	Window.alert("data count: "+data.length);
 	
 	for(int i=0;i<data.length;i++)
 	{
-//		Window.alert("round "+i);
 		for(int j=0;j<data[i].length;j++)
 		{
-//			Window.alert("data: "+data[i][j]);
 			ft.setText(i+rowCount, j, data[i][j]);
 		}
 	}
 	
-//	Window.alert(data[rowCount][0]+"");
 	return ft;
 	}
 	

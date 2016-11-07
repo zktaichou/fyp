@@ -11,7 +11,7 @@ public class ContentPanel extends Composite{
 
 	HorizontalPanel wholePanel = new HorizontalPanel();
 	HorizontalPanel leftPanel = new HorizontalPanel();
-	HorizontalPanel middlePanel = new HorizontalPanel();
+	VerticalPanel middlePanel = new VerticalPanel();
 	HorizontalPanel rightPanel = new HorizontalPanel();
 	
 	public ContentPanel(){

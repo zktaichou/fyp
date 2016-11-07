@@ -26,18 +26,22 @@ public class Menu extends Composite {
 	private Label systemTitleLabel = new Label("");
 
 	// Main Menu Bar Containers
-	private VerticalPanel reportingModule = new VerticalPanel();
+	private VerticalPanel settingsModule = new VerticalPanel();
+	private VerticalPanel monitoringModule = new VerticalPanel();
 	private VerticalPanel planningModule = new VerticalPanel();
 	private VerticalPanel optionsModule = new VerticalPanel();
 	
 	// Main Menu Submenu Popups
 	ArrayList<PopupPanel> popupList = new ArrayList<PopupPanel>();
-	private PopupPanel reportingPopupMenu = new PopupPanel();
+	private PopupPanel settingsPopupMenu = new PopupPanel();
+	private PopupPanel monitoringPopupMenu = new PopupPanel();
 	private PopupPanel planningPopupMenu = new PopupPanel();
 	private PopupPanel optionsPopupMenu = new PopupPanel();
 	
 	// Menu Items
 	Anchor logoutAnchor = new Anchor("Logout");
+	Anchor logicAnchor = new Anchor("Sensor/Actuator Logic");
+	Anchor userNotificationAnchor = new Anchor("User Notification");
 	Anchor actuatorAnchor = new Anchor("Actuator control");
 	Anchor scheduleAnchor = new Anchor("Scheduling");
 	Anchor electricAnchor = new Anchor("Electricity");
@@ -61,8 +65,9 @@ public class Menu extends Composite {
 		setupAnchors();
 		// Render the main menu and its sub menus
 		selectionPanel.add(new HTML(verticalLine));
-		renderReportingMenu("Reporting");
+		renderMonitoringMenu("Monitoring");
 		renderPlanningMenu("Planning");
+		renderSettingsMenu("Settings");
 		renderOptionsMenu(Images.getImage(Images.GEAR_ICON,Menu.HEIGHT));
 		
 		// Set up logo and title
@@ -132,11 +137,39 @@ public class Menu extends Composite {
 				Pages.enterLoginPage();
 			};
 		});
+		logicAnchor.addClickHandler(new ClickHandler(){
+			public void onClick(ClickEvent event){
+				Pages.enterSensorActuatorResponsePage();
+			};
+		});
+		
+		userNotificationAnchor.addClickHandler(new ClickHandler(){
+			public void onClick(ClickEvent event){
+				Pages.enterUserNotificationPage();
+			};
+		});
 	}
-
 	
+	private void renderSettingsMenu(String _title) {
+		
+		//Add new vertical sections here
+		VerticalMenu reportingMenu = new VerticalMenu();
+		
+		reportingMenu.addMenu("Settings");
+		reportingMenu.addAnchor(logicAnchor);
+		reportingMenu.addAnchor(userNotificationAnchor);
+		
+		//Add content panel to popup panel
+		settingsPopupMenu.add(reportingMenu.getMenus());
+		
+		//Set main title and attach popup
+		settingsModule = addNewModule(_title, settingsPopupMenu);
+		
+		selectionPanel.add(settingsModule);
+		selectionPanel.setCellVerticalAlignment(settingsModule, HasVerticalAlignment.ALIGN_MIDDLE);
+	}
 	
-	private void renderReportingMenu(String _title) {
+	private void renderMonitoringMenu(String _title) {
 		
 		//Add new vertical sections here
 		VerticalMenu reportingMenu = new VerticalMenu();
@@ -146,13 +179,13 @@ public class Menu extends Composite {
 		reportingMenu.addAnchor(waterAnchor);
 		
 		//Add content panel to popup panel
-		reportingPopupMenu.add(reportingMenu.getMenus());
+		monitoringPopupMenu.add(reportingMenu.getMenus());
 		
 		//Set main title and attach popup
-		reportingModule = addNewModule(_title, reportingPopupMenu);
+		monitoringModule = addNewModule(_title, monitoringPopupMenu);
 		
-		selectionPanel.add(reportingModule);
-		selectionPanel.setCellVerticalAlignment(reportingModule, HasVerticalAlignment.ALIGN_MIDDLE);
+		selectionPanel.add(monitoringModule);
+		selectionPanel.setCellVerticalAlignment(monitoringModule, HasVerticalAlignment.ALIGN_MIDDLE);
 	}
 	
 	private void renderPlanningMenu(String _title) {

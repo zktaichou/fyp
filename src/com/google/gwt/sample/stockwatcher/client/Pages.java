@@ -36,4 +36,18 @@ public class Pages{
 		BasePage.contentPanel.clear();
 		BasePage.contentPanel.add(schedulePage);
 	}
+	
+	public static void enterUserNotificationPage(){
+		UserNotificationPage userNotificationPage = new UserNotificationPage();
+		
+		BasePage.contentPanel.clear();
+		BasePage.contentPanel.add(userNotificationPage);
+	}
+	
+	public static void enterSensorActuatorResponsePage(){
+		SensorActuatorResponsePage sensorActuatorResponsePage = new SensorActuatorResponsePage();
+		
+		BasePage.contentPanel.clear();
+		BasePage.contentPanel.add(sensorActuatorResponsePage);
+	}
 }

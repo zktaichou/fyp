@@ -22,7 +22,10 @@ public class Data{
 	static HashMap<String, ArrayList<String>> actuatorSpecialScheduleList = new HashMap<>();
 	static HashMap<String, ArrayList<String>> specialScheduleAttributeList = new HashMap<>();
 	static HashMap<String, ArrayList<String>> dayScheduleRuleAttributeList = new HashMap<>();
+	static HashMap<String, ArrayList<String>> sensorAcutatorResponseAttributeList = new HashMap<>();
 	static int regularScheduleAttributeSize = 0;
 	static int specialScheduleAttributeSize = 0;
 	static int ruleAttributeSize = 0;
+	static int responseAttributeSize = 0;
+	static String currentUser = "";
 }

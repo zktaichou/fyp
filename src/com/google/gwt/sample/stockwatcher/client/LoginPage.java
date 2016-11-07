@@ -126,6 +126,8 @@ public class LoginPage extends Composite {
 				public void onSuccess(Boolean result) {
 					if(result)
 					{
+						Data.currentUser = usernameTB.getText();
+						
 						msgPanel.clear();
 						msgPanel.add(new HTML(Images.getImage(Images.LOADING_EPIC,Window.getClientHeight()-Menu.HEIGHT-Footer.HEIGHT)));
 						
@@ -135,16 +137,19 @@ public class LoginPage extends Composite {
 						mainPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 						mainPanel.add(msgPanel);
 						
-						Timer t = new Timer() {
-						      @Override
-						      public void run() {
-									Pages.enterMainMenuPage();
-									Menu.start();
-						      }
-						    };
-
-						    // Schedule the timer to run once in 2-4 seconds.
-						    t.schedule(new Random().nextInt(2001)+2000);
+						Pages.enterMainMenuPage();
+						Menu.start();
+						
+//						Timer t = new Timer() {
+//						      @Override
+//						      public void run() {
+//									Pages.enterMainMenuPage();
+//									Menu.start();
+//						      }
+//						    };
+//
+//						    // Schedule the timer to run once in 2-4 seconds.
+//						    t.schedule(new Random().nextInt(2001)+2000);
 					}
 					else
 					{

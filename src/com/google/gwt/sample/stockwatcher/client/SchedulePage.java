@@ -852,7 +852,7 @@ public class SchedulePage extends Composite{
 		ft.setWidget(lastRow, ft.getCellCount(lastRow), edit);
 		edit.setName(ft.getText(lastRow, 0));
 		setEditRuleClickHandler(edit);
-		}
+	}
 	
 	private void convertDayMaskToString(FlexTable ft){
 		for(int i=1; i<ft.getRowCount(); i++)
