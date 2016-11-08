@@ -3,19 +3,13 @@ package com.google.gwt.sample.stockwatcher.client;
 import com.google.gwt.i18n.client.*;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Random;
 
 import org.moxieapps.gwt.highcharts.client.*;
-import org.moxieapps.gwt.highcharts.client.events.PointClickEvent;
 import org.moxieapps.gwt.highcharts.client.labels.*;
 import org.moxieapps.gwt.highcharts.client.plotOptions.*;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -289,12 +283,13 @@ static long getTime(String date) {
 			if(count>0)
 			{
 				try{
+					@SuppressWarnings("unused")
 					HorizontalPanel check = (HorizontalPanel) getPanel(count-1).asWidget();
 					count++;
 				}catch(Exception e){
 				}
 			}
-		}
+		} 
 		
 		public void addLabel(String title, String string){
 			Label label = new Label(string);
@@ -304,6 +299,7 @@ static long getTime(String date) {
 			if(count>0)
 			{
 				try{
+					@SuppressWarnings("unused")
 					HorizontalPanel check = (HorizontalPanel) getPanel(count-1).asWidget();
 					count++;
 				}catch(Exception e){

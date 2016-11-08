@@ -20,6 +20,7 @@ public class SitePage extends Composite{
 	VerticalPanel buttonPanel = new VerticalPanel();
 
 	ListBox siteListBox = new ListBox();
+	static ListBox controlTypeListBox = new ListBox();
 	
 	static Image sitePic = new Image();
 	
@@ -32,6 +33,9 @@ public class SitePage extends Composite{
 	static HashMap <String, ArrayList<PopupPanel>> controllerActuatorPopupList = new HashMap<>();
 	
 	public SitePage(){
+		
+		renderControlTypeListBox();
+		renderSiteListBox();
 		
 		VerticalPanel wrapper = new VerticalPanel();
 		wrapper.setStyleName("mainStyle");
@@ -55,7 +59,7 @@ public class SitePage extends Composite{
 		initWidget(cPanel); 
 		}
 	
-	public void renderSiteListBox(){
+	private void renderSiteListBox(){
 		siteListBox.clear();
 		int count=0;
 		for(String siteName : Data.siteList.keySet())
@@ -67,9 +71,15 @@ public class SitePage extends Composite{
 		siteListBox.setSelectedIndex(0);
 	}
 	
+	private static void renderControlTypeListBox(){
+		controlTypeListBox.clear();
+		
+		controlTypeListBox.addItem("Manual");
+		controlTypeListBox.addItem("Scheduled");
+		controlTypeListBox.addItem("Sensor Response");
+	}
+	
 	public void setHandlers(){
-
-		renderSiteListBox();
 		getPic(siteListBox.getItemText(0));
 
 		siteListBox.addChangeHandler(new ChangeHandler(){
@@ -100,6 +110,9 @@ public class SitePage extends Composite{
 		int newW=(int)(width*resizeFactor); int newH=(int)(height*resizeFactor);
 		sitePic.setSize(newW+"px",newH+"px");	
 		sitePic.setVisible(true);
+		
+		sitePic.removeFromParent();
+		cPanel.add(sitePic);
 	}
 	
 	public void renderControllerPopups(){
@@ -211,10 +224,11 @@ public class SitePage extends Composite{
 					String status = attributes.get(2);
 					final double x = Double.parseDouble(attributes.get(3));
 					final double y = Double.parseDouble(attributes.get(4));
+					String controlType = attributes.get(5);
 					
 					String icon = Images.getImage(Images.ACTUATOR_CURRENT_ICON,25);
 					
-					Actuator temp = new Actuator(icon, name, status);
+					Actuator temp = new Actuator(icon, name, status, controlType);
 					
 					final PopupPanel container = new PopupPanel();
 					
@@ -337,7 +351,7 @@ public class SitePage extends Composite{
 	public static class Actuator extends Composite{
 		public static HashMap<Anchor,Boolean> state=new HashMap<>();
 		
-		public Actuator(String icon, final String name, String status){
+		public Actuator(String icon, final String name, String status, String controlType){
 			final HashMap<Boolean,String> toggle=new HashMap<>();
 			toggle.put(Boolean.TRUE,Images.getImage(Images.ON, 30));
 			toggle.put(Boolean.FALSE,Images.getImage(Images.OFF, 30));
@@ -404,11 +418,23 @@ public class SitePage extends Composite{
 				}
 			});
 			
+			ListBox lb = new ListBox();
+			lb = controlTypeListBox;
+			lb.setSelectedIndex(getIndexOfTextInWidget(lb,controlType)); 
+			lb.setTitle(name);
+			lb.setName(lb.getSelectedIndex()+"");
+			setControlTypeLBChangeHandlers(lb);
+			
+			HorizontalPanel selectablesPanel = new HorizontalPanel();
+			selectablesPanel.setSpacing(5);
+			selectablesPanel.add(lb);
+			selectablesPanel.add(temp);
+			
 			VerticalPanel vPanel = new VerticalPanel();
+			vPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 			vPanel.setSpacing(5);
 			vPanel.add(hPanel);
-			vPanel.add(temp);
-			vPanel.setCellHorizontalAlignment(temp, HasHorizontalAlignment.ALIGN_CENTER);
+			vPanel.add(selectablesPanel);
 			
 //			FocusPanel wrapper = new FocusPanel();
 //			wrapper.add(vPanel);
@@ -476,5 +502,38 @@ public class SitePage extends Composite{
 				
 				initWidget(vPanel);
 			}
+	}
+	
+	private static int getIndexOfTextInWidget(ListBox lb, String text){
+		for(int i=0; i<lb.getItemCount();i++)
+		{
+			if(text.equals(lb.getItemText(i)))
+			{
+				return i;
+			}
+		}
+		return 0;
+	}
+	
+	private static void setControlTypeLBChangeHandlers(final ListBox lb){
+		lb.addChangeHandler(new ChangeHandler(){
+			public void onChange(ChangeEvent evenet){
+				lb.setEnabled(false);
+				
+				Utility.newRequestObj().actuatorSetControlType(lb.getTitle(), lb.getSelectedItemText(), new AsyncCallback<String>() {
+					public void onFailure(Throwable caught) {
+						Window.alert("Unable to update control type");
+						lb.setSelectedIndex(Integer.parseInt(lb.getName()));
+						lb.setEnabled(true);
+					}
+					
+					public void onSuccess(String result) {
+						Window.alert("Update control type: "+result);
+						lb.setName(String.valueOf(lb.getSelectedIndex()));
+						lb.setEnabled(true);
+					}
+				});
+			}
+		});
 	}
 }

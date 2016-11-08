@@ -133,6 +133,7 @@ public class SchedulePage extends Composite{
 		
 		VerticalPanel vPanel = new VerticalPanel();
 		vPanel.setSpacing(10);
+		vPanel.add(new HTML("<h2>Selection Menu</h2></br>"));
 		vPanel.add(new HTML("Please select an actuator:"));
 		vPanel.add(actuatorLB);
 		vPanel.add(new HTML("Please select a schedule type:"));
@@ -194,6 +195,7 @@ public class SchedulePage extends Composite{
 		dateBox.setFormat(new DateBox.DefaultFormat(ChartUtilities.calendarFormat));
 		dateBox.getDatePicker().setYearArrowsVisible(true);
 		dateBox.setValue(today);
+		
 		schedulePopup.setGlassEnabled(true);
 		schedulePopup.add(scheduleMenu);
 
@@ -235,6 +237,7 @@ public class SchedulePage extends Composite{
 		scheduleType.clear();
 		scheduleType.addItem("Regular Schedule");
 		scheduleType.addItem("Special Schedule");
+		scheduleType.addItem("Ongoing Schedule");
 		scheduleType.setSelectedIndex(selectedSchedule);
 		
 		createScheduleType.clear();
@@ -299,6 +302,10 @@ public class SchedulePage extends Composite{
 				else if(scheduleType.getSelectedItemText().equals("Special Schedule"))
 				{
 					getActuatorSpecialSchedule(actuator);
+				}
+				else if(scheduleType.getSelectedItemText().equals("Ongoing Schedule"))
+				{
+					getOngoingSchedules();
 				}
 			}
 		});
@@ -434,6 +441,14 @@ public class SchedulePage extends Composite{
 		}
 	}
 	
+	private void setOngoingScheduleHeaders(FlexTable ft){
+		String[] header = {"Schedule","Actuator","On Start","On End","Lock?","Priority","Next Start Time","Next End Time"};
+		for(int i=0;i<header.length;i++)
+		{
+			ft.setText(0, i, header[i]);
+		}
+	}
+	
 	private void setRuleHeaders(FlexTable ft){
 		String[] header = {"Rule","Start Hour","Start Minute","End Hour","End Minute"};
 		for(int i=0;i<header.length;i++)
@@ -536,6 +551,7 @@ public class SchedulePage extends Composite{
 		
 	}
 	
+	@SuppressWarnings("deprecation")
 	private void initializeEditSpecialScheduleMenu(String schedule){
 		
 		HorizontalPanel buttonPanel = new HorizontalPanel();
@@ -1257,6 +1273,40 @@ public class SchedulePage extends Composite{
 			row++;
 		}
 		return temp;
+	}
+	
+	private void getOngoingSchedules(){
+		Utility.newRequestObj().getOngoingSchedulesAll(new AsyncCallback<String[][]>() {
+			public void onFailure(Throwable caught) {
+				Window.alert("Unable to get ongoing schedules");
+				Utility.hideTimer();
+			}
+			
+			public void onSuccess(String[][] result) {
+				if(Utility.isNull(result))
+				{
+					Window.alert("No ongoing schedules found");
+					Utility.hideTimer();
+				}
+				else
+				{
+					updateOngoingScheduleTable(scheduleTable, result);
+				}
+			}
+		});
+	}
+	
+	private void updateOngoingScheduleTable(FlexTable ft, String[][] result){
+		schedulePopup.setVisible(false);
+		
+		ft.setStyleName("fancyTable");
+		
+		FlexTable newTable = new FlexTable();
+		setOngoingScheduleHeaders(newTable);
+		ft = ChartUtilities.appendFlexTable(newTable, result);
+		
+		middlePanel.clear();
+		middlePanel.add(ft);
 	}
 	
 //	private void localAppendScheduleTable(FlexTable flexTable){

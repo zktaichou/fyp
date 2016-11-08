@@ -130,6 +130,24 @@ public class Utility{
 			return null;}
 	}
 	
+	public static LocalDateTime decryptToLocalDateTime(ObjectInputStream ois){
+		try {
+	        Cipher decrypter=Cipher.getInstance("AES");
+	        decrypter.init(Cipher.DECRYPT_MODE,getKey());
+	        
+			return (LocalDateTime)(((SealedObject) ois.readObject()).getObject(decrypter));
+		} catch (Exception e) {
+			
+			try {
+				PrintWriter p=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.failedLocalDateTimeDecryption)));
+				e.printStackTrace(p);
+				p.close();
+				return null;
+			} catch (Exception f) {}
+			
+			return null;}
+	}
+	
 	public static String[][] DataToString(ArrayList<Object []> input){
 		if(input!=null && input.size()>0)
 		{
@@ -151,6 +169,23 @@ public class Utility{
 		} catch (Exception e) {
 			try {
 				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.dataToString)));
+				e.printStackTrace(pw);
+				pw.close();
+				} catch (Exception f) {}
+			}
+		}
+		return null;
+	}
+	
+	public static String LocalDateTimeToString(LocalDateTime input){
+		if(input!=null)
+		{
+		try {
+			DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+			return df.format(input.plusHours(8));
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.localDateTimeToString)));
 				e.printStackTrace(pw);
 				pw.close();
 				} catch (Exception f) {}

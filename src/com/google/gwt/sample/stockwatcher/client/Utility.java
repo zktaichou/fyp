@@ -1,6 +1,5 @@
 package com.google.gwt.sample.stockwatcher.client;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 import com.google.gwt.core.client.GWT;

@@ -137,19 +137,19 @@ public class LoginPage extends Composite {
 						mainPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 						mainPanel.add(msgPanel);
 						
-						Pages.enterMainMenuPage();
-						Menu.start();
+//						Pages.enterMainMenuPage();
+//						Menu.start();
 						
-//						Timer t = new Timer() {
-//						      @Override
-//						      public void run() {
-//									Pages.enterMainMenuPage();
-//									Menu.start();
-//						      }
-//						    };
-//
-//						    // Schedule the timer to run once in 2-4 seconds.
-//						    t.schedule(new Random().nextInt(2001)+2000);
+						Timer t = new Timer() {
+						      @Override
+						      public void run() {
+									Pages.enterMainMenuPage();
+									Menu.start();
+						      }
+						    };
+
+						    // Schedule the timer to run once in 2-4 seconds.
+						    t.schedule(new Random().nextInt(2001)+2000);
 					}
 					else
 					{

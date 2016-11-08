@@ -81,24 +81,6 @@ public class ResourcePreload{
 		});
 	}
 	
-	private static void getRegularSchedules(){
-		
-		Utility.newRequestObj().getRegularSchedules(new AsyncCallback<String[][]>() {
-			public void onFailure(Throwable caught) {
-				Window.alert("Unable to get regular schedules list");
-			}
-			
-			public void onSuccess(String[][] rSchedule) {
-				if (rSchedule!=null) {
-					for(int i=0; i<rSchedule.length;i++)
-					{
-						getRegularScheduleByName(rSchedule[i][0]);
-					}
-				}
-			}
-		});
-	}
-	
 	private static void getRegularScheduleByName(final String scheduleName){
 		
 		Utility.newRequestObj().getRegularScheduleByName(scheduleName, new AsyncCallback<String[][]>() {
@@ -125,25 +107,6 @@ public class ResourcePreload{
 		});
 	}
 	
-	private static void getSpecialSchedules(){
-		
-		Utility.newRequestObj().getSpecialSchedules(new AsyncCallback<String[][]>() {
-			public void onFailure(Throwable caught) {
-				Window.alert("Unable to get site list");
-			}
-			
-			public void onSuccess(final String[][] sSchedule) {
-				if (sSchedule!=null) {
-					for(int i=0; i<sSchedule.length;i++)
-					{
-						getSpecialScheduleByName(sSchedule[i][0]);
-					}
-				}
-				
-			}
-		});
-	}
-	
 	private static void getSpecialScheduleByName(final String scheduleName){
 		
 		Utility.newRequestObj().getSpecialScheduleByName(scheduleName, new AsyncCallback<String[][]>() {
@@ -166,6 +129,45 @@ public class ResourcePreload{
 					}
 					Data.specialScheduleActuatorList.put(scheduleName, actuators);
 				}
+			}
+		});
+	}
+	
+	@SuppressWarnings("unused")
+	private static void getRegularSchedules(){
+		
+		Utility.newRequestObj().getRegularSchedules(new AsyncCallback<String[][]>() {
+			public void onFailure(Throwable caught) {
+				Window.alert("Unable to get regular schedules list");
+			}
+			
+			public void onSuccess(String[][] rSchedule) {
+				if (rSchedule!=null) {
+					for(int i=0; i<rSchedule.length;i++)
+					{
+						getRegularScheduleByName(rSchedule[i][0]);
+					}
+				}
+			}
+		});
+	}
+
+	@SuppressWarnings("unused")
+	private static void getSpecialSchedules(){
+		
+		Utility.newRequestObj().getSpecialSchedules(new AsyncCallback<String[][]>() {
+			public void onFailure(Throwable caught) {
+				Window.alert("Unable to get site list");
+			}
+			
+			public void onSuccess(final String[][] sSchedule) {
+				if (sSchedule!=null) {
+					for(int i=0; i<sSchedule.length;i++)
+					{
+						getSpecialScheduleByName(sSchedule[i][0]);
+					}
+				}
+				
 			}
 		});
 	}

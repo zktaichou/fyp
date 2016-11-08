@@ -13,6 +13,7 @@ public class LogFile{
 	static String failedDecryption = fileName("failedDecryption");
 	static String failedStringDecryption = fileName("failedStringDecryption");
 	static String failedLoginDecryption = fileName("failedLoginDecryption");
+	static String failedLocalDateTimeDecryption = fileName("failedLocalDateTimeDecryption");
 	static String requestError = fileName("requestError");
 	static String userLoginError = fileName("userLoginError");
 	static String actuatorSetStatus = fileName("actuatorSetStatus");
@@ -39,7 +40,21 @@ public class LogFile{
 	static String sensorActuatorResponseCreate = fileName("sensorActuatorResponseCreate");
 	static String sensorActuatorResponseUpdate = fileName("sensorActuatorResponseUpdate");
 	static String sensorActuatorResponseDelete = fileName("sensorActuatorResponseDelete");
-	
+	static String getOngoingSchedulesAll = fileName("getOngoingSchedulesAll");
+	static String actuatorSetControlType = fileName("actuatorSetControlType");
+	static String localDateTimeToString = fileName("localDateTimeToString");
+	static String userGetControllerNotificationLastReadTime = fileName("userGetControllerNotificationLastReadTime");
+	static String userGetSensorNotificationLastReadTime = fileName("userGetSensorNotificationLastReadTime");
+	static String userGetActuatorNotificationLastReadTime = fileName("userGetActuatorNotificationLastReadTime");
+	static String userSubscribeControllerNotification = fileName("userSubscribeControllerNotification");
+	static String userUnsubscribeControllerNotification = fileName("userUnsubscribeControllerNotification");
+	static String userSubscribeSensorNotification = fileName("userSubscribeSensorNotification");
+	static String userUnsubscribeSensorNotification = fileName("userUnsubscribeSensorNotification");
+	static String userSubscribeActuatorNotification = fileName("userSubscribeActuatorNotification");
+	static String userUnsubscribeActuatorNotification = fileName("userUnsubscribeActuatorNotification");
+	static String userUpdateControllerNotificationLastReadTime = fileName("userUpdateControllerNotificationLastReadTime");
+	static String userUpdateSensorNotificationLastReadTime = fileName("userUpdateSensorNotificationLastReadTime");
+	static String userUpdateActuatorNotificationLastReadTime = fileName("userUpdateActuatorNotificationLastReadTime");
 	
 	public static String fileName(String name){
 		try{

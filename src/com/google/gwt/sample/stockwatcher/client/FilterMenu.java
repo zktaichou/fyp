@@ -28,6 +28,7 @@ public class FilterMenu extends Composite{
 		if(count>0)
 		{
 			try{
+				@SuppressWarnings("unused")
 				HorizontalPanel check = (HorizontalPanel) getPanel(count-1).asWidget();
 				count++;
 			}catch(Exception e){
@@ -43,6 +44,7 @@ public class FilterMenu extends Composite{
 		if(count>0)
 		{
 			try{
+				@SuppressWarnings("unused")
 				HorizontalPanel check = (HorizontalPanel) getPanel(count-1).asWidget();
 				count++;
 			}catch(Exception e){
