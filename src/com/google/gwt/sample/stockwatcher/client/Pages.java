@@ -38,7 +38,7 @@ public class Pages{
 	}
 	
 	public static void enterUserNotificationPage(){
-		UserNotificationPage userNotificationPage = new UserNotificationPage();
+		UserNotificationPage userNotificationPage = new UserNotificationPage(Data.currentUser);
 		
 		BasePage.contentPanel.clear();
 		BasePage.contentPanel.add(userNotificationPage);

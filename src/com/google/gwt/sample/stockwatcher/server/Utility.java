@@ -111,6 +111,24 @@ public class Utility{
 			return null;}
 	}
 	
+	public static ArrayList<String> decryptToArrayListString(ObjectInputStream ois){
+		try {
+	        Cipher decrypter=Cipher.getInstance("AES");
+	        decrypter.init(Cipher.DECRYPT_MODE,getKey());
+	        
+			return (ArrayList<String>)(((SealedObject) ois.readObject()).getObject(decrypter));
+		} catch (Exception e) {
+			
+			try {
+				PrintWriter p=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.failedArrayListStringDecryption)));
+				e.printStackTrace(p);
+				p.close();
+				return null;
+			} catch (Exception f) {}
+			
+			return null;}
+	}
+	
 	@SuppressWarnings("unchecked")
 	public static String decryptToString(ObjectInputStream ois){
 		try {

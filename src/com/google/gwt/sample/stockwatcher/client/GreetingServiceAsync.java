@@ -1,6 +1,7 @@
 package com.google.gwt.sample.stockwatcher.client;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -50,4 +51,7 @@ public interface GreetingServiceAsync {
 	void userUpdateActuatorNotificationLastReadTime(String user, String actuator, Date date, AsyncCallback<String> callback) throws IllegalArgumentException;
 	void userUnsubscribeActuatorNotification(String user, String actuator, AsyncCallback<String> callback) throws IllegalArgumentException;
 	void userGetActuatorNotificationLastReadTime(String user, String actuator, AsyncCallback<String> callback) throws IllegalArgumentException;
+	void userGetSubscribedControllers(String user, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
+	void userGetSubscribedSensors(String user, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
+	void userGetSubscribedActuators(String user, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
 }

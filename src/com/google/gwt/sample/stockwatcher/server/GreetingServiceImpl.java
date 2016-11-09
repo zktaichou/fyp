@@ -1239,10 +1239,45 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return null;}
 	}
 	
-	public String userSubscribeSensorNotification(String user, String sensor) throws IllegalArgumentException {
+	public String[][] userGetSubscribedControllers(String user) throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();
 			toSend.add("58");
+			toSend.add(user);
+
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			
+			//Special decrypt for String-based returned response
+			 
+			ArrayList<Object[]> data=Utility.decryptToObjectArray(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return Utility.DataToString(data);
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userGetSubscribedControllers)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
+	public String userSubscribeSensorNotification(String user, String sensor) throws IllegalArgumentException {
+		try {
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("59");
 			toSend.add(user);
 			toSend.add(sensor);
 
@@ -1278,7 +1313,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 	public String userUpdateSensorNotificationLastReadTime(String user, String sensor, Date date) throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();
-			toSend.add("59");
+			toSend.add("60");
 			toSend.add(user);
 			toSend.add(sensor);
 			toSend.add(Utility.dateToLocalDateTime(date));
@@ -1315,7 +1350,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 	public String userUnsubscribeSensorNotification(String user, String sensor) throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();
-			toSend.add("60");
+			toSend.add("61");
 			toSend.add(user);
 			toSend.add(sensor);
 
@@ -1351,7 +1386,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 	public String userGetSensorNotificationLastReadTime(String user, String sensor) throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();
-			toSend.add("61");
+			toSend.add("62");
 			toSend.add(user);
 			toSend.add(sensor);
 
@@ -1384,10 +1419,44 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return null;}
 	}
 	
+	public String[][] userGetSubscribedSensors(String user) throws IllegalArgumentException {
+		try {
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("63");
+			toSend.add(user);
+
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			
+			//Special decrypt for String-based returned response
+			ArrayList<Object[]> data=Utility.decryptToObjectArray(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return Utility.DataToString(data);
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userGetSubscribedSensors)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
 	public String userSubscribeActuatorNotification(String user, String actuator) throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();
-			toSend.add("62");
+			toSend.add("64");
 			toSend.add(user);
 			toSend.add(actuator);
 
@@ -1423,7 +1492,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 	public String userUpdateActuatorNotificationLastReadTime(String user, String actuator, Date date) throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();
-			toSend.add("63");
+			toSend.add("65");
 			toSend.add(user);
 			toSend.add(actuator);
 			toSend.add(Utility.dateToLocalDateTime(date));
@@ -1460,7 +1529,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 	public String userUnsubscribeActuatorNotification(String user, String actuator) throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();
-			toSend.add("64");
+			toSend.add("66");
 			toSend.add(user);
 			toSend.add(actuator);
 
@@ -1496,7 +1565,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 	public String userGetActuatorNotificationLastReadTime(String user, String actuator) throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();
-			toSend.add("65");
+			toSend.add("67");
 			toSend.add(user);
 			toSend.add(actuator);
 
@@ -1523,6 +1592,40 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 		} catch (Exception e) {
 			try {
 				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userGetActuatorNotificationLastReadTime)));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
+	public String[][] userGetSubscribedActuators(String user) throws IllegalArgumentException {
+		try {
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("68");
+			toSend.add(user);
+
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			
+			//Special decrypt for String-based returned response
+			 ArrayList<Object[]> data=Utility.decryptToObjectArray(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return Utility.DataToString(data);
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userGetSubscribedActuators)));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}

@@ -1,6 +1,7 @@
 package com.google.gwt.sample.stockwatcher.client;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -52,4 +53,7 @@ public interface GreetingService extends RemoteService {
 	String userUpdateActuatorNotificationLastReadTime(String user, String actuator, Date date) throws IllegalArgumentException;
 	String userUnsubscribeActuatorNotification(String user, String actuator) throws IllegalArgumentException;
 	String userGetActuatorNotificationLastReadTime(String user, String actuator) throws IllegalArgumentException;
+	String[][] userGetSubscribedControllers(String user) throws IllegalArgumentException;
+	String[][] userGetSubscribedSensors(String user) throws IllegalArgumentException;
+	String[][] userGetSubscribedActuators(String user) throws IllegalArgumentException;
 }

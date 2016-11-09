@@ -14,6 +14,7 @@ public class LogFile{
 	static String failedStringDecryption = fileName("failedStringDecryption");
 	static String failedLoginDecryption = fileName("failedLoginDecryption");
 	static String failedLocalDateTimeDecryption = fileName("failedLocalDateTimeDecryption");
+	static String failedArrayListStringDecryption = fileName("failedArrayListStringDecryption");
 	static String requestError = fileName("requestError");
 	static String userLoginError = fileName("userLoginError");
 	static String actuatorSetStatus = fileName("actuatorSetStatus");
@@ -55,13 +56,17 @@ public class LogFile{
 	static String userUpdateControllerNotificationLastReadTime = fileName("userUpdateControllerNotificationLastReadTime");
 	static String userUpdateSensorNotificationLastReadTime = fileName("userUpdateSensorNotificationLastReadTime");
 	static String userUpdateActuatorNotificationLastReadTime = fileName("userUpdateActuatorNotificationLastReadTime");
+	static String userGetSubscribedControllers = fileName("userGetSubscribedControllers");
+	static String userGetSubscribedSensors = fileName("userGetSubscribedSensors");
+	static String userGetSubscribedActuators = fileName("userGetSubscribedActuators");
 	
 	public static String fileName(String name){
 		try{
-		File file = new File("log");
+		File file = new File("log_"+timestamp());
+		file.mkdir();
 		} catch (Exception e){}
 		
-		return "log/"+name+"_"+timestamp()+".txt";
+		return "log/"+timestamp()+"/"+name+".txt";
 	}
 	
 	private static String timestamp(){
