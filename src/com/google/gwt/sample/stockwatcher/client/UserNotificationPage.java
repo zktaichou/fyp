@@ -76,7 +76,6 @@ public class UserNotificationPage extends Composite{
 		subscriptionPanel.add(actuatorSubscribedPanel);
 			
 		VerticalPanel wrapper = new VerticalPanel();
-		wrapper.setStyleName("mainStyle");
 		wrapper.add(new HTML("<h1>"+message+"!</h1></br>"));
 		wrapper.add(subscriptionPanel);
 			
@@ -213,7 +212,7 @@ public class UserNotificationPage extends Composite{
 	}
 	private void renderControllerLB(){
 		controllerLB.clear();
-		controllerLB.setVisibleItemCount(controllerSubcriptionList.size());
+		controllerLB.setVisibleItemCount(5);
 		for(String controller: Data.controllerAttributeList.keySet())
 		{
 			if(!controllerSubcriptionList.containsKey(controller))
@@ -223,7 +222,7 @@ public class UserNotificationPage extends Composite{
 	
 	private void renderSensorLB(){
 		sensorLB.clear();
-		sensorLB.setVisibleItemCount(sensorSubcriptionList.size());
+		sensorLB.setVisibleItemCount(5);
 		for(String sensor: Data.sensorAttributeList.keySet())
 		{
 			if(!sensorSubcriptionList.containsKey(sensor))
@@ -233,7 +232,7 @@ public class UserNotificationPage extends Composite{
 	
 	private void renderActuatorLB(){
 		actuatorLB.clear();
-		actuatorLB.setVisibleItemCount(actuatorSubcriptionList.size());
+		actuatorLB.setVisibleItemCount(5);
 		for(String actuator: Data.actuatorAttributeList.keySet())
 		{
 			if(!actuatorSubcriptionList.containsKey(actuator))
@@ -249,7 +248,6 @@ public class UserNotificationPage extends Composite{
 	
 	private void renderControllerSubcriptionPanel(){
 		FlexTable wrapper = new FlexTable();
-		wrapper.setStyleName("fancyTable");
 		setHeaders(wrapper);
 		for(String controller: controllerSubcriptionList.keySet())
 		{
@@ -270,7 +268,6 @@ public class UserNotificationPage extends Composite{
 	
 	private void renderSensorSubcriptionPanel(){
 		FlexTable wrapper = new FlexTable();
-		wrapper.setStyleName("fancyTable");
 		setHeaders(wrapper);
 		for(String sensor: sensorSubcriptionList.keySet())
 		{
@@ -291,7 +288,6 @@ public class UserNotificationPage extends Composite{
 	
 	private void renderActuatorSubcriptionPanel(){
 		FlexTable wrapper = new FlexTable();
-		wrapper.setStyleName("fancyTable");
 		setHeaders(wrapper);
 		for(String actuator: actuatorSubcriptionList.keySet())
 		{

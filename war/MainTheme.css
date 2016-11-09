@@ -4,6 +4,12 @@
 	font-family: 'Play', sans-serif;
 	text-decoration: none !important;
 }
+.tableSolidBorder {
+	color: #FFFFFF;
+	border: solid;
+	font-family: 'Play', sans-serif;
+	text-decoration: none !important;
+}
 .filterMenu {
 	color: #FFFFFF;
   	vertical-align: top !important;
