@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -159,10 +160,13 @@ public class Utility{
 			{
 				for (int i2=0;i2<input.get(i).length;i2++) {
 					if (input.get(i)[i2] instanceof LocalDateTime) {
-					    data[i][i2]=df.format(((LocalDateTime)input.get(i)[i2]).plusHours(8));
+					    data[i][i2]=df.format(((LocalDateTime)input.get(i)[i2]));
 					} else {
 					    data[i][i2]=input.get(i)[i2].toString();
 					}
+//				    PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter("temp2.txt",true)));
+//				    pw.println(i+","+i2+" | "+data[i][i2]+" | "+input.get(i)[i2].getClass().getName());
+//					pw.close();
 				}
 			}
 			return data;
@@ -182,7 +186,7 @@ public class Utility{
 		{
 		try {
 			DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-			return df.format(input.plusHours(8));
+			return df.format(input);
 		} catch (Exception e) {
 			try {
 				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.localDateTimeToString())));

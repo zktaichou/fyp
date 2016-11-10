@@ -7,6 +7,8 @@ public class Images{
 	public static enum VerticalAlignment { BASELINE, SUB, SUPER, TOP, TEXT_TOP, MIDDLE, BOTTOM, TEXT_BOTTOM }
 	
 	// Picture Paths
+	public static final String DEBUG = "images/debug.gif";
+	public static final String NOTIFICATION = "images/notification.gif";
 	public static final String SAMPLE_1 = "images/sample1.png";
 	public static final String SAMPLE_2 = "images/sample2.png";
 	public static final String SAMPLE_3 = "images/sample3.png";

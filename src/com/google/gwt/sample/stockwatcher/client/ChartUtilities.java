@@ -62,7 +62,8 @@ static long getTime(String date) {
 }  
 
 	private static String updateTitle(String name, java.sql.Date sd, java.sql.Date ed){
-		return name+" reading from "+sd+" to "+ed;
+		return "Live updates for "+name;
+		//return name+" reading from "+sd+" to "+ed;
 	}
 	
 	public static java.sql.Date stringToStartDate(String date){

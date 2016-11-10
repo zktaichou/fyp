@@ -1,5 +1,6 @@
 package com.google.gwt.sample.stockwatcher.client;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -320,9 +321,11 @@ public class UserNotificationPage extends Composite{
 				}
 				else
 				{
+					Data.subscribedControllerList.clear();
 					controllerSubcriptionList.clear();
 					for(int i=0;i<reply.length;i++)
 					{
+						Data.subscribedControllerList.add(reply[i][1]);
 						controllerSubcriptionList.put(reply[i][1], checkIfLastReadTimeNull(reply[i][2]));
 					}
 				}
@@ -346,9 +349,11 @@ public class UserNotificationPage extends Composite{
 				}
 				else
 				{
+					Data.subscribedSensorList.clear();
 					sensorSubcriptionList.clear();
 					for(int i=0;i<reply.length;i++)
 					{
+						Data.subscribedSensorList.add(reply[i][1]);
 						sensorSubcriptionList.put(reply[i][1], checkIfLastReadTimeNull(reply[i][2]));
 					}
 				}
@@ -372,9 +377,11 @@ public class UserNotificationPage extends Composite{
 				}
 				else
 				{
+					Data.subscribedActuatorList.clear();
 					actuatorSubcriptionList.clear();
 					for(int i=0;i<reply.length;i++)
 					{
+						Data.subscribedActuatorList.add(reply[i][1]);
 						actuatorSubcriptionList.put(reply[i][1], checkIfLastReadTimeNull(reply[i][2]));
 					}
 				}
@@ -398,6 +405,7 @@ public class UserNotificationPage extends Composite{
 					getSubscribedController(user);
 					removeItemFromListBox(controllerLB, controller);
 					subscribeSelectionPopup.setVisible(false);
+					updateControllerLastReadTime(user,controller);
 				}
 			}
 		});
@@ -417,6 +425,7 @@ public class UserNotificationPage extends Composite{
 					getSubscribedSensor(user);
 					removeItemFromListBox(sensorLB, sensor);
 					subscribeSelectionPopup.setVisible(false);
+					updateSensorLastReadTime(user,sensor);
 				}
 			}
 		});
@@ -436,6 +445,7 @@ public class UserNotificationPage extends Composite{
 					getSubscribedActuator(user);
 					removeItemFromListBox(actuatorLB, actuator);
 					subscribeSelectionPopup.setVisible(false);
+					updateActuatorLastReadTime(user,actuator);
 				}
 			}
 		});
@@ -459,7 +469,6 @@ public class UserNotificationPage extends Composite{
 	}
 	
 	private void unSubscribeSensor(final String user, final String sensor){
-//		Window.alert(user+" unsubscribing "+sensor);
 		Utility.newRequestObj().userUnsubscribeSensorNotification(user, sensor, new AsyncCallback<String>(){
 			public void onFailure(Throwable caught) {
 				Window.alert("Unable to unsubscribe "+sensor);
@@ -477,7 +486,6 @@ public class UserNotificationPage extends Composite{
 	}
 	
 	private void unSubscribeActuator(final String user, final String actuator){
-//		Window.alert(user+" unsubscribing "+actuator);
 		Utility.newRequestObj().userUnsubscribeActuatorNotification(user, actuator, new AsyncCallback<String>(){
 			public void onFailure(Throwable caught) {
 				Window.alert("Unable to unsubscribe "+actuator);
@@ -490,6 +498,45 @@ public class UserNotificationPage extends Composite{
 					addItemToListBox(actuatorLB, actuator);
 					getSubscribedActuator(user);
 				}
+			}
+		});
+	}
+	
+	private void updateControllerLastReadTime(final String user, final String controller){
+		Date date = new Date(System.currentTimeMillis());
+		Utility.newRequestObj().userUpdateControllerNotificationLastReadTime(user, controller, date, new AsyncCallback<String>(){
+			public void onFailure(Throwable caught) {
+				Window.alert("Unable to update controller last read time");
+			} 
+ 
+			public void onSuccess(String reply) {
+
+			}
+		});
+	} 
+	
+	private void updateSensorLastReadTime(final String user, final String sensor){
+		Date date = new Date(System.currentTimeMillis());
+		Utility.newRequestObj().userUpdateControllerNotificationLastReadTime(user, sensor, date, new AsyncCallback<String>(){
+			public void onFailure(Throwable caught) {
+				Window.alert("Unable to update sensor last read time");
+			} 
+ 
+			public void onSuccess(String reply) {
+
+			}
+		});
+	}
+	
+	private void updateActuatorLastReadTime(final String user, final String actuator){
+		Date date = new Date(System.currentTimeMillis());
+		Utility.newRequestObj().userUpdateControllerNotificationLastReadTime(user, actuator, date, new AsyncCallback<String>(){
+			public void onFailure(Throwable caught) {
+				Window.alert("Unable to update actuator last read time");
+			} 
+ 
+			public void onSuccess(String reply) {
+
 			}
 		});
 	}

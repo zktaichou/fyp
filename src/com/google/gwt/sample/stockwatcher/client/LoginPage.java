@@ -59,7 +59,6 @@ public class LoginPage extends Composite {
 		wrapper.add(usernameTB);
 		wrapper.add(new HTML(enterPasswordMsg));
 		wrapper.add(passwordTB);
-//		wrapper.add(linksPanel);
 		wrapper.add(loginButton);
 		
 		mainPanel.clear();
@@ -148,8 +147,8 @@ public class LoginPage extends Composite {
 						      }
 						    };
 
-						    // Schedule the timer to run once in 2-4 seconds.
-						    t.schedule(new Random().nextInt(2001)+2000);
+						// Schedule the timer to run once in 2-4 seconds.
+						t.schedule(new Random().nextInt(2001)+2000);
 					}
 					else
 					{
@@ -158,9 +157,7 @@ public class LoginPage extends Composite {
 				}
 			});
 		}
-		
 	}
-	
 }
 
 

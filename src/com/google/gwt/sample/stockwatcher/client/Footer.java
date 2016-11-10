@@ -60,7 +60,6 @@ public class Footer extends Composite {
 		Date today = new Date();
 		DateTimeFormat dateFormat = DateTimeFormat.getFormat("d MMMM yyyy h:mm:ss a (zzzzz)");
 		DateTimeFormat yearFormat = DateTimeFormat.getFormat("yyyy");
-		
 		//
 		copyrightAnchor.setHTML("Created by Titus Ong and Yap Yee King, Copyright &copy; " + yearFormat.format(today));
 		copyrightAnchor.addStyleName("footer-text");

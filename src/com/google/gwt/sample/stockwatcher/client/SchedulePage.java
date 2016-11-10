@@ -199,7 +199,7 @@ public class SchedulePage extends Composite{
 		schedulePopup.setGlassEnabled(true);
 		schedulePopup.add(scheduleMenu);
 
-		for(int i=1; i<=24; i++)
+		for(int i=0; i<24; i++)
 		{
 			sHLB.addItem(Integer.toString(i));
 			eHLB.addItem(Integer.toString(i));

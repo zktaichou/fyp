@@ -167,11 +167,20 @@ public class LogFile{
 	public static String userGetSubscribedActuators(){
 		return fileName("userGetSubscribedActuators");
 	}
+	public static String controllerEventGetBetweenTime(){
+		return fileName("controllerEventGetBetweenTime");
+	}
+	public static String sensorEventGetBetweenTime(){
+		return fileName("sensorEventGetBetweenTime");
+	}
+	public static String actuatorEventGetBetweenTime(){
+		return fileName("actuatorEventGetBetweenTime");
+	}
 	
 	public static String fileName(String name){
 		try{
 		File file=new File("log/"+timestamp());
-		file.mkdir();
+		file.mkdirs();
 		} catch (Exception e){}
 		
 		return "log/"+timestamp()+"/"+name+".txt";

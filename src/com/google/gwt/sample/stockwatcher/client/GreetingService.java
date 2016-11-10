@@ -56,4 +56,7 @@ public interface GreetingService extends RemoteService {
 	String[][] userGetSubscribedControllers(String user) throws IllegalArgumentException;
 	String[][] userGetSubscribedSensors(String user) throws IllegalArgumentException;
 	String[][] userGetSubscribedActuators(String user) throws IllegalArgumentException;
+	String[][] controllerEventGetBetweenTime(ArrayList<String> controllerList, Date start, Date end) throws IllegalArgumentException;
+	String[][] sensorEventGetBetweenTime(ArrayList<String> controllerList, Date start, Date end) throws IllegalArgumentException;
+	String[][] actuatorEventGetBetweenTime(ArrayList<String> controllerList, Date start, Date end) throws IllegalArgumentException;
 }

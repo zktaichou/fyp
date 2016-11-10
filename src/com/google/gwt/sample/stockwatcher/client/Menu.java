@@ -45,17 +45,21 @@ public class Menu extends Composite {
 	Anchor scheduleAnchor = new Anchor("Scheduling");
 	Anchor electricAnchor = new Anchor("Electricity");
 	Anchor waterAnchor = new Anchor("Water");
+	static Anchor notificationAnchor = new Anchor(" ");
 	
 	String verticalLine = "<hr width=\"1\" size=\"30\">";
 	
 	public static void standby(){
 		selectionPanel.setVisible(false);
 		optionsPanel.setVisible(false);
+		notificationAnchor.setVisible(false);
 	}
 	
 	public static void start(){
 		selectionPanel.setVisible(true);
 		optionsPanel.setVisible(true);
+//		notificationAnchor.setVisible(true);
+		NotificationServer.start();
 	}
 	
 	// Menu Constructor
@@ -68,6 +72,7 @@ public class Menu extends Composite {
 		renderPlanningMenu("Planning");
 		renderSettingsMenu("Settings");
 		renderOptionsMenu(Images.getImage(Images.GEAR_ICON,Menu.HEIGHT));
+		renderNotificationAnchor();
 		
 		// Set up logo and title
 		fsktmLogo.setHTML(Images.getImage(Images.FSKTM_LOGO,Menu.HEIGHT));
@@ -84,8 +89,10 @@ public class Menu extends Composite {
 		leftMenuContainerPanel.setCellVerticalAlignment(selectionPanel, HasVerticalAlignment.ALIGN_MIDDLE);
 		
 		HorizontalPanel rightMenuContainerPanel = new HorizontalPanel();
+		rightMenuContainerPanel.add(notificationAnchor);
 		rightMenuContainerPanel.add(optionsPanel);
 		rightMenuContainerPanel.setWidth("100%");
+		rightMenuContainerPanel.setCellHorizontalAlignment(notificationAnchor, HasHorizontalAlignment.ALIGN_RIGHT);
 		rightMenuContainerPanel.setCellHorizontalAlignment(optionsPanel, HasHorizontalAlignment.ALIGN_RIGHT);
 		
 		// Container Panel for Main Menu Panel
@@ -109,7 +116,6 @@ public class Menu extends Composite {
 
 	// Setup Menu Item Links
 	private void setupAnchors() {
-		
 		actuatorAnchor.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
 				Pages.enterSitePage();
@@ -133,6 +139,7 @@ public class Menu extends Composite {
 		logoutAnchor.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
 				hidePopups();
+				NotificationServer.stop();
 				Pages.enterLoginPage();
 			};
 		});
@@ -145,6 +152,14 @@ public class Menu extends Composite {
 		userNotificationAnchor.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
 				Pages.enterUserNotificationPage();
+			};
+		});
+		notificationAnchor.addClickHandler(new ClickHandler(){
+			public void onClick(ClickEvent event){
+				NotificationServer.notificationPopup.setVisible(true);
+				NotificationServer.notificationPopup.center();
+				NotificationServer.isRead=true;
+				notificationAnchor.setVisible(false);
 			};
 		});
 	}
@@ -221,6 +236,10 @@ public class Menu extends Composite {
 		optionsModule = addNewModule(anchor, optionsPopupMenu);
 				
 		optionsPanel.add(optionsModule);
+	}
+	
+	private void renderNotificationAnchor() {
+		notificationAnchor.setHTML(Images.getImage(Images.NOTIFICATION, 30));
 	}
 	
 	// Render Menu Bars

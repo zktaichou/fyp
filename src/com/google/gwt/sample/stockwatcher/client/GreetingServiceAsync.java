@@ -54,4 +54,7 @@ public interface GreetingServiceAsync {
 	void userGetSubscribedControllers(String user, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
 	void userGetSubscribedSensors(String user, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
 	void userGetSubscribedActuators(String user, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
+	void controllerEventGetBetweenTime(ArrayList<String> controllerList, Date start, Date end, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
+	void sensorEventGetBetweenTime(ArrayList<String> controllerList, Date start, Date end, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
+	void actuatorEventGetBetweenTime(ArrayList<String> controllerList, Date start, Date end, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
 }

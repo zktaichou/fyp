@@ -869,6 +869,120 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return null;}
 	}
 	
+	public String[][] controllerEventGetBetweenTime(ArrayList<String> controllerList, Date start, Date end) throws IllegalArgumentException {
+		try {
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("39c");
+			toSend.add(controllerList);
+			toSend.add(Utility.dateToLocalDateTime(start));
+			toSend.add(Utility.dateToLocalDateTime(end));
+			
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			 
+			ArrayList<Object []> data=Utility.decryptToObjectArray(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return Utility.DataToString(data);
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.controllerEventGetBetweenTime())));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			
+			return null;}
+	}
+	
+	public String[][] sensorEventGetBetweenTime(ArrayList<String> sensorList, Date start, Date end) throws IllegalArgumentException {
+		try {
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("40c");
+			toSend.add(sensorList);
+			toSend.add(Utility.dateToLocalDateTime(start));
+			toSend.add(Utility.dateToLocalDateTime(end));
+			
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			 
+			ArrayList<Object []> data=Utility.decryptToObjectArray(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return Utility.DataToString(data);
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.sensorEventGetBetweenTime())));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			
+			return null;}
+	}
+	
+	public String[][] actuatorEventGetBetweenTime(ArrayList<String> sensorList, Date start, Date end) throws IllegalArgumentException {
+		try {
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("41c");
+			toSend.add(sensorList);
+			toSend.add(Utility.dateToLocalDateTime(start));
+			toSend.add(Utility.dateToLocalDateTime(end));
+			
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			 
+			ArrayList<Object []> data=Utility.decryptToObjectArray(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return Utility.DataToString(data);
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.actuatorEventGetBetweenTime())));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			
+			return null;}
+	}
+	
 	public String actuatorSetStatus(String actuator, String status) throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();

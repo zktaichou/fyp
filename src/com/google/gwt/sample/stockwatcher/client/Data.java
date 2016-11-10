@@ -26,6 +26,9 @@ public class Data{
 	static HashMap<String, ArrayList<String>> controllerSubscriptionAttributeList = new HashMap<>();
 	static HashMap<String, ArrayList<String>> sensorSubscriptionAttributeList = new HashMap<>();
 	static HashMap<String, ArrayList<String>> actuatorSubscriptionAttributeList = new HashMap<>();
+	static ArrayList<String> subscribedControllerList = new ArrayList<String>();
+	static ArrayList<String> subscribedSensorList = new ArrayList<String>();
+	static ArrayList<String> subscribedActuatorList = new ArrayList<String>();
 	static int regularScheduleAttributeSize = 0;
 	static int specialScheduleAttributeSize = 0;
 	static int ruleAttributeSize = 0;
