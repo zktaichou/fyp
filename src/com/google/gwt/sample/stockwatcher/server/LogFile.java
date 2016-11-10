@@ -5,64 +5,172 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class LogFile{
-	static String getSiteList = fileName("getSiteList");
-	static String getControllerList = fileName("getControllerList");
-	static String getSensorList = fileName("getSensorList");
-	static String getActuatorList = fileName("getActuatorList");
-	static String failedEcryption = fileName("failedEcryption");
-	static String failedDecryption = fileName("failedDecryption");
-	static String failedStringDecryption = fileName("failedStringDecryption");
-	static String failedLoginDecryption = fileName("failedLoginDecryption");
-	static String failedLocalDateTimeDecryption = fileName("failedLocalDateTimeDecryption");
-	static String failedArrayListStringDecryption = fileName("failedArrayListStringDecryption");
-	static String requestError = fileName("requestError");
-	static String userLoginError = fileName("userLoginError");
-	static String actuatorSetStatus = fileName("actuatorSetStatus");
-	static String dataToString = fileName("dataToString");
-	static String getKey = fileName("getKey");
-	static String getRegularSchedules = fileName("getRegularSchedules");
-	static String getRegularScheduleByName = fileName("getRegularScheduleByName");
-	static String getSpecialSchedules = fileName("getSpecialSchedules");
-	static String getSpecialScheduleByName = fileName("getSpecialScheduleByName");
-	static String getActuatorRegularSchedule = fileName("getActuatorRegularSchedule");
-	static String getActuatorSpecialSchedule = fileName("getActuatorSpecialSchedule");
-	static String createRegularSchedule = fileName("createRegularSchedule");
-	static String deleteRegularSchedule = fileName("deleteRegularSchedule");
-	static String createSpecialSchedule = fileName("createSpecialSchedule");
-	static String deleteSpecialSchedule = fileName("deleteSpecialSchedule");
-	static String getDayScheduleRuleAll = fileName("getDayScheduleRuleAll");
-	static String getDayScheduleRuleByName = fileName("getDayScheduleRuleByName");
-	static String createDayScheduleRule = fileName("createDayScheduleRule");
-	static String updateRegularSchedule = fileName("updateRegularSchedule");
-	static String updateSpecialSchedule = fileName("updateSpecialSchedule");
-	static String updateDayScheduleRule = fileName("updateDayScheduleRule");
-	static String deleteDayScheduleRule = fileName("deleteDayScheduleRule");
-	static String sensorActuatorResponseGetAll = fileName("sensorActuatorResponseGetAll");
-	static String sensorActuatorResponseCreate = fileName("sensorActuatorResponseCreate");
-	static String sensorActuatorResponseUpdate = fileName("sensorActuatorResponseUpdate");
-	static String sensorActuatorResponseDelete = fileName("sensorActuatorResponseDelete");
-	static String getOngoingSchedulesAll = fileName("getOngoingSchedulesAll");
-	static String actuatorSetControlType = fileName("actuatorSetControlType");
-	static String localDateTimeToString = fileName("localDateTimeToString");
-	static String userGetControllerNotificationLastReadTime = fileName("userGetControllerNotificationLastReadTime");
-	static String userGetSensorNotificationLastReadTime = fileName("userGetSensorNotificationLastReadTime");
-	static String userGetActuatorNotificationLastReadTime = fileName("userGetActuatorNotificationLastReadTime");
-	static String userSubscribeControllerNotification = fileName("userSubscribeControllerNotification");
-	static String userUnsubscribeControllerNotification = fileName("userUnsubscribeControllerNotification");
-	static String userSubscribeSensorNotification = fileName("userSubscribeSensorNotification");
-	static String userUnsubscribeSensorNotification = fileName("userUnsubscribeSensorNotification");
-	static String userSubscribeActuatorNotification = fileName("userSubscribeActuatorNotification");
-	static String userUnsubscribeActuatorNotification = fileName("userUnsubscribeActuatorNotification");
-	static String userUpdateControllerNotificationLastReadTime = fileName("userUpdateControllerNotificationLastReadTime");
-	static String userUpdateSensorNotificationLastReadTime = fileName("userUpdateSensorNotificationLastReadTime");
-	static String userUpdateActuatorNotificationLastReadTime = fileName("userUpdateActuatorNotificationLastReadTime");
-	static String userGetSubscribedControllers = fileName("userGetSubscribedControllers");
-	static String userGetSubscribedSensors = fileName("userGetSubscribedSensors");
-	static String userGetSubscribedActuators = fileName("userGetSubscribedActuators");
+	public static String getSiteList(){
+		return fileName("getSiteList");
+	}
+	public static String getControllerList(){
+		return fileName("getControllerList");
+	}
+	public static String getSensorList(){
+		return fileName("getSensorList");
+	}
+	public static String getActuatorList(){
+		return fileName("getActuatorList");
+	}
+	public static String failedEcryption(){
+		return fileName("failedEcryption");
+	}
+	public static String failedDecryption(){
+		return fileName("failedDecryption");
+	}
+	public static String failedStringDecryption(){
+		return fileName("failedStringDecryption");
+	}
+	public static String failedLoginDecryption(){
+		return fileName("failedLoginDecryption");
+	}
+	public static String failedLocalDateTimeDecryption(){
+		return fileName("failedLocalDateTimeDecryption");
+	}
+	public static String failedArrayListStringDecryption(){
+		return fileName("failedArrayListStringDecryption");
+	}
+	public static String requestError(){
+		return fileName("requestError");
+	}
+	public static String userLoginError(){
+		return fileName("userLoginError");
+	}
+	public static String actuatorSetStatus(){
+		return fileName("actuatorSetStatus");
+	}
+	public static String dataToString(){
+		return fileName("dataToString");
+	}
+	public static String getKey(){
+		return fileName("getKey");
+	}
+	public static String getRegularSchedules(){
+		return fileName("getRegularSchedules");
+	}
+	public static String getRegularScheduleByName(){
+		return fileName("getRegularScheduleByName");
+	}
+	public static String getSpecialSchedules(){
+		return fileName("getSpecialSchedules");
+	}
+	public static String getSpecialScheduleByName(){
+		return fileName("getSpecialScheduleByName");
+	}
+	public static String getActuatorRegularSchedule(){
+		return fileName("getActuatorRegularSchedule");
+	}
+	public static String getActuatorSpecialSchedule(){
+		return fileName("getActuatorSpecialSchedule");
+	}
+	public static String createRegularSchedule(){
+		return fileName("createRegularSchedule");
+	}
+	public static String deleteRegularSchedule(){
+		return fileName("deleteRegularSchedule");
+	}
+	public static String createSpecialSchedule(){
+		return fileName("createSpecialSchedule");
+	}
+	public static String deleteSpecialSchedule(){
+		return fileName("deleteSpecialSchedule");
+	}
+	public static String getDayScheduleRuleAll(){
+		return fileName("getDayScheduleRuleAll");
+	}
+	public static String getDayScheduleRuleByName(){
+		return fileName("getDayScheduleRuleByName");
+	}
+	public static String createDayScheduleRule(){
+		return fileName("createDayScheduleRule");
+	}
+	public static String updateRegularSchedule(){
+		return fileName("updateRegularSchedule");
+	}
+	public static String updateSpecialSchedule(){
+		return fileName("updateSpecialSchedule");
+	}
+	public static String updateDayScheduleRule(){
+		return fileName("updateDayScheduleRule");
+	}
+	public static String deleteDayScheduleRule(){
+		return fileName("deleteDayScheduleRule");
+	}
+	public static String sensorActuatorResponseGetAll(){
+		return fileName("sensorActuatorResponseGetAll");
+	}
+	public static String sensorActuatorResponseCreate(){
+		return fileName("sensorActuatorResponseCreate");
+	}
+	public static String sensorActuatorResponseUpdate(){
+		return fileName("sensorActuatorResponseUpdate");
+	}
+	public static String sensorActuatorResponseDelete(){
+		return fileName("sensorActuatorResponseDelete");
+	}
+	public static String getOngoingSchedulesAll(){
+		return fileName("getOngoingSchedulesAll");
+	}
+	public static String actuatorSetControlType(){
+		return fileName("actuatorSetControlType");
+	}
+	public static String localDateTimeToString(){
+		return fileName("localDateTimeToString");
+	}
+	public static String userGetControllerNotificationLastReadTime(){
+		return fileName("userGetControllerNotificationLastReadTime");
+	}
+	public static String userGetSensorNotificationLastReadTime(){
+		return fileName("userGetSensorNotificationLastReadTime");
+	}
+	public static String userGetActuatorNotificationLastReadTime(){
+		return fileName("userGetActuatorNotificationLastReadTime");
+	}
+	public static String userSubscribeControllerNotification(){
+		return fileName("userSubscribeControllerNotification");
+	}
+	public static String userUnsubscribeControllerNotification(){
+		return fileName("userUnsubscribeControllerNotification");
+	}
+	public static String userSubscribeSensorNotification(){
+		return fileName("userSubscribeSensorNotification");
+	}
+	public static String userUnsubscribeSensorNotification(){
+		return fileName("userUnsubscribeSensorNotification");
+	}
+	public static String userSubscribeActuatorNotification(){
+		return fileName("userSubscribeActuatorNotification");
+	}
+	public static String userUnsubscribeActuatorNotification(){
+		return fileName("userUnsubscribeActuatorNotification");
+	}
+	public static String userUpdateControllerNotificationLastReadTime(){
+		return fileName("userUpdateControllerNotificationLastReadTime");
+	}
+	public static String userUpdateSensorNotificationLastReadTime(){
+		return fileName("userUpdateSensorNotificationLastReadTime");
+	}
+	public static String userUpdateActuatorNotificationLastReadTime(){
+		return fileName("userUpdateActuatorNotificationLastReadTime");
+	}
+	public static String userGetSubscribedControllers(){
+		return fileName("userGetSubscribedControllers");
+	}
+	public static String userGetSubscribedSensors(){
+		return fileName("userGetSubscribedSensors");
+	}
+	public static String userGetSubscribedActuators(){
+		return fileName("userGetSubscribedActuators");
+	}
 	
 	public static String fileName(String name){
 		try{
-		File file = new File("log_"+timestamp());
+		File file=new File("log/"+timestamp());
 		file.mkdir();
 		} catch (Exception e){}
 		

@@ -57,7 +57,7 @@ public class Utility{
 			return secret;
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getKey)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getKey())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -71,7 +71,7 @@ public class Utility{
 			return new SealedObject(msg,encrypter);
 		} catch (Exception e) {
 			try {
-				PrintWriter p=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.failedEcryption)));
+				PrintWriter p=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.failedEcryption())));
 				e.printStackTrace(p);
 				p.close();
 			} catch (Exception f) {}
@@ -86,7 +86,7 @@ public class Utility{
 			return (String)(((SealedObject) ois.readObject()).getObject(decrypter));
 		} catch (Exception e) {
 			try {
-				PrintWriter p=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.failedLoginDecryption)));
+				PrintWriter p=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.failedLoginDecryption())));
 				e.printStackTrace(p);
 				p.close();
 			} catch (Exception f) {}
@@ -102,25 +102,7 @@ public class Utility{
 			return (ArrayList<Object []>)(((SealedObject) ois.readObject()).getObject(decrypter));
 		} catch (Exception e) {
 			try {
-				PrintWriter p=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.failedDecryption)));
-				e.printStackTrace(p);
-				p.close();
-				return null;
-			} catch (Exception f) {}
-			
-			return null;}
-	}
-	
-	public static ArrayList<String> decryptToArrayListString(ObjectInputStream ois){
-		try {
-	        Cipher decrypter=Cipher.getInstance("AES");
-	        decrypter.init(Cipher.DECRYPT_MODE,getKey());
-	        
-			return (ArrayList<String>)(((SealedObject) ois.readObject()).getObject(decrypter));
-		} catch (Exception e) {
-			
-			try {
-				PrintWriter p=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.failedArrayListStringDecryption)));
+				PrintWriter p=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.failedDecryption())));
 				e.printStackTrace(p);
 				p.close();
 				return null;
@@ -139,7 +121,7 @@ public class Utility{
 		} catch (Exception e) {
 			
 			try {
-				PrintWriter p=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.failedStringDecryption)));
+				PrintWriter p=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.failedStringDecryption())));
 				e.printStackTrace(p);
 				p.close();
 				return null;
@@ -157,7 +139,7 @@ public class Utility{
 		} catch (Exception e) {
 			
 			try {
-				PrintWriter p=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.failedLocalDateTimeDecryption)));
+				PrintWriter p=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.failedLocalDateTimeDecryption())));
 				e.printStackTrace(p);
 				p.close();
 				return null;
@@ -186,7 +168,7 @@ public class Utility{
 			return data;
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.dataToString)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.dataToString())));
 				e.printStackTrace(pw);
 				pw.close();
 				} catch (Exception f) {}
@@ -203,7 +185,7 @@ public class Utility{
 			return df.format(input.plusHours(8));
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.localDateTimeToString)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.localDateTimeToString())));
 				e.printStackTrace(pw);
 				pw.close();
 				} catch (Exception f) {}

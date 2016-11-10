@@ -49,7 +49,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return data.equals("ACTIVATED");
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userLoginError)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userLoginError())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -81,7 +81,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return Utility.DataToString(data);
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getSiteList)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getSiteList())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -114,7 +114,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return Utility.DataToString(data);
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getControllerList)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getControllerList())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -147,7 +147,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return Utility.DataToString(data);
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getSensorList)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getSensorList())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -180,7 +180,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return Utility.DataToString(data);
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getActuatorList)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getActuatorList())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -213,7 +213,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return Utility.DataToString(data);
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getDayScheduleRuleAll)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getDayScheduleRuleAll())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -246,7 +246,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return Utility.DataToString(data);
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getDayScheduleRuleByName)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getDayScheduleRuleByName())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -284,7 +284,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return data;
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.updateDayScheduleRule)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.updateDayScheduleRule())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -317,7 +317,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return data;
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.deleteDayScheduleRule)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.deleteDayScheduleRule())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -354,7 +354,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return data;
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.createDayScheduleRule)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.createDayScheduleRule())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -387,7 +387,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return Utility.DataToString(data);
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getActuatorRegularSchedule)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getActuatorRegularSchedule())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -420,7 +420,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return Utility.DataToString(data);
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getActuatorSpecialSchedule)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getActuatorSpecialSchedule())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -452,7 +452,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return Utility.DataToString(data);
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getRegularSchedules)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getRegularSchedules())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -485,7 +485,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return Utility.DataToString(data);
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getRegularScheduleByName)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getRegularScheduleByName())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -526,7 +526,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return data;
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.createRegularSchedule)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.createRegularSchedule())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -559,7 +559,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return data;
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.deleteRegularSchedule)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.deleteRegularSchedule())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -601,7 +601,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return data;
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.updateRegularSchedule)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.updateRegularSchedule())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -633,7 +633,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return Utility.DataToString(data);
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getSpecialSchedules)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getSpecialSchedules())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -666,7 +666,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return Utility.DataToString(data);
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getSpecialScheduleByName)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getSpecialScheduleByName())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -709,7 +709,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return data;
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.createSpecialSchedule)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.createSpecialSchedule())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -742,7 +742,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return data;
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.deleteSpecialSchedule)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.deleteSpecialSchedule())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -786,7 +786,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return data;
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.updateSpecialSchedule)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.updateSpecialSchedule())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -817,7 +817,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return Utility.DataToString(data);
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getOngoingSchedulesAll)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getOngoingSchedulesAll())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -861,7 +861,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return result;
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.requestError)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.requestError())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -898,7 +898,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return data;
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.actuatorSetStatus)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.actuatorSetStatus())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -934,7 +934,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return data;
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.actuatorSetControlType)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.actuatorSetControlType())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -970,7 +970,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return result;
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.sensorActuatorResponseGetAll)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.sensorActuatorResponseGetAll())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -1011,7 +1011,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return data;
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.sensorActuatorResponseCreate)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.sensorActuatorResponseCreate())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -1052,7 +1052,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return data;
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.sensorActuatorResponseUpdate)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.sensorActuatorResponseUpdate())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -1087,7 +1087,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return data;
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.sensorActuatorResponseDelete)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.sensorActuatorResponseDelete())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -1123,7 +1123,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return data;
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userSubscribeControllerNotification)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userSubscribeControllerNotification())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -1160,7 +1160,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return data;
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userUpdateControllerNotificationLastReadTime)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userUpdateControllerNotificationLastReadTime())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -1196,7 +1196,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return data;
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userUnsubscribeControllerNotification)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userUnsubscribeControllerNotification())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -1232,7 +1232,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return Utility.LocalDateTimeToString(data);
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userGetControllerNotificationLastReadTime)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userGetControllerNotificationLastReadTime())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -1267,7 +1267,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return Utility.DataToString(data);
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userGetSubscribedControllers)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userGetSubscribedControllers())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -1303,7 +1303,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return data;
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userSubscribeSensorNotification)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userSubscribeSensorNotification())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -1340,7 +1340,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return data;
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userUpdateSensorNotificationLastReadTime)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userUpdateSensorNotificationLastReadTime())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -1376,7 +1376,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return data;
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userUnsubscribeSensorNotification)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userUnsubscribeSensorNotification())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -1412,7 +1412,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return Utility.LocalDateTimeToString(data);
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userGetSensorNotificationLastReadTime)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userGetSensorNotificationLastReadTime())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -1446,7 +1446,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return Utility.DataToString(data);
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userGetSubscribedSensors)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userGetSubscribedSensors())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -1482,7 +1482,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return data;
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userSubscribeActuatorNotification)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userSubscribeActuatorNotification())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -1519,7 +1519,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return data;
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userUpdateActuatorNotificationLastReadTime)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userUpdateActuatorNotificationLastReadTime())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -1555,7 +1555,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return data;
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userUnsubscribeActuatorNotification)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userUnsubscribeActuatorNotification())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -1591,7 +1591,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return Utility.LocalDateTimeToString(data);
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userGetActuatorNotificationLastReadTime)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userGetActuatorNotificationLastReadTime())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
@@ -1625,7 +1625,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return Utility.DataToString(data);
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userGetSubscribedActuators)));
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userGetSubscribedActuators())));
 				e.printStackTrace(pw);
 				pw.close();
 			} catch (Exception f) {}
