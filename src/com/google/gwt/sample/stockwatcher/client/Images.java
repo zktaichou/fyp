@@ -7,6 +7,9 @@ public class Images{
 	public static enum VerticalAlignment { BASELINE, SUB, SUPER, TOP, TEXT_TOP, MIDDLE, BOTTOM, TEXT_BOTTOM }
 	
 	// Picture Paths
+	public static final String CONTROLLER_NOTIFICATION = "images/controller_notification.gif";
+	public static final String ACTUATOR_NOTIFICATION = "images/actuator_notification.gif";
+	public static final String SENSOR_NOTIFICATION = "images/sensor_notification.gif";
 	public static final String DEBUG = "images/debug.gif";
 	public static final String NOTIFICATION = "images/notification.gif";
 	public static final String SAMPLE_1 = "images/sample1.png";

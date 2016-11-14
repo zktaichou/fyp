@@ -45,20 +45,23 @@ public class Menu extends Composite {
 	Anchor scheduleAnchor = new Anchor("Scheduling");
 	Anchor electricAnchor = new Anchor("Electricity");
 	Anchor waterAnchor = new Anchor("Water");
-	static Anchor notificationAnchor = new Anchor(" ");
+	static Anchor cNotificationAnchor = new Anchor(" ");
+	static Anchor sNotificationAnchor = new Anchor(" ");
+	static Anchor aNotificationAnchor = new Anchor(" ");
 	
 	String verticalLine = "<hr width=\"1\" size=\"30\">";
 	
 	public static void standby(){
 		selectionPanel.setVisible(false);
 		optionsPanel.setVisible(false);
-		notificationAnchor.setVisible(false);
+		cNotificationAnchor.setVisible(false);
+		sNotificationAnchor.setVisible(false);
+		aNotificationAnchor.setVisible(false);
 	}
 	
 	public static void start(){
 		selectionPanel.setVisible(true);
 		optionsPanel.setVisible(true);
-//		notificationAnchor.setVisible(true);
 		NotificationServer.start();
 	}
 	
@@ -89,10 +92,14 @@ public class Menu extends Composite {
 		leftMenuContainerPanel.setCellVerticalAlignment(selectionPanel, HasVerticalAlignment.ALIGN_MIDDLE);
 		
 		HorizontalPanel rightMenuContainerPanel = new HorizontalPanel();
-		rightMenuContainerPanel.add(notificationAnchor);
+		rightMenuContainerPanel.add(cNotificationAnchor);
+		rightMenuContainerPanel.add(sNotificationAnchor);
+		rightMenuContainerPanel.add(aNotificationAnchor);
 		rightMenuContainerPanel.add(optionsPanel);
 		rightMenuContainerPanel.setWidth("100%");
-		rightMenuContainerPanel.setCellHorizontalAlignment(notificationAnchor, HasHorizontalAlignment.ALIGN_RIGHT);
+		rightMenuContainerPanel.setCellHorizontalAlignment(cNotificationAnchor, HasHorizontalAlignment.ALIGN_RIGHT);
+		rightMenuContainerPanel.setCellHorizontalAlignment(sNotificationAnchor, HasHorizontalAlignment.ALIGN_RIGHT);
+		rightMenuContainerPanel.setCellHorizontalAlignment(aNotificationAnchor, HasHorizontalAlignment.ALIGN_RIGHT);
 		rightMenuContainerPanel.setCellHorizontalAlignment(optionsPanel, HasHorizontalAlignment.ALIGN_RIGHT);
 		
 		// Container Panel for Main Menu Panel
@@ -101,6 +108,7 @@ public class Menu extends Composite {
 		menuContainerPanel.add(rightMenuContainerPanel);
 		menuContainerPanel.setCellVerticalAlignment(leftMenuContainerPanel, HasVerticalAlignment.ALIGN_MIDDLE);
 		menuContainerPanel.setCellVerticalAlignment(rightMenuContainerPanel, HasVerticalAlignment.ALIGN_MIDDLE);
+		menuContainerPanel.setCellHorizontalAlignment(rightMenuContainerPanel, HasHorizontalAlignment.ALIGN_RIGHT);
 		menuContainerPanel.setWidth("100%");
 
 		// Set up main menu panel
@@ -154,12 +162,25 @@ public class Menu extends Composite {
 				Pages.enterUserNotificationPage();
 			};
 		});
-		notificationAnchor.addClickHandler(new ClickHandler(){
+		cNotificationAnchor.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
-				NotificationServer.notificationPopup.setVisible(true);
-				NotificationServer.notificationPopup.center();
-				NotificationServer.isRead=true;
-				notificationAnchor.setVisible(false);
+				NotificationServer.cPopup.setVisible(true);
+				NotificationServer.cPopup.center();
+				cNotificationAnchor.setVisible(false);
+			};
+		});
+		sNotificationAnchor.addClickHandler(new ClickHandler(){
+			public void onClick(ClickEvent event){
+				NotificationServer.sPopup.setVisible(true);
+				NotificationServer.sPopup.center();
+				sNotificationAnchor.setVisible(false);
+			};
+		});
+		aNotificationAnchor.addClickHandler(new ClickHandler(){
+			public void onClick(ClickEvent event){
+				NotificationServer.aPopup.setVisible(true);
+				NotificationServer.aPopup.center();
+				aNotificationAnchor.setVisible(false);
 			};
 		});
 	}
@@ -239,7 +260,9 @@ public class Menu extends Composite {
 	}
 	
 	private void renderNotificationAnchor() {
-		notificationAnchor.setHTML(Images.getImage(Images.NOTIFICATION, 30));
+		cNotificationAnchor.setHTML(Images.getImage(Images.CONTROLLER_NOTIFICATION, 30));
+		sNotificationAnchor.setHTML(Images.getImage(Images.SENSOR_NOTIFICATION, 30));
+		aNotificationAnchor.setHTML(Images.getImage(Images.ACTUATOR_NOTIFICATION, 30));
 	}
 	
 	// Render Menu Bars
