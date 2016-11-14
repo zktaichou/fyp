@@ -1,5 +1,6 @@
 package com.google.gwt.sample.stockwatcher.client;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 import com.google.gwt.dom.client.Style.Unit;
@@ -7,6 +8,7 @@ import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.client.ui.PopupPanel.AnimationType;
 
@@ -43,8 +45,8 @@ public class Menu extends Composite {
 	Anchor userNotificationAnchor = new Anchor("User Notification");
 	Anchor actuatorAnchor = new Anchor("Actuator control");
 	Anchor scheduleAnchor = new Anchor("Scheduling");
-	Anchor electricAnchor = new Anchor("Electricity");
-	Anchor waterAnchor = new Anchor("Water");
+	Anchor liveAnchor = new Anchor("Live Updates");
+	Anchor historicalAnchor = new Anchor("Historical");
 	static Anchor cNotificationAnchor = new Anchor(" ");
 	static Anchor sNotificationAnchor = new Anchor(" ");
 	static Anchor aNotificationAnchor = new Anchor(" ");
@@ -134,14 +136,14 @@ public class Menu extends Composite {
 				Pages.enterSchedulePage();
 			};
 		});
-		electricAnchor.addClickHandler(new ClickHandler(){
+		liveAnchor.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
 				Pages.enterMonitoringPage();
 			};
 		});
-		waterAnchor.addClickHandler(new ClickHandler(){
+		historicalAnchor.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
-				Window.alert(Messages.WIP);
+				Pages.enterReportingPage();
 			};
 		});
 		logoutAnchor.addClickHandler(new ClickHandler(){
@@ -167,6 +169,19 @@ public class Menu extends Composite {
 				NotificationServer.cPopup.setVisible(true);
 				NotificationServer.cPopup.center();
 				cNotificationAnchor.setVisible(false);
+				
+				for(int i=0; i<Data.subscribedControllerList.size(); i++)
+				{
+					Utility.newRequestObj().userUpdateControllerNotificationLastReadTime(Data.currentUser, Data.subscribedControllerList.get(i), new Date(System.currentTimeMillis()), new AsyncCallback<String>(){
+						public void onFailure(Throwable caught) {
+//							Window.alert("Unable to update controller last read time");
+						} 
+			 
+						public void onSuccess(String reply) {
+//							Window.alert("updated controller last read time!");
+						}
+					});
+				}
 			};
 		});
 		sNotificationAnchor.addClickHandler(new ClickHandler(){
@@ -174,6 +189,19 @@ public class Menu extends Composite {
 				NotificationServer.sPopup.setVisible(true);
 				NotificationServer.sPopup.center();
 				sNotificationAnchor.setVisible(false);
+				
+				for(int i=0; i<Data.subscribedSensorList.size(); i++)
+				{
+					Utility.newRequestObj().userUpdateSensorNotificationLastReadTime(Data.currentUser, Data.subscribedSensorList.get(i), new Date(System.currentTimeMillis()), new AsyncCallback<String>(){
+						public void onFailure(Throwable caught) {
+//							Window.alert("Unable to update sensor last read time");
+						} 
+			 
+						public void onSuccess(String reply) {
+
+						}
+					});
+				}
 			};
 		});
 		aNotificationAnchor.addClickHandler(new ClickHandler(){
@@ -181,6 +209,19 @@ public class Menu extends Composite {
 				NotificationServer.aPopup.setVisible(true);
 				NotificationServer.aPopup.center();
 				aNotificationAnchor.setVisible(false);
+				
+				for(int i=0; i<Data.subscribedActuatorList.size(); i++)
+				{
+					Utility.newRequestObj().userUpdateActuatorNotificationLastReadTime(Data.currentUser, Data.subscribedActuatorList.get(i), new Date(System.currentTimeMillis()), new AsyncCallback<String>(){
+						public void onFailure(Throwable caught) {
+//							Window.alert("Unable to update actuator last read time");
+						} 
+			 
+						public void onSuccess(String reply) {
+
+						}
+					});
+				}
 			};
 		});
 	}
@@ -190,7 +231,7 @@ public class Menu extends Composite {
 		//Add new vertical sections here
 		VerticalMenu reportingMenu = new VerticalMenu();
 		
-		reportingMenu.addMenu("Settings");
+		reportingMenu.addMenu("Settings Menu");
 		reportingMenu.addAnchor(logicAnchor);
 		reportingMenu.addAnchor(userNotificationAnchor);
 		
@@ -209,9 +250,9 @@ public class Menu extends Composite {
 		//Add new vertical sections here
 		VerticalMenu reportingMenu = new VerticalMenu();
 		
-		reportingMenu.addMenu("Utilities");
-		reportingMenu.addAnchor(electricAnchor);
-		reportingMenu.addAnchor(waterAnchor);
+		reportingMenu.addMenu("Report Menu");
+		reportingMenu.addAnchor(liveAnchor);
+		reportingMenu.addAnchor(historicalAnchor);
 		
 		//Add content panel to popup panel
 		monitoringPopupMenu.add(reportingMenu.getMenus());
@@ -228,7 +269,7 @@ public class Menu extends Composite {
 		//Add new vertical sections here
 		VerticalMenu planningMenu = new VerticalMenu();
 		
-		planningMenu.addMenu("Function");
+		planningMenu.addMenu("Function Menu");
 		planningMenu.addAnchor(actuatorAnchor);
 		planningMenu.addAnchor(scheduleAnchor);
 		

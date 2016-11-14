@@ -23,6 +23,13 @@ public class Pages{
 		BasePage.contentPanel.add(monitoringPage);
 	}
 
+	public static void enterReportingPage(){
+		ReportingPage reportingPage = new ReportingPage();
+		
+		BasePage.contentPanel.clear();
+		BasePage.contentPanel.add(reportingPage);
+	}
+
 	public static void enterSitePage(){
 		SitePage sitePage = new SitePage();
 		

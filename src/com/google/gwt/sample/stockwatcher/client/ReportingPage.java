@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox;
 
-public class MonitoringPage extends Composite {
+public class ReportingPage extends Composite {
 
 	ContentPanel contentPanel = new ContentPanel();
 	VerticalPanel parameterPanel = new VerticalPanel();
@@ -61,7 +61,7 @@ public class MonitoringPage extends Composite {
     String eMonth;
     String eYear;
     
-	public MonitoringPage(){
+	public ReportingPage(){
 		setHandlers();
 		setWidgetContent();
 		
@@ -108,7 +108,7 @@ public class MonitoringPage extends Composite {
 		contentPanel.clear();
 		contentPanel.addLeft(parameterPanel);
 		contentPanel.add(chartPanel);
-//		contentPanel.addRight(filterPanel);
+		contentPanel.addRight(filterPanel);
 		
 		initWidget(contentPanel);
 		}
@@ -183,7 +183,7 @@ public class MonitoringPage extends Composite {
 
 		sDateBox.setFormat(new DateBox.DefaultFormat(ChartUtilities.calendarFormat));
 		sDateBox.getDatePicker().setYearArrowsVisible(true);
-		sDateBox.setValue(today);
+		sDateBox.setValue(startOfYear);
 	    
 		eDateBox.setFormat(new DateBox.DefaultFormat(ChartUtilities.calendarFormat));
 		eDateBox.getDatePicker().setYearArrowsVisible(true);

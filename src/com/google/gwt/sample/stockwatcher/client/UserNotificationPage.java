@@ -510,7 +510,7 @@ public class UserNotificationPage extends Composite{
 			} 
  
 			public void onSuccess(String reply) {
-
+				Window.alert(reply);
 			}
 		});
 	} 

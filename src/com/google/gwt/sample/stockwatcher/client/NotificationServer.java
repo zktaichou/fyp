@@ -317,8 +317,12 @@ public class NotificationServer{
 					cFlag=true;
 					cTable=ChartUtilities.appendFlexTable(cTable, reply);
 				}
-				for(int i=0; i<reply.length;i++){
-					updateControllerLastReadTime(Data.currentUser, reply[i][0], reply[i][1]);
+				if(cPopup.isVisible())
+				{
+					for(int i=0; i<Data.subscribedControllerList.size(); i++)
+					{
+						updateControllerLastReadTime(Data.currentUser, Data.subscribedControllerList.get(i));
+					}
 				}
 			}
 		});
@@ -337,8 +341,12 @@ public class NotificationServer{
 					sFlag=true;
 					sTable=ChartUtilities.appendFlexTable(sTable, reply);
 				}
-				for(int i=0; i<reply.length;i++){
-					updateSensorLastReadTime(Data.currentUser, reply[i][0], reply[i][1]);
+				if(sPopup.isVisible())
+				{
+					for(int i=0; i<Data.subscribedSensorList.size(); i++)
+					{
+						updateSensorLastReadTime(Data.currentUser, Data.subscribedSensorList.get(i));
+					}
 				}
 			}
 		});
@@ -357,17 +365,33 @@ public class NotificationServer{
 					aFlag=true;
 					aTable=ChartUtilities.appendFlexTable(aTable, reply);
 				}
-				for(int i=0; i<reply.length;i++){
-					updateActuatorLastReadTime(Data.currentUser, reply[i][0], reply[i][1]);
+				if(aPopup.isVisible())
+				{
+					for(int i=0; i<Data.subscribedActuatorList.size(); i++)
+					{
+						updateActuatorLastReadTime(Data.currentUser, Data.subscribedSensorList.get(i));
+					}
 				}
 			}
 		});
 	}
 	
-	private static void updateControllerLastReadTime(final String user, final String controller, final String date){
-		Utility.newRequestObj().userUpdateControllerNotificationLastReadTime(user, controller, new java.sql.Date(ChartUtilities.dateTimeFormat.parse(date).getTime()), new AsyncCallback<String>(){
+	public static void updateControllerLastReadTime(final String user, final String controller){
+		Utility.newRequestObj().userUpdateControllerNotificationLastReadTime(user, controller, new Date(System.currentTimeMillis()), new AsyncCallback<String>(){
 			public void onFailure(Throwable caught) {
-				Window.alert("Unable to update controller last read time");
+//				Window.alert("Unable to update controller last read time");
+			} 
+ 
+			public void onSuccess(String reply) {
+//				Window.alert("updated controller last read time!");
+			}
+		});
+	}
+	
+	public static void updateSensorLastReadTime(final String user, final String sensor){
+		Utility.newRequestObj().userUpdateControllerNotificationLastReadTime(user, sensor, new Date(System.currentTimeMillis()), new AsyncCallback<String>(){
+			public void onFailure(Throwable caught) {
+//				Window.alert("Unable to update sensor last read time");
 			} 
  
 			public void onSuccess(String reply) {
@@ -376,22 +400,10 @@ public class NotificationServer{
 		});
 	}
 	
-	private static void updateSensorLastReadTime(final String user, final String sensor, final String date){
-		Utility.newRequestObj().userUpdateControllerNotificationLastReadTime(user, sensor, new java.sql.Date(ChartUtilities.dateTimeFormat.parse(date).getTime()), new AsyncCallback<String>(){
+	public static void updateActuatorLastReadTime(final String user, final String actuator){
+		Utility.newRequestObj().userUpdateControllerNotificationLastReadTime(user, actuator, new Date(System.currentTimeMillis()), new AsyncCallback<String>(){
 			public void onFailure(Throwable caught) {
-				Window.alert("Unable to update sensor last read time");
-			} 
- 
-			public void onSuccess(String reply) {
-
-			}
-		});
-	}
-	
-	private static void updateActuatorLastReadTime(final String user, final String actuator, final String date){
-		Utility.newRequestObj().userUpdateControllerNotificationLastReadTime(user, actuator, new java.sql.Date(ChartUtilities.dateTimeFormat.parse(date).getTime()), new AsyncCallback<String>(){
-			public void onFailure(Throwable caught) {
-				Window.alert("Unable to update actuator last read time");
+//				Window.alert("Unable to update actuator last read time");
 			} 
  
 			public void onSuccess(String reply) {
