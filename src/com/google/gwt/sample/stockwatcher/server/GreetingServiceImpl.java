@@ -1746,6 +1746,311 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return null;}
 	}
 	
+	public String[][] getTotalReadingGroupByDay(String sensor) throws IllegalArgumentException {
+		try {
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("69a");
+			toSend.add(sensor);
+
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			
+			//Special decrypt for String-based returned response
+			 ArrayList<Object[]> data=Utility.decryptToObjectArray(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return Utility.DataToString(data);
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getTotalReadingGroupByDay())));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
+	public String[][] getTotalReadingGroupByMonth(String sensor) throws IllegalArgumentException {
+		try {
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("69b");
+			toSend.add(sensor);
+
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			
+			//Special decrypt for String-based returned response
+			 ArrayList<Object[]> data=Utility.decryptToObjectArray(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return Utility.DataToString(data);
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getTotalReadingGroupByMonth())));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
+	public String[][] getTotalReadingGroupByYear(String sensor) throws IllegalArgumentException {
+		try {
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("69c");
+			toSend.add(sensor);
+
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			
+			//Special decrypt for String-based returned response
+			 ArrayList<Object[]> data=Utility.decryptToObjectArray(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return Utility.DataToString(data);
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getTotalReadingGroupByYear())));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
+	public String[][] getAverageReadingGroupByDay(String sensor) throws IllegalArgumentException {
+		try {
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("70a");
+			toSend.add(sensor);
+
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			
+			//Special decrypt for String-based returned response
+			 ArrayList<Object[]> data=Utility.decryptToObjectArray(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return Utility.DataToString(data);
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getAverageReadingGroupByDay())));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
+	public String[][] getAverageReadingGroupByMonth(String sensor) throws IllegalArgumentException {
+		try {
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("70b");
+			toSend.add(sensor);
+
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			
+			//Special decrypt for String-based returned response
+			 ArrayList<Object[]> data=Utility.decryptToObjectArray(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return Utility.DataToString(data);
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getAverageReadingGroupByMonth())));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
+	public String[][] getAverageReadingGroupByYear(String sensor) throws IllegalArgumentException {
+		try {
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("70c");
+			toSend.add(sensor);
+
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			
+			//Special decrypt for String-based returned response
+			 ArrayList<Object[]> data=Utility.decryptToObjectArray(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return Utility.DataToString(data);
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getAverageReadingGroupByYear())));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
+	public String[][] getCulmulativeReadingGroupByDay(String sensor) throws IllegalArgumentException {
+		try {
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("71a");
+			toSend.add(sensor);
+
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			
+			//Special decrypt for String-based returned response
+			 ArrayList<Object[]> data=Utility.decryptToObjectArray(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return Utility.DataToString(data);
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getCulmulativeReadingGroupByDay())));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
+	public String[][] getCulmulativeReadingGroupByMonth(String sensor) throws IllegalArgumentException {
+		try {
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("71b");
+			toSend.add(sensor);
+
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			
+			//Special decrypt for String-based returned response
+			 ArrayList<Object[]> data=Utility.decryptToObjectArray(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return Utility.DataToString(data);
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getCulmulativeReadingGroupByMonth())));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
+	public String[][] getCulmulativeReadingGroupByYear(String sensor) throws IllegalArgumentException {
+		try {
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("71c");
+			toSend.add(sensor);
+
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			
+			//Special decrypt for String-based returned response
+			 ArrayList<Object[]> data=Utility.decryptToObjectArray(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return Utility.DataToString(data);
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getCulmulativeReadingGroupByYear())));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
 	
 	public int getPortNumber() throws IllegalArgumentException {
 		return Utility.portNumber;

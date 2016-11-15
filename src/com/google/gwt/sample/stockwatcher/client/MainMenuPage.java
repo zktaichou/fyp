@@ -20,6 +20,7 @@ public class MainMenuPage extends Composite{
 	String selectTitle = "<h1>Please select the page that you want to enter</h1>";
 	
 	public MainMenuPage(){
+		Header.setHeaderTitle("");
 		setHandlers();
 		
 		msgPanel.add(new HTML(Messages.MAIN_MENU));

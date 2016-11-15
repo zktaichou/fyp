@@ -13,7 +13,7 @@ public class BasePage implements EntryPoint {
 	static VerticalPanel footerContainer = new VerticalPanel();
 	static ContentPanel contentPanel = new ContentPanel();
 	
-	static int contentPanelHeight = Window.getClientHeight()-Menu.HEIGHT-Footer.HEIGHT;
+	static int contentPanelHeight = Window.getClientHeight()-Menu.HEIGHT-Footer.HEIGHT-Header.HEIGHT;
 	
 	public void onModuleLoad() {
 		ResourcePreload.preloadData();
@@ -29,14 +29,13 @@ public class BasePage implements EntryPoint {
 		Menu menu = new Menu();
 		menuContainer.add(menu);
 		menuContainer.setWidth("100%");
-		
-//		Header header = new Header();
-//		headerContainer.add(header);
-//		headerContainer.setWidth("100%");
-//		headerContainer.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+
+		Header header = new Header();
+		headerContainer.add(header);
+		headerContainer.setWidth("100%");
+		headerContainer.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 
 		LoginPage loginPage = new LoginPage();
-		
 		contentPanel.add(loginPage);
 		contentContainer.add(contentPanel);
 		contentContainer.setSize("100%", "100%");

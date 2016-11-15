@@ -62,6 +62,7 @@ public class UserNotificationPage extends Composite{
 	String noSubscription = "No subscription";
 	
 	public UserNotificationPage(String user){
+		Header.setHeaderTitle("Main Menu > Settings > User Notification Subscription");
 		this.user=user;
 		
 		getUserSubscription(this.user);

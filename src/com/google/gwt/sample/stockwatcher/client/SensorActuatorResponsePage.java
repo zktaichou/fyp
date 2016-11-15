@@ -61,6 +61,7 @@ public class SensorActuatorResponsePage extends Composite {
 	int timeout;
 	
 	public SensorActuatorResponsePage(){
+		Header.setHeaderTitle("Main Menu > Settings > Sensor/Actuator Logic Control");
 		
 		setHandlers();
 		setWidgets();

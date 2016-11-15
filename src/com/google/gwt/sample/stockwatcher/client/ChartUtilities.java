@@ -61,13 +61,13 @@ static long getTime(String date) {
     return dateTimeFormat.parse(date).getTime();  
 }  
 
-	private static String updateReportingTitle(String name, java.sql.Date sd, java.sql.Date ed){
+	public static String updateReportingTitle(String name, java.sql.Date sd, java.sql.Date ed){
 		return name+" readings from "+calendarFormat.format(sd)+" to "+calendarFormat.format(ed);
 		//return name+" reading from "+sd+" to "+ed;
 	}
 	
-	private static String updateLiveUpdateTitle(String name, java.sql.Date sd, java.sql.Date ed){
-		return "Live updates for "+name;
+	public static String updateLiveUpdateTitle(String name, java.sql.Date sd, java.sql.Date ed){
+		return "Today's live updates for "+name;
 		//return name+" reading from "+sd+" to "+ed;
 	}
 	
@@ -104,13 +104,13 @@ static long getTime(String date) {
 				Utility.hideTimer();
 				if(ReportingPage.chartPanel.isVisible())
 				{
-					StockChart chart = createChart(sn, data,updateReportingTitle(sn,sd,ed), predictionIsEnabled, isLiveUpdate, steps);
+					Chart chart = createReportChart(sn, data,updateReportingTitle(sn,sd,ed), predictionIsEnabled, steps);
 					ReportingPage.chartPanel.clear();
 					ReportingPage.chartPanel.add(chart);
 				}
 				else
 				{
-					StockChart chart = createChart(sn, data,updateLiveUpdateTitle(sn,sd,ed), predictionIsEnabled, isLiveUpdate, steps);
+					StockChart chart = createLiveChart(sn, data,updateLiveUpdateTitle(sn,sd,ed), predictionIsEnabled, isLiveUpdate, steps);
 					MonitoringPage.chartPanel.clear();
 					MonitoringPage.chartPanel.add(chart);
 				}
@@ -161,7 +161,52 @@ static long getTime(String date) {
 		return data;
 	}
 	
-	public static StockChart createChart(final String sensorName, Number[][] data, String title, final Boolean predictionIsEnabled, final Boolean isLiveUpdate, int steps){
+	public static Number[][] formatDaily(String [][] input){
+		int dataCount = input[0].length;
+		Number [][] data = new Number[input.length][dataCount];
+		
+		for(int i=0;i<input.length;i++)
+		{
+			data[i][0]=DateTimeFormat.getFormat("yyyy-MM-dd").parse(input[i][0]).getTime();
+			for(int j=1; j<dataCount;j++)
+			{
+				data[i][j]=convertToNumber(input[i][j]);
+			}
+		}
+		return data;
+	}
+	
+	public static Number[][] formatMonthly(String [][] input){
+		int dataCount = input[0].length;
+		Number [][] data = new Number[input.length][dataCount];
+		
+		for(int i=0;i<input.length;i++)
+		{
+			data[i][0]=DateTimeFormat.getFormat("yyyy-MM").parse(input[i][0]).getTime();
+			for(int j=1; j<dataCount;j++)
+			{
+				data[i][j]=convertToNumber(input[i][j]);
+			}
+		}
+		return data;
+	}
+	
+	public static Number[][] formatYearly(String [][] input){
+		int dataCount = input[0].length;
+		Number [][] data = new Number[input.length][dataCount];
+		
+		for(int i=0;i<input.length;i++)
+		{
+			data[i][0]=DateTimeFormat.getFormat("yyyy").parse(input[i][0]).getTime();
+			for(int j=1; j<dataCount;j++)
+			{
+				data[i][j]=convertToNumber(input[i][j]);
+			}
+		}
+		return data;
+	}
+	
+	public static StockChart createLiveChart(final String sensorName, Number[][] data, String title, final Boolean predictionIsEnabled, final Boolean isLiveUpdate, int steps){
 		
 		Utility.hideTimer();
 		
@@ -245,6 +290,72 @@ static long getTime(String date) {
 	        };
 	        tempTimer.schedule(0);
 	    }
+        
+        chart.setSize(Window.getClientWidth()*2/3, Window.getClientHeight()*2/3);
+	    
+		return chart;
+	}
+	
+	public static Chart createReportChart(final String sensorName, Number[][] data, String title, final Boolean predictionIsEnabled, int steps){
+		
+		Utility.hideTimer();
+		
+		final Chart chart = new Chart();
+		chart
+		.setType(Series.Type.COLUMN)  
+        .setMarginRight(30)  
+        .setBarPlotOptions(new BarPlotOptions()  
+                .setDataLabels(new DataLabels()  
+                    .setEnabled(true)  
+                )  
+            )
+        .setChartTitleText(title)
+	    .setLegend(new Legend().setEnabled(false))  
+	    .setCredits(new Credits().setEnabled(false))
+	    .setSplinePlotOptions(new SplinePlotOptions()  
+                .setMarker(new Marker()  
+                    .setEnabled(true).setRadius(3)  
+                )  
+        )
+	    ;
+		chart.setBackgroundColor(new Color()
+				   .setLinearGradient(0.0, 0.0, 1.0, 1.0)
+				   .addColorStop(0, 0, 0, 0, 1)
+				   .addColorStop(0, 0, 0, 0, 0)
+				 );
+		
+		chart.getXAxis().setDateTimeLabelFormats(
+				new DateTimeLabelFormats()
+				    .setSecond("%l:%M:%S %p"));
+		
+		chart.getYAxis()
+        .setPlotLines(  
+            chart.getYAxis().createPlotLine()  
+                .setValue(0)  
+                .setWidth(1)  
+                .setColor("#808080")  
+        );
+		
+		final Series series = chart.createSeries();  
+	    chart.addSeries(series.setName("Data")); 
+	    
+	    final Series predictionSeries = chart.createSeries();
+	    int lastRow = data.length;
+	    
+	    if(predictionIsEnabled)
+	    {
+		    lastRow-=steps;
+		    chart.addSeries(predictionSeries.setName("Prediction")); 
+		    for(int i=lastRow;i<data.length;i++)
+		    {
+		    	predictionSeries.addPoint(data[i][0],data[i][1]);
+		    }
+	    }
+	    
+	    for(int i=0;i<lastRow;i++)
+		{
+	    	series.addPoint(data[i][0],data[i][1]);
+		}
         
         chart.setSize(Window.getClientWidth()*2/3, Window.getClientHeight()*2/3);
 	    

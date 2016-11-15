@@ -38,6 +38,7 @@ public class LoginPage extends Composite {
 	public static final GreetingServiceAsync greetingService = GWT.create(GreetingService.class);
 
 	public LoginPage(){
+		Header.setHeaderTitle("");
 		setHandlers();
 		
 		msgPanel.clear();

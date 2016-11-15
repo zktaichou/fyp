@@ -1,7 +1,13 @@
 .header-panel {
 	/* background: #BDBDBD !important; */
-	margin: 0px 10px 0px 10px;
+	margin: 10px 0px 10px 0px;
 	border: none;
+	font-family: 'Play', sans-serif;
+	font-weight: bold;
+	color: #FFFFFF;
+	background: rgba(0, 0, 0, 0);
+    padding-left: 10px;
+    width: 100%;
 }
 
 .header-title-panel {

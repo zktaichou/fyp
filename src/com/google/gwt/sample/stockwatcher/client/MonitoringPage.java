@@ -52,6 +52,7 @@ public class MonitoringPage extends Composite {
     String eYear;
     
 	public MonitoringPage(){
+		Header.setHeaderTitle("Main Menu > Monitoring > Live Update Readings");
 		setHandlers();
 		setWidgetContent();
 		

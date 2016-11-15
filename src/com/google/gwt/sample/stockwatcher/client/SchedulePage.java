@@ -122,7 +122,7 @@ public class SchedulePage extends Composite{
 	ArrayList<Object> ruleAttributeList = new ArrayList<>();
 	
 	public SchedulePage(){
-		
+		Header.setHeaderTitle("Main Menu > Planning > Scheduling");
 		setWidgets();
 		setHandlers();
 		

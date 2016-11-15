@@ -33,7 +33,7 @@ public class SitePage extends Composite{
 	static HashMap <String, ArrayList<PopupPanel>> controllerActuatorPopupList = new HashMap<>();
 	
 	public SitePage(){
-		
+		Header.setHeaderTitle("Main Menu > Planning > Actuator Control");
 		renderControlTypeListBox();
 		renderSiteListBox();
 		

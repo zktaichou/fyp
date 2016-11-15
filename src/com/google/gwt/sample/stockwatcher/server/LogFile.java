@@ -176,6 +176,33 @@ public class LogFile{
 	public static String actuatorEventGetBetweenTime(){
 		return fileName("actuatorEventGetBetweenTime");
 	}
+	public static String getTotalReadingGroupByDay(){
+		return fileName("getTotalReadingGroupByDay");
+	}
+	public static String getTotalReadingGroupByMonth(){
+		return fileName("getTotalReadingGroupByMonth");
+	}
+	public static String getTotalReadingGroupByYear(){
+		return fileName("getTotalReadingGroupByYear");
+	}
+	public static String getAverageReadingGroupByDay(){
+		return fileName("getAverageReadingGroupByDay");
+	}
+	public static String getAverageReadingGroupByMonth(){
+		return fileName("getAverageReadingGroupByMonth");
+	}
+	public static String getAverageReadingGroupByYear(){
+		return fileName("getAverageReadingGroupByYear");
+	}
+	public static String getCulmulativeReadingGroupByDay(){
+		return fileName("getCulmulativeReadingGroupByDay");
+	}
+	public static String getCulmulativeReadingGroupByMonth(){
+		return fileName("getCulmulativeReadingGroupByMonth");
+	}
+	public static String getCulmulativeReadingGroupByYear(){
+		return fileName("getCulmulativeReadingGroupByYear");
+	}
 	
 	public static String fileName(String name){
 		try{

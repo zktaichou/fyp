@@ -12,6 +12,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
@@ -35,7 +36,8 @@ public class ReportingPage extends Composite {
 	HorizontalPanel buttonPanel = new HorizontalPanel();
 	HorizontalPanel selectionPanel = new HorizontalPanel();
 
-	FilterMenu filterMenu = new FilterMenu();
+	FilterMenu advancedFilterMenu = new FilterMenu();
+	FilterMenu basicFilterMenu = new FilterMenu();
 	
 	CheckBox filterBox = new CheckBox("Advanced filter");
 	public static CheckBox predictionBox = new CheckBox("Show prediction");
@@ -43,6 +45,8 @@ public class ReportingPage extends Composite {
 	ListBox siteListBox = new ListBox();
 	ListBox siteControllerListBox = new ListBox();
 	ListBox controllerSensorListBox = new ListBox();
+	ListBox reportViewLB = new ListBox();
+	ListBox reportSortLB = new ListBox();
 	
 	FlexTable table = new FlexTable();
 	StockChart chart = new StockChart();
@@ -65,28 +69,36 @@ public class ReportingPage extends Composite {
     TextBox tb = new TextBox();
     
 	public ReportingPage(){
+		Header.setHeaderTitle("Main Menu > Monitoring > Historical");
 		setHandlers();
 		setWidgetContent();
 		
-		filterMenu.clear();
-		filterMenu.setStyleName("mainStyle");
-		filterMenu.setVisible(false);
-		filterMenu.addLabel("Start date");
-		filterMenu.addItem(sDateBox);
-		filterMenu.addLabel("End date");
-		filterMenu.addItem(eDateBox);
-		filterMenu.addLabel("Prediction menu");
-		filterMenu.addItem(predictionBox);
-		filterMenu.addLabel("Prediction", "Input steps");
-		filterMenu.addItem("Prediction",tb);
-		filterMenu.addNewRow(refreshButton);
+		basicFilterMenu.clear();
+		basicFilterMenu.setStyleName("mainStyle");
+		basicFilterMenu.addLabel("View Reading By");
+		basicFilterMenu.addItem(reportViewLB);
+		basicFilterMenu.addLabel("Sort Reading By");
+		basicFilterMenu.addItem(reportSortLB);
 		
-		filterMenu.hideGroup("Prediction");
+		advancedFilterMenu.clear();
+		advancedFilterMenu.setStyleName("mainStyle");
+		advancedFilterMenu.setVisible(false);
+		advancedFilterMenu.addLabel("Start date");
+		advancedFilterMenu.addItem(sDateBox);
+		advancedFilterMenu.addLabel("End date");
+		advancedFilterMenu.addItem(eDateBox);
+		advancedFilterMenu.addLabel("Prediction menu");
+		advancedFilterMenu.addItem(predictionBox);
+		advancedFilterMenu.addLabel("Prediction", "Input steps");
+		advancedFilterMenu.addItem("Prediction",tb);
+		advancedFilterMenu.addNewRow(refreshButton);
+		
+		advancedFilterMenu.hideGroup("Prediction");
 
 		VerticalPanel temp = new VerticalPanel();
 		temp.setSpacing(10);
 		temp.add(filterBox);
-		temp.add(filterMenu);
+		temp.add(advancedFilterMenu);
 		
 		filterPanel.clear();
 		filterPanel.add(temp);
@@ -101,6 +113,8 @@ public class ReportingPage extends Composite {
 		selectionPanel.add(siteControllerListBox);
 		selectionPanel.add(new HTML("Please select sensor:"));
 		selectionPanel.add(controllerSensorListBox);
+		selectionPanel.add(new HTML("<h3>Basic Filter Menu</h3></br>"));
+		selectionPanel.add(basicFilterMenu);
 		selectionPanel.add(goButton);
 		selectionPanel.setSpacing(10);
 		
@@ -121,7 +135,7 @@ public class ReportingPage extends Composite {
 		initWidget(contentPanel);
 		}
 	
-	private Boolean validInputFields(){
+	private Boolean isSensorSelected(){
 		if(controllerSensorListBox.getItemCount()==0)
 		{
 			Window.alert("No sensor is selected");
@@ -134,7 +148,7 @@ public class ReportingPage extends Composite {
 		filterBox.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 			   @Override
 			   public void onValueChange(ValueChangeEvent<Boolean> event) {
-					filterMenu.setVisible(filterBox.getValue());
+					advancedFilterMenu.setVisible(filterBox.getValue());
 			   }
 			});
 		siteListBox.addChangeHandler(new ChangeHandler() {
@@ -161,26 +175,34 @@ public class ReportingPage extends Composite {
 			});
 		predictionBox.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
-				filterMenu.hideGroup("Prediction");
+				advancedFilterMenu.hideGroup("Prediction");
 				if(predictionBox.getValue())
 				{
-					filterMenu.showGroup("Prediction");
+					advancedFilterMenu.showGroup("Prediction");
 				}
 				};
 			});
 	}
 	
 	private void sendDataToServer(){
-		if(validInputFields())
+		if(isSensorSelected())
 		{
 			chartPanel.clear();
 			chartPanel.add(Utility.addTimer());
+			
 			if(predictionBox.getValue())
 			{
 				if(Utility.isNumeric(tb.getText()))
 				{
 					int steps = Integer.parseInt(tb.getText());
-					ChartUtilities.getData(controllerSensorListBox.getSelectedItemText(),ChartUtilities.stringToStartDate(getSDate()),ChartUtilities.stringToEndDate(getEDate()),predictionBox.getValue(), false, steps);
+					ChartCreationHandler.acceptParam(controllerSensorListBox.getSelectedItemText(), 
+							ChartUtilities.stringToStartDate(getSDate()), 
+							ChartUtilities.stringToEndDate(getEDate()), 
+							predictionBox.getValue(), 
+							steps,
+							reportSortLB.getSelectedItemText(), 
+							reportViewLB.getSelectedItemText(), 
+							false); //isLiveUpdate
 				}
 				else
 				{
@@ -190,7 +212,14 @@ public class ReportingPage extends Composite {
 			}
 			else
 			{
-				ChartUtilities.getData(controllerSensorListBox.getSelectedItemText(),ChartUtilities.stringToStartDate(getSDate()),ChartUtilities.stringToEndDate(getEDate()),predictionBox.getValue(), false, 0);
+				ChartCreationHandler.acceptParam(controllerSensorListBox.getSelectedItemText(), 
+						ChartUtilities.stringToStartDate(getSDate()), 
+						ChartUtilities.stringToEndDate(getEDate()), 
+						predictionBox.getValue(), 
+						0,
+						reportSortLB.getSelectedItemText(), 
+						reportViewLB.getSelectedItemText(), 
+						false); //isLiveUpdate
 			}
 		}
 	}
@@ -229,6 +258,16 @@ public class ReportingPage extends Composite {
 		{
 			siteListBox.addItem(siteName);
 		}
+
+		reportViewLB.clear();
+		reportViewLB.addItem("Daily");
+		reportViewLB.addItem("Monthly");
+		reportViewLB.addItem("Yearly");
+		
+		reportSortLB.clear();
+		reportSortLB.addItem("Average");
+		reportSortLB.addItem("Sum");
+		reportSortLB.addItem("Cumulative Sum");
 		
 		showControllers(siteControllerListBox, 0);
 		showSensors(controllerSensorListBox, 0);

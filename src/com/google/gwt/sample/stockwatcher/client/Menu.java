@@ -40,7 +40,7 @@ public class Menu extends Composite {
 	private PopupPanel optionsPopupMenu = new PopupPanel();
 	
 	// Menu Items
-	Anchor logoutAnchor = new Anchor("Logout");
+	Anchor logoutAnchor = new Anchor("logout");
 	Anchor logicAnchor = new Anchor("Sensor/Actuator Logic");
 	Anchor userNotificationAnchor = new Anchor("User Notification");
 	Anchor actuatorAnchor = new Anchor("Actuator control");
