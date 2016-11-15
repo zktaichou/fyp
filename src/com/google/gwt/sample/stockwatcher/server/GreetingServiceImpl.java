@@ -824,7 +824,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return null;}
 	}
 	
-	public String[][] greetServer(String sn, Date sd, Date ed, Boolean predictionIsEnabled) throws IllegalArgumentException {
+	public String[][] greetServer(String sn, Date sd, Date ed, Boolean predictionIsEnabled, int steps, Boolean isAppend) throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();
 			toSend.add("37");
@@ -855,7 +855,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			
 			if(predictionIsEnabled)
 			{
-				result = Weka.predict(result);
+				result = Weka.predict(result, steps, isAppend);
 			}
 			
 			return result;
@@ -1381,9 +1381,9 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return Utility.DataToString(data);
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userGetSubscribedControllers())));
-				e.printStackTrace(pw);
-				pw.close();
+//				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userGetSubscribedControllers())));
+//				e.printStackTrace(pw);
+//				pw.close();
 			} catch (Exception f) {}
 			return null;}
 	}
@@ -1560,9 +1560,9 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return Utility.DataToString(data);
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userGetSubscribedSensors())));
-				e.printStackTrace(pw);
-				pw.close();
+//				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userGetSubscribedSensors())));
+//				e.printStackTrace(pw);
+//				pw.close();
 			} catch (Exception f) {}
 			return null;}
 	}
@@ -1739,9 +1739,9 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return Utility.DataToString(data);
 		} catch (Exception e) {
 			try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userGetSubscribedActuators())));
-				e.printStackTrace(pw);
-				pw.close();
+//				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.userGetSubscribedActuators())));
+//				e.printStackTrace(pw);
+//				pw.close();
 			} catch (Exception f) {}
 			return null;}
 	}

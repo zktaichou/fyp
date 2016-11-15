@@ -9,11 +9,8 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -28,16 +25,10 @@ public class MonitoringPage extends Composite {
 
 	ContentPanel contentPanel = new ContentPanel();
 	VerticalPanel parameterPanel = new VerticalPanel();
-	VerticalPanel filterPanel = new VerticalPanel();
 	
 	public static HorizontalPanel chartPanel = new HorizontalPanel();
 	HorizontalPanel buttonPanel = new HorizontalPanel();
 	HorizontalPanel selectionPanel = new HorizontalPanel();
-
-	FilterMenu filterMenu = new FilterMenu();
-	
-	CheckBox filterBox = new CheckBox("Advanced filter");
-	public static CheckBox predictionBox = new CheckBox("Show predicted values");
 	
 	ListBox siteListBox = new ListBox();
 	ListBox siteControllerListBox = new ListBox();
@@ -48,7 +39,6 @@ public class MonitoringPage extends Composite {
 	
 	Button backButton = new Button("Back");
 	Button goButton = new Button("Go");
-	Button refreshButton = new Button("Refresh chart");
 	
     DateBox sDateBox = new DateBox();
     DateBox eDateBox = new DateBox();
@@ -65,27 +55,9 @@ public class MonitoringPage extends Composite {
 		setHandlers();
 		setWidgetContent();
 		
-		filterMenu.clear();
-		filterMenu.setStyleName("mainStyle");
-		filterMenu.setVisible(false);
-		filterMenu.addLabel("Start date");
-		filterMenu.addItem(sDateBox);
-		filterMenu.addLabel("End date");
-		filterMenu.addItem(eDateBox);
-		filterMenu.addNewRow(predictionBox);
-		filterMenu.addNewRow(refreshButton);
-
-		VerticalPanel temp = new VerticalPanel();
-		temp.setSpacing(10);
-		temp.add(filterBox);
-		temp.add(filterMenu);
-		
-		filterPanel.clear();
-		filterPanel.add(temp);
-		filterPanel.setStyleName("filterMenu");
-		
 		VerticalPanel selectionPanel = new VerticalPanel();
 		selectionPanel.setStyleName("mainStyle");
+		selectionPanel.setSpacing(10);
 		selectionPanel.add(new HTML("<h2>Selection Menu</h2></br>"));
 		selectionPanel.add(new HTML("Please select site:"));
 		selectionPanel.add(siteListBox);
@@ -94,7 +66,6 @@ public class MonitoringPage extends Composite {
 		selectionPanel.add(new HTML("Please select sensor:"));
 		selectionPanel.add(controllerSensorListBox);
 		selectionPanel.add(goButton);
-		selectionPanel.setSpacing(10);
 		
 		parameterPanel.clear();
 		parameterPanel.add(selectionPanel);
@@ -123,34 +94,22 @@ public class MonitoringPage extends Composite {
 	}
 	
 	public void setHandlers(){
-		filterBox.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-			   @Override
-			   public void onValueChange(ValueChangeEvent<Boolean> event) {
-					filterMenu.setVisible(filterBox.getValue());
-			   }
-			});
 		siteListBox.addChangeHandler(new ChangeHandler() {
 		      public void onChange(ChangeEvent event) {
 		          showControllers(siteControllerListBox, siteListBox.getSelectedItemText());
 		          showSensors(controllerSensorListBox, siteControllerListBox.getSelectedItemText());
-		        }
-		      });
+		      }
+		});
 		siteControllerListBox.addChangeHandler(new ChangeHandler() {
 		      public void onChange(ChangeEvent event) {
 		          showSensors(controllerSensorListBox, siteControllerListBox.getSelectedItemText());
-		        }
-		      });
+		      }
+		});
 		goButton.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
-				filterBox.setValue(false, true);
 				sendDataToServer();
-				};
-			});
-		refreshButton.addClickHandler(new ClickHandler(){
-			public void onClick(ClickEvent event){
-				sendDataToServer();
-				};
-			});
+			};
+		});
 	}
 	
 	private void sendDataToServer(){
@@ -158,7 +117,7 @@ public class MonitoringPage extends Composite {
 		{
 		chartPanel.clear();
 		chartPanel.add(Utility.addTimer());
-		ChartUtilities.getData(controllerSensorListBox.getSelectedItemText(),ChartUtilities.stringToStartDate(getSDate()),ChartUtilities.stringToEndDate(getEDate()),predictionBox.getValue());
+		ChartUtilities.getData(controllerSensorListBox.getSelectedItemText(),ChartUtilities.stringToStartDate(getSDate()),ChartUtilities.stringToEndDate(getEDate()),false,true,1);
 		}
 	}
 	
@@ -172,7 +131,6 @@ public class MonitoringPage extends Composite {
 	
 	@SuppressWarnings("deprecation")
 	public void setWidgetContent(){
-		predictionBox.setValue(false);
 		
 		Date today = new Date();
 		Date startOfYear = new Date();

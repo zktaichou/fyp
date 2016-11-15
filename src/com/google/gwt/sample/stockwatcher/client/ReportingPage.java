@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox;
 
@@ -37,7 +38,7 @@ public class ReportingPage extends Composite {
 	FilterMenu filterMenu = new FilterMenu();
 	
 	CheckBox filterBox = new CheckBox("Advanced filter");
-	public static CheckBox predictionBox = new CheckBox("Show predicted values");
+	public static CheckBox predictionBox = new CheckBox("Show prediction");
 	
 	ListBox siteListBox = new ListBox();
 	ListBox siteControllerListBox = new ListBox();
@@ -61,6 +62,8 @@ public class ReportingPage extends Composite {
     String eMonth;
     String eYear;
     
+    TextBox tb = new TextBox();
+    
 	public ReportingPage(){
 		setHandlers();
 		setWidgetContent();
@@ -72,8 +75,13 @@ public class ReportingPage extends Composite {
 		filterMenu.addItem(sDateBox);
 		filterMenu.addLabel("End date");
 		filterMenu.addItem(eDateBox);
-		filterMenu.addNewRow(predictionBox);
+		filterMenu.addLabel("Prediction menu");
+		filterMenu.addItem(predictionBox);
+		filterMenu.addLabel("Prediction", "Input steps");
+		filterMenu.addItem("Prediction",tb);
 		filterMenu.addNewRow(refreshButton);
+		
+		filterMenu.hideGroup("Prediction");
 
 		VerticalPanel temp = new VerticalPanel();
 		temp.setSpacing(10);
@@ -151,14 +159,39 @@ public class ReportingPage extends Composite {
 				sendDataToServer();
 				};
 			});
+		predictionBox.addClickHandler(new ClickHandler(){
+			public void onClick(ClickEvent event){
+				filterMenu.hideGroup("Prediction");
+				if(predictionBox.getValue())
+				{
+					filterMenu.showGroup("Prediction");
+				}
+				};
+			});
 	}
 	
 	private void sendDataToServer(){
 		if(validInputFields())
 		{
-		chartPanel.clear();
-		chartPanel.add(Utility.addTimer());
-		ChartUtilities.getData(controllerSensorListBox.getSelectedItemText(),ChartUtilities.stringToStartDate(getSDate()),ChartUtilities.stringToEndDate(getEDate()),predictionBox.getValue());
+			chartPanel.clear();
+			chartPanel.add(Utility.addTimer());
+			if(predictionBox.getValue())
+			{
+				if(Utility.isNumeric(tb.getText()))
+				{
+					int steps = Integer.parseInt(tb.getText());
+					ChartUtilities.getData(controllerSensorListBox.getSelectedItemText(),ChartUtilities.stringToStartDate(getSDate()),ChartUtilities.stringToEndDate(getEDate()),predictionBox.getValue(), false, steps);
+				}
+				else
+				{
+					Window.alert("Invalid input for number of steps");
+					Utility.hideTimer();
+				}
+			}
+			else
+			{
+				ChartUtilities.getData(controllerSensorListBox.getSelectedItemText(),ChartUtilities.stringToStartDate(getSDate()),ChartUtilities.stringToEndDate(getEDate()),predictionBox.getValue(), false, 0);
+			}
 		}
 	}
 	

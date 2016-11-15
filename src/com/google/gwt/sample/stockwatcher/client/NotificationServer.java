@@ -197,7 +197,7 @@ public class NotificationServer{
 		cFlag=false;
 		Utility.newRequestObj().userGetSubscribedControllers(user, new AsyncCallback<String[][]>(){
 			public void onFailure(Throwable caught) {
-				Window.alert("Unable to get "+Data.currentUser+"'s controller subscription");
+//				Window.alert("Unable to get "+Data.currentUser+"'s controller subscription");
 			}
  
 			public void onSuccess(String[][] reply) {
@@ -234,7 +234,7 @@ public class NotificationServer{
 		sFlag=false;
 		Utility.newRequestObj().userGetSubscribedSensors(user, new AsyncCallback<String[][]>(){
 			public void onFailure(Throwable caught) {
-				Window.alert("Unable to get "+Data.currentUser+"'s sensor subscription");
+//				Window.alert("Unable to get "+Data.currentUser+"'s sensor subscription");
 			} 
  
 			public void onSuccess(String[][] reply) {
@@ -271,7 +271,7 @@ public class NotificationServer{
 		aFlag=false;
 		Utility.newRequestObj().userGetSubscribedActuators(user, new AsyncCallback<String[][]>(){
 			public void onFailure(Throwable caught) {
-				Window.alert("Unable to get "+Data.currentUser+"'s actuator subscription");
+//				Window.alert("Unable to get "+Data.currentUser+"'s actuator subscription");
 			} 
  
 			public void onSuccess(String[][] reply) {
@@ -308,7 +308,7 @@ public class NotificationServer{
 		cLastSent=new Date(System.currentTimeMillis()+1);
 		Utility.newRequestObj().controllerEventGetBetweenTime(controllerList, start, end, new AsyncCallback<String[][]>(){
 			public void onFailure(Throwable caught) {
-				Window.alert("Unable to get controller events between time");
+//				Window.alert("Unable to get controller events between time");
 			} 
  
 			public void onSuccess(String[][] reply) {
@@ -332,7 +332,7 @@ public class NotificationServer{
 		sLastSent=new Date(System.currentTimeMillis()+1);
 		Utility.newRequestObj().sensorEventGetBetweenTime(sensorList, start, end, new AsyncCallback<String[][]>(){
 			public void onFailure(Throwable caught) {
-				Window.alert("Unable to get sensor events between time");
+//				Window.alert("Unable to get sensor events between time");
 			}
  
 			public void onSuccess(String[][] reply) {
@@ -356,7 +356,7 @@ public class NotificationServer{
 		aLastSent=new Date(System.currentTimeMillis()+1);
 		Utility.newRequestObj().actuatorEventGetBetweenTime(actuatorList, start, end, new AsyncCallback<String[][]>(){
 			public void onFailure(Throwable caught) {
-				Window.alert("Unable to get actuator events between time");
+//				Window.alert("Unable to get actuator events between time");
 			} 
  
 			public void onSuccess(String[][] reply) {

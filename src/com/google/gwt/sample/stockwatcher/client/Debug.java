@@ -2,10 +2,11 @@ package com.google.gwt.sample.stockwatcher.client;
 
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 
 public class Debug{
-	static PopupPanel popup = new PopupPanel();
+	static DialogBox popup = new DialogBox();
 	static Anchor debug = new Anchor(" ");
 	
 	static Timer timer = new Timer()

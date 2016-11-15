@@ -61,7 +61,12 @@ static long getTime(String date) {
     return dateTimeFormat.parse(date).getTime();  
 }  
 
-	private static String updateTitle(String name, java.sql.Date sd, java.sql.Date ed){
+	private static String updateReportingTitle(String name, java.sql.Date sd, java.sql.Date ed){
+		return name+" readings from "+calendarFormat.format(sd)+" to "+calendarFormat.format(ed);
+		//return name+" reading from "+sd+" to "+ed;
+	}
+	
+	private static String updateLiveUpdateTitle(String name, java.sql.Date sd, java.sql.Date ed){
 		return "Live updates for "+name;
 		//return name+" reading from "+sd+" to "+ed;
 	}
@@ -77,11 +82,11 @@ static long getTime(String date) {
 	}
 	
 	//Object returned here --------------vvvvv
-	public static void getData(final String sn, final java.sql.Date sd, final java.sql.Date ed, final boolean predictionIsEnabled){
+	public static void getData(final String sn, final java.sql.Date sd, final java.sql.Date ed, final boolean predictionIsEnabled, final boolean isLiveUpdate, final int steps){
 		Data.latestRequestID++;
 		final int currRequestID=Data.latestRequestID;
 		
-		Utility.newRequestObj().greetServer(sn,sd,ed,predictionIsEnabled, new AsyncCallback<String[][]>() {
+		Utility.newRequestObj().greetServer(sn,sd,ed,predictionIsEnabled, steps, false, new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
 				Window.alert("Data request failed");
 			}
@@ -95,23 +100,29 @@ static long getTime(String date) {
 				}
 				else if(currRequestID==Data.latestRequestID)
 				{
-					Number [][] data = formatData(result);
-					StockChart chart = createChart(sn, data,updateTitle(sn,sd,ed), predictionIsEnabled);
-					if(predictionIsEnabled)
-					{
-	//					chart.addSeries(series);
-					}
+				Number [][] data = formatData(result);
 				Utility.hideTimer();
-				MonitoringPage.chartPanel.add(chart);
+				if(ReportingPage.chartPanel.isVisible())
+				{
+					StockChart chart = createChart(sn, data,updateReportingTitle(sn,sd,ed), predictionIsEnabled, isLiveUpdate, steps);
+					ReportingPage.chartPanel.clear();
+					ReportingPage.chartPanel.add(chart);
+				}
+				else
+				{
+					StockChart chart = createChart(sn, data,updateLiveUpdateTitle(sn,sd,ed), predictionIsEnabled, isLiveUpdate, steps);
+					MonitoringPage.chartPanel.clear();
+					MonitoringPage.chartPanel.add(chart);
+				}
 				//BasePage.panel.add(createFlexTable(result));
 				}
 			}
 		});
 	}
 	
-	public static void getAppendData(final Series s, String sn, java.sql.Date sd, java.sql.Date ed, Boolean prediction){
+	public static void getAppendData(final Series series, String sn, java.sql.Date sd, java.sql.Date ed, final Boolean prediction, final Series predictionSeries){
 		
-		Utility.newRequestObj().greetServer(sn,sd,ed,prediction,new AsyncCallback<String[][]>() {
+		Utility.newRequestObj().greetServer(sn,sd,ed,prediction,1,true, new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
 //				Window.alert("Data append fail");
 			}
@@ -120,9 +131,16 @@ static long getTime(String date) {
 			public void onSuccess(String[][] result) {
 				
 				Number [][] data = formatData(result);
-				for(int i=0;i<data.length;i++)
+
+			    int lastRow = data.length;
+			    if(prediction)
+			    {
+				    predictionSeries.addPoint(data[lastRow][0],data[lastRow][1], true, true, true);
+				    lastRow-=1;
+			    }
+				for(int i=0;i<lastRow;i++)
 				{
-					s.addPoint(data[i][0],data[i][1], true, true, true);
+					series.addPoint(data[i][0],data[i][1], true, true, true);
 				}
 			}
 		});
@@ -137,13 +155,13 @@ static long getTime(String date) {
 			data[i][0]=DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss").parse(input[i][0]).getTime();
 			for(int j=1; j<dataCount;j++)
 			{
-			data[i][j]=convertToNumber(input[i][j]);
+				data[i][j]=convertToNumber(input[i][j]);
 			}
 		}
 		return data;
 	}
 	
-	public static StockChart createChart(final String sensorName, Number[][] data, String title, final Boolean predictionIsEnabled){
+	public static StockChart createChart(final String sensorName, Number[][] data, String title, final Boolean predictionIsEnabled, final Boolean isLiveUpdate, int steps){
 		
 		Utility.hideTimer();
 		
@@ -188,30 +206,45 @@ static long getTime(String date) {
         );
 		
 		final Series series = chart.createSeries();  
-	    chart.addSeries(series.setName("data")); 
+	    chart.addSeries(series.setName("Data")); 
 	    
-	    for(int i=0;i<data.length;i++)
+	    final Series predictionSeries = chart.createSeries();
+	    int lastRow = data.length-1;
+	    
+	    if(predictionIsEnabled)
+	    {
+		    lastRow-=steps;
+		    chart.addSeries(predictionSeries.setName("Prediction")); 
+		    for(int i=lastRow;i<data.length;i++)
+		    {
+		    	predictionSeries.addPoint(data[i][0],data[i][1]);
+		    }
+	    }
+	    
+	    for(int i=0;i<lastRow;i++)
 		{
 	    	series.addPoint(data[i][0],data[i][1]);
-	    
 		}
 	    
-	    final Timer tempTimer = new Timer() {
-	    	java.sql.Date lastRequestTime = new java.sql.Date(System.currentTimeMillis());
-            @Override  
-            public void run() {
-            	if (chart.isAttached()) {
-            		if (chart.isRendered()) {
-	                	long currTime=System.currentTimeMillis();
-	                	getAppendData(series,sensorName,lastRequestTime,new java.sql.Date(currTime),predictionIsEnabled);
-	                    lastRequestTime=new java.sql.Date(currTime+10);
-            		}
-                    schedule(2000);
-            	}
-
-            }  
-        };
-        tempTimer.schedule(0);
+	    if(isLiveUpdate)
+	    {
+		    final Timer tempTimer = new Timer() {
+		    	java.sql.Date lastRequestTime = new java.sql.Date(System.currentTimeMillis());
+	            @Override  
+	            public void run() {
+	            	if (chart.isAttached()) {
+	            		if (chart.isRendered()) {
+		                	long currTime=System.currentTimeMillis();
+		                	getAppendData(series,sensorName,lastRequestTime,new java.sql.Date(currTime),predictionIsEnabled, predictionSeries);
+		                    lastRequestTime=new java.sql.Date(currTime+10);
+	            		}
+	                    schedule(2000);
+	            	}
+	
+	            }  
+	        };
+	        tempTimer.schedule(0);
+	    }
         
         chart.setSize(Window.getClientWidth()*2/3, Window.getClientHeight()*2/3);
 	    

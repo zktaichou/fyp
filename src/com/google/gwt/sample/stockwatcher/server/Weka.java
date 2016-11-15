@@ -1,8 +1,11 @@
 package com.google.gwt.sample.stockwatcher.server;
 
 import org.joda.time.DateTime;
+
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import weka.core.Instances;
 import weka.filters.supervised.attribute.TSLagMaker;
@@ -23,12 +26,23 @@ public class Weka {
 	 // new forecaster
     private static WekaForecaster forecaster = new WekaForecaster();
 	private static int steps = 1;
-	private static String tempFileName = "temp.txt";
-	
-	  public static String[][] predict(String incoming[][]) {
-	    try {
-	      String[][] data = incoming;
-	      try {
+	private static String tempFileName = "prediction.arff";
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private static long difference;
+	private static String[][] data;
+
+	  public static String[][] predict(String incoming[][], int incomingStep, Boolean isAppend) {
+	      steps = incomingStep;
+	  try {
+		  	if(isAppend)
+		  	{
+		  		data = append(data,incoming);
+		  	}
+	    	else
+	    	{
+	    		data = incoming;
+	    	}
+		  	try {
 	    	  File lol = new File(tempFileName);
 	    	  if (lol.exists()) {
 	    		  lol.delete();     
@@ -37,20 +51,30 @@ public class Weka {
 				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(tempFileName)));
 				pw.println("@relation sample");
 				pw.println();
-				pw.println("@attribute Date date 'dd-MM-yyyy HH:mm:ss'");
+				pw.println("@attribute Date date 'yyyy-MM-dd'");
 				pw.println("@attribute value numeric");
 				pw.println();
 				pw.println("@data");
+				
+				int count=1;
 				
 				for(int i=0; i<data.length;i++){
 					String cLine = "";
 					for(int j=0; j<data[i].length;j++)
 					{
-						cLine+=data[i][j]+",";
+						if(j==0)
+						{
+							cLine+=(count++)+"-01-01,";
+						}
+						else
+						{
+							cLine+=data[i][j]+",";
+						}
 					}
 					pw.println(cLine.substring(0, cLine.length()-1));
 				}
 				pw.close();
+				difference = dateFormat.parse(data[data.length-1][0]).getTime() - dateFormat.parse(data[data.length-2][0]).getTime();
 			} catch (Exception f) {}
 	      
 	      // load the wine data
@@ -66,7 +90,7 @@ public class Weka {
 	      
 	      forecaster.getTSLagMaker().setTimeStampField("Date"); // date identifier in the data source file
 	      forecaster.getTSLagMaker().setMinLag(1);
-	      forecaster.getTSLagMaker().setMaxLag(steps); //get only past 12 data
+	      forecaster.getTSLagMaker().setMaxLag(data.length); //get only past x number of data
 	      
 	      //some unexplained settings even in official docs, go figure
 	      forecaster.getTSLagMaker().setAddMonthOfYear(true);
@@ -81,28 +105,30 @@ public class Weka {
 	      // lag period
 	      forecaster.primeForecaster(dataSet);
 
-	      // forecast for 12 units (months) beyond the end of the
+	      // forecast for x number of units (months) beyond the end of the
 	      // training data
 	      List<List<NumericPrediction>> forecast = forecaster.forecast(steps, System.out);
 	      DateTime currentDt = getCurrentDateTime(forecaster.getTSLagMaker());
 
 	      // output the predictions. Outer list is over the steps; inner list is over
 	      // the targets
-	      ArrayList<String> presult = new ArrayList<>();
 	      ArrayList<String> dresult = new ArrayList<>();
-	      
+	      ArrayList<String> presult = new ArrayList<>();
+	      Date d = new Date();
+	      d.setTime(dateFormat.parse(data[data.length-1][0]).getTime());
+
 	      for (int i = 0; i < steps; i++) {
 	        List<NumericPrediction> predsAtStep = forecast.get(i);
-	        for (int j = 0; j < 1; j++) {
-	          NumericPrediction predForTarget = predsAtStep.get(j);
-	          presult.add("" + predForTarget.predicted());
-	        }
-	        String time = currentDt.toString("dd-MM-yyyy");
-	        dresult.add(time);
-	        currentDt = advanceTime(forecaster.getTSLagMaker(), currentDt);
+	        NumericPrediction predForTarget = predsAtStep.get(0);
+	        presult.add("" + predForTarget.predicted());
+	        
+	        d.setTime(d.getTime()+difference);
+		    dresult.add(dateFormat.format(d));
+//		    String time = currentDt.toString("yyyy-MM-dd");
+		    currentDt = advanceTime(forecaster.getTSLagMaker(), currentDt);
 	      }
 	      
-	      String[][] predictedData = new String[incoming.length][presult.size()];
+	      String[][] predictedData = new String[steps][2];
 	      
 	      for (int i = 0; i < presult.size(); i++) {
 		        predictedData[i][0]=dresult.get(i);
@@ -113,8 +139,9 @@ public class Weka {
 	      
 	      try {
 				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter("predictedValues.txt")));
-				for(String temp: presult){
-				pw.println(temp);
+				int i=0;
+				for(String temp: dresult){
+				pw.print(temp+","+presult.get(i++));
 				}
 				pw.close();
 			} catch (Exception f) {}
@@ -123,6 +150,15 @@ public class Weka {
 	      // by priming with the most recent historical data (as it becomes available).
 	      // At some stage it becomes prudent to re-build the model using current
 	      // historical data.
+	      
+	      try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter("predictedValuesAll.txt")));
+				for(int i=0; i<finalData.length;i++)
+				{
+					pw.println(finalData[i][0]+","+finalData[i][1]);
+				}
+				pw.close();
+			} catch (Exception f) {}
 
 	      return finalData;
 	      

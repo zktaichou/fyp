@@ -9,7 +9,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  * The async counterpart of <code>GreetingService</code>.
  */
 public interface GreetingServiceAsync {
-	void greetServer(String sn, Date sd, Date ed, Boolean predictionIsEnabled, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
+	void greetServer(String sn, Date sd, Date ed, Boolean predictionIsEnabled, int steps, Boolean isAppend, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
 	void userLogin(String username, String password, AsyncCallback<Boolean> callback) throws IllegalArgumentException;
 	void getRegularSchedules(AsyncCallback<String[][]> callback) throws IllegalArgumentException;
 	void getRegularScheduleByName(String scheduleName, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
