@@ -1746,7 +1746,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return null;}
 	}
 	
-	public String[][] getTotalReadingGroupByDay(String sensor) throws IllegalArgumentException {
+	public String[][] getTotalReadingGroupByDay(String sensor, Boolean predictionIsEnabled, int steps) throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();
 			toSend.add("69a");
@@ -1770,7 +1770,15 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			
 			sc.close();
 			
-			return Utility.DataToString(data);
+			String[][] result = Utility.DataToString(data);
+			result = combineDate(result);
+			
+			if(predictionIsEnabled)
+			{
+				result = Weka.predictDaily(result, steps, false);
+			}
+			
+			return result;
 		} catch (Exception e) {
 			try {
 				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getTotalReadingGroupByDay())));
@@ -1780,7 +1788,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return null;}
 	}
 	
-	public String[][] getTotalReadingGroupByMonth(String sensor) throws IllegalArgumentException {
+	public String[][] getTotalReadingGroupByMonth(String sensor, Boolean predictionIsEnabled, int steps) throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();
 			toSend.add("69b");
@@ -1804,7 +1812,15 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			
 			sc.close();
 			
-			return Utility.DataToString(data);
+			String[][] result = Utility.DataToString(data);
+			result = combineDate(result);
+			
+			if(predictionIsEnabled)
+			{
+				result = Weka.predictMonthly(result, steps, false);
+			}
+			
+			return result;
 		} catch (Exception e) {
 			try {
 				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getTotalReadingGroupByMonth())));
@@ -1814,7 +1830,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return null;}
 	}
 	
-	public String[][] getTotalReadingGroupByYear(String sensor) throws IllegalArgumentException {
+	public String[][] getTotalReadingGroupByYear(String sensor, Boolean predictionIsEnabled, int steps) throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();
 			toSend.add("69c");
@@ -1838,7 +1854,15 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			
 			sc.close();
 			
-			return Utility.DataToString(data);
+			String[][] result = Utility.DataToString(data);
+			result = combineDate(result);
+			
+			if(predictionIsEnabled)
+			{
+				result = Weka.predictYearly(result, steps, false);
+			}
+			
+			return result;
 		} catch (Exception e) {
 			try {
 				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getTotalReadingGroupByYear())));
@@ -1848,7 +1872,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return null;}
 	}
 	
-	public String[][] getAverageReadingGroupByDay(String sensor) throws IllegalArgumentException {
+	public String[][] getAverageReadingGroupByDay(String sensor, Boolean predictionIsEnabled, int steps) throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();
 			toSend.add("70a");
@@ -1872,7 +1896,15 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			
 			sc.close();
 			
-			return Utility.DataToString(data);
+			String[][] result = Utility.DataToString(data);
+			result = combineDate(result);
+			
+			if(predictionIsEnabled)
+			{
+				result = Weka.predictDaily(result, steps, false);
+			}
+			
+			return result;
 		} catch (Exception e) {
 			try {
 				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getAverageReadingGroupByDay())));
@@ -1882,7 +1914,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return null;}
 	}
 	
-	public String[][] getAverageReadingGroupByMonth(String sensor) throws IllegalArgumentException {
+	public String[][] getAverageReadingGroupByMonth(String sensor, Boolean predictionIsEnabled, int steps) throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();
 			toSend.add("70b");
@@ -1906,7 +1938,15 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			
 			sc.close();
 			
-			return Utility.DataToString(data);
+			String[][] result = Utility.DataToString(data);
+			result = combineDate(result);
+			
+			if(predictionIsEnabled)
+			{
+				result = Weka.predictMonthly(result, steps, false);
+			}
+			
+			return result;
 		} catch (Exception e) {
 			try {
 				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getAverageReadingGroupByMonth())));
@@ -1916,7 +1956,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return null;}
 	}
 	
-	public String[][] getAverageReadingGroupByYear(String sensor) throws IllegalArgumentException {
+	public String[][] getAverageReadingGroupByYear(String sensor, Boolean predictionIsEnabled, int steps) throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();
 			toSend.add("70c");
@@ -1940,7 +1980,15 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			
 			sc.close();
 			
-			return Utility.DataToString(data);
+			String[][] result = Utility.DataToString(data);
+			result = combineDate(result);
+			
+			if(predictionIsEnabled)
+			{
+				result = Weka.predictYearly(result, steps, false);
+			}
+			
+			return result;
 		} catch (Exception e) {
 			try {
 				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getAverageReadingGroupByYear())));
@@ -1950,7 +1998,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return null;}
 	}
 	
-	public String[][] getCulmulativeReadingGroupByDay(String sensor) throws IllegalArgumentException {
+	public String[][] getCulmulativeReadingGroupByDay(String sensor, Boolean predictionIsEnabled, int steps) throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();
 			toSend.add("71a");
@@ -1974,7 +2022,15 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			
 			sc.close();
 			
-			return Utility.DataToString(data);
+			String[][] result = Utility.DataToString(data);
+			result = combineDate(result);
+			
+			if(predictionIsEnabled)
+			{
+				result = Weka.predictDaily(result, steps, false);
+			}
+			
+			return result;
 		} catch (Exception e) {
 			try {
 				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getCulmulativeReadingGroupByDay())));
@@ -1984,7 +2040,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return null;}
 	}
 	
-	public String[][] getCulmulativeReadingGroupByMonth(String sensor) throws IllegalArgumentException {
+	public String[][] getCulmulativeReadingGroupByMonth(String sensor, Boolean predictionIsEnabled, int steps) throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();
 			toSend.add("71b");
@@ -2008,7 +2064,15 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			
 			sc.close();
 			
-			return Utility.DataToString(data);
+			String[][] result = Utility.DataToString(data);
+			result = combineDate(result);
+			
+			if(predictionIsEnabled)
+			{
+				result = Weka.predictMonthly(result, steps, false);
+			}
+			
+			return result;
 		} catch (Exception e) {
 			try {
 				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getCulmulativeReadingGroupByMonth())));
@@ -2018,7 +2082,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return null;}
 	}
 	
-	public String[][] getCulmulativeReadingGroupByYear(String sensor) throws IllegalArgumentException {
+	public String[][] getCulmulativeReadingGroupByYear(String sensor, Boolean predictionIsEnabled, int steps) throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();
 			toSend.add("71c");
@@ -2041,8 +2105,16 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			is.close();
 			
 			sc.close();
+
+			String[][] result = Utility.DataToString(data);
+			result = combineDate(result);
 			
-			return Utility.DataToString(data);
+			if(predictionIsEnabled)
+			{
+				result = Weka.predictYearly(result, steps, false);
+			}
+			
+			return result;
 		} catch (Exception e) {
 			try {
 				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.getCulmulativeReadingGroupByYear())));
@@ -2054,6 +2126,40 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 	
 	public int getPortNumber() throws IllegalArgumentException {
 		return Utility.portNumber;
+	}
+	
+	private String[][] combineDate(String[][] data){
+		String[][] newData = new String[data.length][2];
+		if(data[0].length==4) //have year, month, day
+		{
+			for(int i=0; i<data.length; i++)
+			{
+				String date = data[i][0]+"-"+data[i][1]+"-"+data[i][2];
+				newData[i][0]=date;
+				newData[i][1]=data[i][3];
+			}
+			return newData;
+		}
+		else if(data[0].length==3) //have year, month
+		{
+			for(int i=0; i<data.length; i++)
+			{
+				String date = data[i][0]+"-"+data[i][1];
+				newData[i][0]=date;
+				newData[i][1]=data[i][2];
+			}
+			return newData;
+		}else if(data[0].length==2) //have year
+		{
+			for(int i=0; i<data.length; i++)
+			{
+				String date = data[i][0];
+				newData[i][0]=date;
+				newData[i][1]=data[i][1];
+			}
+			return newData;
+		}
+		return null;
 	}
 	
 }

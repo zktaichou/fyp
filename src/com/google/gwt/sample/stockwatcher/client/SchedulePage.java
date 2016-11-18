@@ -993,7 +993,7 @@ public class SchedulePage extends Composite{
 	
 	private void setCreateScheduleParam(){
 		scheduleName=scheduleNameTB.getText();
-		actuatorName=actuatorLB.getSelectedItemText();
+		actuatorName=scheduleActuatorLB.getSelectedItemText();
 		rule=ruleLB.getSelectedItemText();
 		onStart=actuatorOnStartLB.getSelectedItemText();
 		onEnd=actuatorOnEndLB.getSelectedItemText();

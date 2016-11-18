@@ -59,13 +59,13 @@ public interface GreetingService extends RemoteService {
 	String[][] controllerEventGetBetweenTime(ArrayList<String> controllerList, Date start, Date end) throws IllegalArgumentException;
 	String[][] sensorEventGetBetweenTime(ArrayList<String> controllerList, Date start, Date end) throws IllegalArgumentException;
 	String[][] actuatorEventGetBetweenTime(ArrayList<String> controllerList, Date start, Date end) throws IllegalArgumentException;
-	String[][] getTotalReadingGroupByDay(String sensor) throws IllegalArgumentException;
-	String[][] getTotalReadingGroupByMonth(String sensor) throws IllegalArgumentException;
-	String[][] getTotalReadingGroupByYear(String sensor) throws IllegalArgumentException;
-	String[][] getAverageReadingGroupByDay(String sensor) throws IllegalArgumentException;
-	String[][] getAverageReadingGroupByMonth(String sensor) throws IllegalArgumentException;
-	String[][] getAverageReadingGroupByYear(String sensor) throws IllegalArgumentException;
-	String[][] getCulmulativeReadingGroupByDay(String sensor) throws IllegalArgumentException;
-	String[][] getCulmulativeReadingGroupByMonth(String sensor) throws IllegalArgumentException;
-	String[][] getCulmulativeReadingGroupByYear(String sensor) throws IllegalArgumentException;
+	String[][] getTotalReadingGroupByDay(String sensor, Boolean predictionIsEnabled, int steps) throws IllegalArgumentException;
+	String[][] getTotalReadingGroupByMonth(String sensor, Boolean predictionIsEnabled, int steps) throws IllegalArgumentException;
+	String[][] getTotalReadingGroupByYear(String sensor, Boolean predictionIsEnabled, int steps) throws IllegalArgumentException;
+	String[][] getAverageReadingGroupByDay(String sensor, Boolean predictionIsEnabled, int steps) throws IllegalArgumentException;
+	String[][] getAverageReadingGroupByMonth(String sensor, Boolean predictionIsEnabled, int steps) throws IllegalArgumentException;
+	String[][] getAverageReadingGroupByYear(String sensor, Boolean predictionIsEnabled, int steps) throws IllegalArgumentException;
+	String[][] getCulmulativeReadingGroupByDay(String sensor, Boolean predictionIsEnabled, int steps) throws IllegalArgumentException;
+	String[][] getCulmulativeReadingGroupByMonth(String sensor, Boolean predictionIsEnabled, int steps) throws IllegalArgumentException;
+	String[][] getCulmulativeReadingGroupByYear(String sensor, Boolean predictionIsEnabled, int steps) throws IllegalArgumentException;
 }

@@ -100,20 +100,12 @@ static long getTime(String date) {
 				}
 				else if(currRequestID==Data.latestRequestID)
 				{
+				result=filterData(result);
 				Number [][] data = formatData(result);
 				Utility.hideTimer();
-				if(ReportingPage.chartPanel.isVisible())
-				{
-					Chart chart = createReportChart(sn, data,updateReportingTitle(sn,sd,ed), predictionIsEnabled, steps);
-					ReportingPage.chartPanel.clear();
-					ReportingPage.chartPanel.add(chart);
-				}
-				else
-				{
-					StockChart chart = createLiveChart(sn, data,updateLiveUpdateTitle(sn,sd,ed), predictionIsEnabled, isLiveUpdate, steps);
-					MonitoringPage.chartPanel.clear();
-					MonitoringPage.chartPanel.add(chart);
-				}
+				StockChart chart = createLiveChart(sn, data,updateLiveUpdateTitle(sn,sd,ed), predictionIsEnabled, isLiveUpdate, steps);
+				MonitoringPage.chartPanel.clear();
+				MonitoringPage.chartPanel.add(chart);
 				//BasePage.panel.add(createFlexTable(result));
 				}
 			}
@@ -144,6 +136,25 @@ static long getTime(String date) {
 				}
 			}
 		});
+	}
+	
+	private static String [][] filterData(String[][] result){
+		if(result.length<=500) return result;
+		else {
+			int factor=result.length/500;
+			int count=result.length;
+			int resultxCount=0;
+			String [][] resultx=new String[500][result[0].length];
+			for (int i=0;i<result.length;i++) {
+				if (count>500) {
+					if (i%factor==0) resultx[resultxCount++]=result[i];
+					else count--;
+				} else {
+					resultx[resultxCount++]=result[i];
+				}
+			}
+			return resultx;
+		}
 	}
 	
 	public static Number[][] formatData(String [][] input){
@@ -303,36 +314,44 @@ static long getTime(String date) {
 		final Chart chart = new Chart();
 		chart
 		.setType(Series.Type.COLUMN)  
-        .setMarginRight(30)  
-        .setBarPlotOptions(new BarPlotOptions()  
-                .setDataLabels(new DataLabels()  
-                    .setEnabled(true)  
-                )  
-            )
         .setChartTitleText(title)
 	    .setLegend(new Legend().setEnabled(false))  
 	    .setCredits(new Credits().setEnabled(false))
-	    .setSplinePlotOptions(new SplinePlotOptions()  
-                .setMarker(new Marker()  
-                    .setEnabled(true).setRadius(3)  
-                )  
-        )
 	    ;
 		chart.setBackgroundColor(new Color()
 				   .setLinearGradient(0.0, 0.0, 1.0, 1.0)
 				   .addColorStop(0, 0, 0, 0, 1)
 				   .addColorStop(0, 0, 0, 0, 0)
 				 );
+
+		String[] dateContents = title.split(" ");
+
+		chart.getXAxis().setType(Axis.Type.DATE_TIME).setMaxZoom(14 * 24 * 3600000);
 		
-		chart.getXAxis().setDateTimeLabelFormats(
-				new DateTimeLabelFormats()
-				    .setSecond("%l:%M:%S %p"));
+		for(int i=0;i<dateContents.length;i++)
+		{
+			if(dateContents[i].equals("Daily"))
+			{
+				chart.getXAxis().setDateTimeLabelFormats(new DateTimeLabelFormats().setDay("%e %B %Y"));
+				break;
+			}
+			if(dateContents[i].equals("Monthly"))
+			{
+				chart.getXAxis().setDateTimeLabelFormats(new DateTimeLabelFormats().setMonth("%B %Y"));
+				break;
+			}
+			if(dateContents[i].equals("Yearly"))
+			{
+				chart.getXAxis().setDateTimeLabelFormats(new DateTimeLabelFormats().setYear("%Y"));
+				break;
+			}
+		}
 		
 		chart.getYAxis()
         .setPlotLines(  
             chart.getYAxis().createPlotLine()  
                 .setValue(0)  
-                .setWidth(1)  
+                .setWidth(2)  
                 .setColor("#808080")  
         );
 		
@@ -342,7 +361,7 @@ static long getTime(String date) {
 	    final Series predictionSeries = chart.createSeries();
 	    int lastRow = data.length;
 	    
-	    if(predictionIsEnabled)
+	    if(predictionIsEnabled && data.length>1)
 	    {
 		    lastRow-=steps;
 		    chart.addSeries(predictionSeries.setName("Prediction")); 

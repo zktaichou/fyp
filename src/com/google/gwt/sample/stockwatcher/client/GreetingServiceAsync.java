@@ -57,14 +57,14 @@ public interface GreetingServiceAsync {
 	void controllerEventGetBetweenTime(ArrayList<String> controllerList, Date start, Date end, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
 	void sensorEventGetBetweenTime(ArrayList<String> controllerList, Date start, Date end, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
 	void actuatorEventGetBetweenTime(ArrayList<String> controllerList, Date start, Date end, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
-	void getTotalReadingGroupByDay(String sensor, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
-	void getTotalReadingGroupByMonth(String sensor, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
-	void getTotalReadingGroupByYear(String sensor, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
-	void getAverageReadingGroupByDay(String sensor, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
-	void getAverageReadingGroupByMonth(String sensor, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
-	void getAverageReadingGroupByYear(String sensor, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
-	void getCulmulativeReadingGroupByDay(String sensor, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
-	void getCulmulativeReadingGroupByMonth(String sensor, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
-	void getCulmulativeReadingGroupByYear(String sensor, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
+	void getTotalReadingGroupByDay(String sensor, Boolean predictionIsEnabled, int steps, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
+	void getTotalReadingGroupByMonth(String sensor, Boolean predictionIsEnabled, int steps, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
+	void getTotalReadingGroupByYear(String sensor, Boolean predictionIsEnabled, int steps, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
+	void getAverageReadingGroupByDay(String sensor, Boolean predictionIsEnabled, int steps, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
+	void getAverageReadingGroupByMonth(String sensor, Boolean predictionIsEnabled, int steps, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
+	void getAverageReadingGroupByYear(String sensor, Boolean predictionIsEnabled, int steps, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
+	void getCulmulativeReadingGroupByDay(String sensor, Boolean predictionIsEnabled, int steps, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
+	void getCulmulativeReadingGroupByMonth(String sensor, Boolean predictionIsEnabled, int steps, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
+	void getCulmulativeReadingGroupByYear(String sensor, Boolean predictionIsEnabled, int steps, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
 
 }
