@@ -1,7 +1,6 @@
 package com.google.gwt.sample.stockwatcher.client;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.google.gwt.event.dom.client.ClickEvent;

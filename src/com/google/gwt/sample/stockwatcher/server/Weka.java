@@ -146,28 +146,30 @@ public class Weka {
 	      
 	      String[][] finalData = append(data,predictedData);
 	      
-	      try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter("predictedValues.txt")));
-				int i=0;
-				for(String temp: dresult){
-				pw.println(temp+","+presult.get(i++));
-				}
-				pw.close();
-			} catch (Exception f) {}
-	      
 	      // we can continue to use the trained forecaster for further forecasting
 	      // by priming with the most recent historical data (as it becomes available).
 	      // At some stage it becomes prudent to re-build the model using current
 	      // historical data.
+
+	      //Prediction values
+//	      try {
+//				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter("predictedValues.txt")));
+//				int i=0;
+//				for(String temp: dresult){
+//				pw.println(temp+","+presult.get(i++));
+//				}
+//				pw.close();
+//			} catch (Exception f) {}
 	      
-	      try {
-				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter("predictedValuesAll.txt")));
-				for(int i=0; i<finalData.length;i++)
-				{
-					pw.println(finalData[i][0]+","+finalData[i][1]);
-				}
-				pw.close();
-			} catch (Exception f) {}
+	      //Old values + new predicted values
+//	      try {
+//				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter("predictedValuesAll.txt")));
+//				for(int i=0; i<finalData.length;i++)
+//				{
+//					pw.println(finalData[i][0]+","+finalData[i][1]);
+//				}
+//				pw.close();
+//			} catch (Exception f) {}
 
 	      return finalData;
 	      

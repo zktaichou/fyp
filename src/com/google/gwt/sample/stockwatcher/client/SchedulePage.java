@@ -1298,6 +1298,7 @@ public class SchedulePage extends Composite{
 		});
 	}
 	
+	@SuppressWarnings("unused")
 	private void getOngoingSchedules(final String actuator){
 		Utility.newRequestObj().getOngoingSchedulesAll(new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {

@@ -12,7 +12,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
@@ -149,30 +148,30 @@ public class ReportingPage extends Composite {
 			   @Override
 			   public void onValueChange(ValueChangeEvent<Boolean> event) {
 					advancedFilterMenu.setVisible(filterBox.getValue());
-			   }
-			});
+			  }
+		});
 		siteListBox.addChangeHandler(new ChangeHandler() {
 		      public void onChange(ChangeEvent event) {
 		          showControllers(siteControllerListBox, siteListBox.getSelectedItemText());
 		          showSensors(controllerSensorListBox, siteControllerListBox.getSelectedItemText());
-		        }
-		      });
+		      }
+		});
 		siteControllerListBox.addChangeHandler(new ChangeHandler() {
 		      public void onChange(ChangeEvent event) {
 		          showSensors(controllerSensorListBox, siteControllerListBox.getSelectedItemText());
-		        }
-		      });
+		      }
+		});
 		goButton.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
 				filterBox.setValue(false, true);
 				sendDataToServer();
-				};
-			});
+			};
+		});
 		refreshButton.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
 				sendDataToServer();
-				};
-			});
+			};
+		});
 		predictionBox.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
 				advancedFilterMenu.hideGroup("Prediction");
@@ -180,8 +179,8 @@ public class ReportingPage extends Composite {
 				{
 					advancedFilterMenu.showGroup("Prediction");
 				}
-				};
-			});
+			};
+		});
 	}
 	
 	private void sendDataToServer(){

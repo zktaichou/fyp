@@ -7,7 +7,6 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.client.ui.PopupPanel.AnimationType;
@@ -21,9 +20,11 @@ public class Menu extends Composite {
 	private VerticalPanel mainMenuPanel = new VerticalPanel();
 	private static VerticalPanel optionsPanel = new VerticalPanel();
 	private static HorizontalPanel selectionPanel = new HorizontalPanel();
+	private HorizontalPanel p = new HorizontalPanel();
 	
 	// Main Menu Bar GWT Components
 	private Anchor fsktmLogo = new Anchor();
+	private Anchor homeLogo = new Anchor(" ");
 	private Label systemTitleLabel = new Label("");
 
 	// Main Menu Bar Containers
@@ -47,6 +48,8 @@ public class Menu extends Composite {
 	Anchor scheduleAnchor = new Anchor("Scheduling");
 	Anchor liveAnchor = new Anchor("Live Updates");
 	Anchor historicalAnchor = new Anchor("Historical");
+
+	static Anchor arrowAnchor = new Anchor(" ");
 	static Anchor cNotificationAnchor = new Anchor(" ");
 	static Anchor sNotificationAnchor = new Anchor(" ");
 	static Anchor aNotificationAnchor = new Anchor(" ");
@@ -59,11 +62,13 @@ public class Menu extends Composite {
 		cNotificationAnchor.setVisible(false);
 		sNotificationAnchor.setVisible(false);
 		aNotificationAnchor.setVisible(false);
+		arrowAnchor.setVisible(false);
 	}
 	
 	public static void start(){
 		selectionPanel.setVisible(true);
 		optionsPanel.setVisible(true);
+		arrowAnchor.setVisible(true);
 		NotificationServer.start();
 	}
 	
@@ -73,6 +78,7 @@ public class Menu extends Composite {
 		setupAnchors();
 		// Render the main menu and its sub menus
 		selectionPanel.add(new HTML(verticalLine));
+		renderHomeAnchor();
 		renderMonitoringMenu("Monitoring");
 		renderPlanningMenu("Planning");
 		renderSettingsMenu("Settings");
@@ -89,9 +95,11 @@ public class Menu extends Composite {
 		leftMenuContainerPanel.add(fsktmLogo);
 		leftMenuContainerPanel.add(systemTitleLabel);
 		leftMenuContainerPanel.add(selectionPanel);
+		leftMenuContainerPanel.add(arrowAnchor);
 		leftMenuContainerPanel.setCellVerticalAlignment(fsktmLogo, HasVerticalAlignment.ALIGN_MIDDLE);
 		leftMenuContainerPanel.setCellVerticalAlignment(systemTitleLabel, HasVerticalAlignment.ALIGN_MIDDLE);
 		leftMenuContainerPanel.setCellVerticalAlignment(selectionPanel, HasVerticalAlignment.ALIGN_MIDDLE);
+		leftMenuContainerPanel.setCellVerticalAlignment(arrowAnchor, HasVerticalAlignment.ALIGN_MIDDLE);
 		
 		HorizontalPanel rightMenuContainerPanel = new HorizontalPanel();
 		rightMenuContainerPanel.add(cNotificationAnchor);
@@ -126,6 +134,12 @@ public class Menu extends Composite {
 
 	// Setup Menu Item Links
 	private void setupAnchors() {
+		arrowAnchor.setHTML(Images.getImage(Images.LEFT_ARROW,25));
+		homeLogo.addClickHandler(new ClickHandler(){
+			public void onClick(ClickEvent event){
+				Pages.enterMainMenuPage();
+			};
+		});
 		actuatorAnchor.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
 				Pages.enterSitePage();
@@ -224,6 +238,17 @@ public class Menu extends Composite {
 				}
 			};
 		});
+	}
+	
+	private void renderHomeAnchor(){
+		homeLogo.setHTML(Images.getImage(Images.HOME2, 25));
+
+		p.clear();
+		p.addStyleName("gwt-NewMainMenuPanel");
+		p.add(homeLogo);
+		
+		selectionPanel.add(p);
+		selectionPanel.setCellVerticalAlignment(p, HasVerticalAlignment.ALIGN_MIDDLE);
 	}
 	
 	private void renderSettingsMenu(String _title) {

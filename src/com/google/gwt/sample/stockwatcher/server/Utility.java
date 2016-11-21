@@ -11,10 +11,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 import javax.crypto.Cipher;
 import javax.crypto.SealedObject;
@@ -23,15 +20,9 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.sample.stockwatcher.client.GreetingService;
-import com.google.gwt.sample.stockwatcher.client.GreetingServiceAsync;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 /**
  * The server-side implementation of the RPC service.
  */
-@SuppressWarnings("serial")
 public class Utility{
 	
 	static int portNumber = 40001;
@@ -112,7 +103,6 @@ public class Utility{
 			return null;}
 	}
 	
-	@SuppressWarnings("unchecked")
 	public static String decryptToString(ObjectInputStream ois){
 		try {
 	        Cipher decrypter=Cipher.getInstance("AES");

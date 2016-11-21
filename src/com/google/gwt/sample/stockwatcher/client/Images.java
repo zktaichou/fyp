@@ -7,6 +7,14 @@ public class Images{
 	public static enum VerticalAlignment { BASELINE, SUB, SUPER, TOP, TEXT_TOP, MIDDLE, BOTTOM, TEXT_BOTTOM }
 	
 	// Picture Paths
+	public static final String HOME = "images/home.png";
+	public static final String HOME2 = "images/home2.png";
+	public static final String LEFT_ARROW = "images/left_arrow.gif";
+	public static final String LEFT_ARROW2 = "images/left_arrow2.gif";
+	public static final String UP_BLINKER = "images/up_blinker.gif";
+	public static final String WELCOME = "images/welcome.gif";
+	public static final String WELCOME2 = "images/welcome2.gif";
+	public static final String WELCOME3 = "images/welcome3.gif";
 	public static final String CONTROLLER_NOTIFICATION = "images/controller_notification.gif";
 	public static final String ACTUATOR_NOTIFICATION = "images/actuator_notification.gif";
 	public static final String SENSOR_NOTIFICATION = "images/sensor_notification.gif";

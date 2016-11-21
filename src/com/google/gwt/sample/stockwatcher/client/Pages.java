@@ -3,6 +3,7 @@ package com.google.gwt.sample.stockwatcher.client;
 public class Pages{
 	
 	public static void enterLoginPage(){
+		Menu.arrowAnchor.setVisible(false);
 		LoginPage loginPage = new LoginPage();
 		
 		BasePage.contentPanel.clear();
@@ -10,6 +11,7 @@ public class Pages{
 	}
 
 	public static void enterMainMenuPage(){
+		Menu.arrowAnchor.setVisible(true);
 		MainMenuPage mainMenuPage = new MainMenuPage();
 		
 		BasePage.contentPanel.clear();
@@ -17,6 +19,7 @@ public class Pages{
 	}
 
 	public static void enterMonitoringPage(){
+		Menu.arrowAnchor.setVisible(false);
 		MonitoringPage monitoringPage = new MonitoringPage();
 		
 		BasePage.contentPanel.clear();
@@ -24,6 +27,7 @@ public class Pages{
 	}
 
 	public static void enterReportingPage(){
+		Menu.arrowAnchor.setVisible(false);
 		ReportingPage reportingPage = new ReportingPage();
 		
 		BasePage.contentPanel.clear();
@@ -31,6 +35,7 @@ public class Pages{
 	}
 
 	public static void enterSitePage(){
+		Menu.arrowAnchor.setVisible(false);
 		SitePage sitePage = new SitePage();
 		
 		BasePage.contentPanel.clear();
@@ -38,6 +43,7 @@ public class Pages{
 	}
 	
 	public static void enterSchedulePage(){
+		Menu.arrowAnchor.setVisible(false);
 		SchedulePage schedulePage = new SchedulePage();
 		
 		BasePage.contentPanel.clear();
@@ -45,6 +51,7 @@ public class Pages{
 	}
 	
 	public static void enterUserNotificationPage(){
+		Menu.arrowAnchor.setVisible(false);
 		UserNotificationPage userNotificationPage = new UserNotificationPage(Data.currentUser);
 		
 		BasePage.contentPanel.clear();
@@ -52,6 +59,7 @@ public class Pages{
 	}
 	
 	public static void enterSensorActuatorResponsePage(){
+		Menu.arrowAnchor.setVisible(false);
 		SensorActuatorResponsePage sensorActuatorResponsePage = new SensorActuatorResponsePage();
 		
 		BasePage.contentPanel.clear();

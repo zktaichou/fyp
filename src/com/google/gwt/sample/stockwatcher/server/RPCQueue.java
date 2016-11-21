@@ -1,10 +1,5 @@
 package com.google.gwt.sample.stockwatcher.server;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 public class RPCQueue{
 //	//the request queue
 //			private List queuedRequests = new ArrayList(); 
