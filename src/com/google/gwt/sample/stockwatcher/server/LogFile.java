@@ -203,6 +203,9 @@ public class LogFile{
 	public static String getCulmulativeReadingGroupByYear(){
 		return fileName("getCulmulativeReadingGroupByYear");
 	}
+	public static String getOngoingSchedulesByName(){
+		return fileName("getOngoingSchedulesByName");
+	}
 	
 	public static String fileName(String name){
 		try{

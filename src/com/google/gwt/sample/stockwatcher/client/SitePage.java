@@ -20,7 +20,6 @@ public class SitePage extends Composite{
 	VerticalPanel buttonPanel = new VerticalPanel();
 
 	ListBox siteListBox = new ListBox();
-	static ListBox controlTypeListBox = new ListBox();
 	
 	static Image sitePic = new Image();
 	
@@ -34,7 +33,6 @@ public class SitePage extends Composite{
 	
 	public SitePage(){
 		Header.setHeaderTitle("Main Menu > Planning > Actuator Control");
-		renderControlTypeListBox();
 		renderSiteListBox();
 		
 		VerticalPanel wrapper = new VerticalPanel();
@@ -71,12 +69,12 @@ public class SitePage extends Composite{
 		siteListBox.setSelectedIndex(0);
 	}
 	
-	private static void renderControlTypeListBox(){
-		controlTypeListBox.clear();
+	private static void renderControlTypeListBox(ListBox lb){
+		lb.clear();
 		
-		controlTypeListBox.addItem("Manual");
-		controlTypeListBox.addItem("Scheduled");
-		controlTypeListBox.addItem("Sensor Response");
+		lb.addItem("Manual");
+		lb.addItem("Scheduled");
+		lb.addItem("Sensor Response");
 	}
 	
 	public void setHandlers(){
@@ -355,14 +353,6 @@ public class SitePage extends Composite{
 			final HashMap<Boolean,String> toggle=new HashMap<>();
 			toggle.put(Boolean.TRUE,Images.getImage(Images.ON, 30));
 			toggle.put(Boolean.FALSE,Images.getImage(Images.OFF, 30));
-			
-			HorizontalPanel hPanel = new HorizontalPanel();
-			hPanel.setStyleName("rounded");
-			hPanel.getElement().getStyle().setBackgroundColor("white");
-			hPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-			hPanel.setSpacing(3);
-			hPanel.add(new HTML(icon));
-			hPanel.add(new HTML(name));
 
 			final Anchor temp = new Anchor(" ");
 			//Enable click
@@ -417,18 +407,27 @@ public class SitePage extends Composite{
 					}
 				}
 			});
+
+			HorizontalPanel hPanel = new HorizontalPanel();
+			hPanel.setStyleName("rounded");
+			hPanel.getElement().getStyle().setBackgroundColor("white");
+			hPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+			hPanel.setSpacing(3);
+			hPanel.add(new HTML(icon));
+			hPanel.add(new HTML(name));
+			hPanel.add(temp);
 			
 			ListBox lb = new ListBox();
-			lb = controlTypeListBox;
+			renderControlTypeListBox(lb);
 			lb.setSelectedIndex(getIndexOfTextInWidget(lb,controlType)); 
 			lb.setTitle(name);
 			lb.setName(lb.getSelectedIndex()+"");
 			setControlTypeLBChangeHandlers(lb);
 			
-			HorizontalPanel selectablesPanel = new HorizontalPanel();
+			VerticalPanel selectablesPanel = new VerticalPanel();
+			selectablesPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 			selectablesPanel.setSpacing(5);
 			selectablesPanel.add(lb);
-			selectablesPanel.add(temp);
 			
 			VerticalPanel vPanel = new VerticalPanel();
 			vPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
@@ -452,7 +451,12 @@ public class SitePage extends Composite{
 //			  }
 //			});
 			
-			initWidget(vPanel);
+			PopupPanel lol = new PopupPanel();
+			lol.setStyleName("rounded");
+			lol.getElement().getStyle().setBackgroundColor("white");
+			lol.add(vPanel);
+			
+			initWidget(lol);
 		}
 	}
 	

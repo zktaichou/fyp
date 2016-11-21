@@ -39,6 +39,7 @@ public interface GreetingServiceAsync {
 	void sensorActuatorResponseUpdate(int id, String actuator, String onTrigger, String onNotTrigger, String expression, boolean enabled, int timeout, AsyncCallback<String> callback) throws IllegalArgumentException;
 	void sensorActuatorResponseDelete(int id, AsyncCallback<String> callback) throws IllegalArgumentException;
 	void getOngoingSchedulesAll(AsyncCallback<String[][]> callback) throws IllegalArgumentException;
+	void getOngoingSchedulesByName(String actuator, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
 	void userSubscribeControllerNotification(String user, String controller, AsyncCallback<String> callback) throws IllegalArgumentException;
 	void userUpdateControllerNotificationLastReadTime(String user, String controller, Date date, AsyncCallback<String> callback) throws IllegalArgumentException;
 	void userUnsubscribeControllerNotification(String user, String controller, AsyncCallback<String> callback) throws IllegalArgumentException;

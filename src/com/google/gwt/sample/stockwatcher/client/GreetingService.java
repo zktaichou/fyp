@@ -41,6 +41,7 @@ public interface GreetingService extends RemoteService {
 	String sensorActuatorResponseUpdate(int id, String actuator, String onTrigger, String onNotTrigger, String expression, boolean enabled, int timeout) throws IllegalArgumentException;
 	String sensorActuatorResponseDelete(int id) throws IllegalArgumentException;
 	String[][] getOngoingSchedulesAll() throws IllegalArgumentException;
+	String[][] getOngoingSchedulesByName(String actuator) throws IllegalArgumentException;
 	String userSubscribeControllerNotification(String user, String controller) throws IllegalArgumentException;
 	String userUpdateControllerNotificationLastReadTime(String user, String controller, Date date) throws IllegalArgumentException;
 	String userUnsubscribeControllerNotification(String user, String controller) throws IllegalArgumentException;

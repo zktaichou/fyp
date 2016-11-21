@@ -52,6 +52,8 @@ public class SchedulePage extends Composite{
 	Button newRuleButton = new Button("New Rule");
 	Button createRuleButton = new Button("Create");
 	Button cancelRuleButton = new Button("Cancel");
+	
+	Button ongoingScheduleButton = new Button("Ongoing Schedules");
 
 	ListBox sHLB = new ListBox();
 	ListBox sMLB = new ListBox();
@@ -305,7 +307,7 @@ public class SchedulePage extends Composite{
 				}
 				else if(scheduleType.getSelectedItemText().equals("Ongoing Schedule"))
 				{
-					getOngoingSchedules();
+					getOngoingSchedulesByName(actuator);
 				}
 			}
 		});
@@ -1275,7 +1277,28 @@ public class SchedulePage extends Composite{
 		return temp;
 	}
 	
-	private void getOngoingSchedules(){
+	private void getOngoingSchedulesByName(final String actuator){
+		Utility.newRequestObj().getOngoingSchedulesByName(actuator, new AsyncCallback<String[][]>() {
+			public void onFailure(Throwable caught) {
+				Window.alert("Unable to get ongoing schedules for "+actuator);
+				Utility.hideTimer();
+			}
+			
+			public void onSuccess(String[][] result) {
+				if(Utility.isNull(result))
+				{
+					Window.alert("No ongoing schedules found for "+actuator);
+					Utility.hideTimer();
+				}
+				else
+				{
+					updateOngoingScheduleTable(scheduleTable, result);
+				}
+			}
+		});
+	}
+	
+	private void getOngoingSchedules(final String actuator){
 		Utility.newRequestObj().getOngoingSchedulesAll(new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
 				Window.alert("Unable to get ongoing schedules");
