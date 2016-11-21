@@ -12,7 +12,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class MainMenuPage extends Composite{
 
-	Anchor welcomeAnchor = new Anchor(" ");
+	Anchor welcomeAnchor = new Anchor();
 	
 	VerticalPanel mainPanel = new VerticalPanel();
 
