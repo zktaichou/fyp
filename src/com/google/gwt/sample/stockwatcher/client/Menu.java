@@ -11,6 +11,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.client.ui.PopupPanel.AnimationType;
 
+import javafx.scene.Cursor;
+
 public class Menu extends Composite {
 	// Menu Height
 	public static final int HEIGHT = 50;
@@ -49,7 +51,7 @@ public class Menu extends Composite {
 	Anchor liveAnchor = new Anchor("Live Updates");
 	Anchor historicalAnchor = new Anchor("Historical");
 
-	static Anchor arrowAnchor = new Anchor(" ");
+	static Anchor arrowAnchor = new Anchor();
 	static Anchor cNotificationAnchor = new Anchor(" ");
 	static Anchor sNotificationAnchor = new Anchor(" ");
 	static Anchor aNotificationAnchor = new Anchor(" ");
@@ -135,6 +137,7 @@ public class Menu extends Composite {
 	// Setup Menu Item Links
 	private void setupAnchors() {
 		arrowAnchor.setHTML(Images.getImage(Images.LEFT_ARROW,25));
+		
 		homeLogo.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
 				Pages.enterMainMenuPage();

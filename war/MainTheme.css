@@ -41,3 +41,7 @@
 	font-family: 'Play', sans-serif;
 	color: #FFFFFF;
 }
+
+.disableClick{
+    pointer-events: none;
+}

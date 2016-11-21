@@ -28,7 +28,7 @@ public class MainMenuPage extends Composite{
 		Header.setHeaderTitle("");
 		setHandlers();
 		
-		welcomeAnchor.setHTML(Images.getImage(Images.WELCOME,150));
+		welcomeAnchor.setHTML(Images.getImage(Images.WELCOME,120));
 		
 		welcomePanel.add(welcomeAnchor);
 
