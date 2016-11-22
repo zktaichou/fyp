@@ -475,7 +475,8 @@ public class Menu extends Composite {
 		mainPanel.setHeight("30px");
 		mainPanel.add(label);
 		
-		mainPanel.addDomHandler(addShowPopupHandler(popup), MouseOverEvent.getType());
+		mainPanel.addDomHandler(addShowPopupHandler(popup), ClickEvent.getType());
+		mainPanel.addDomHandler(addShowPopupMouseHandler(popup), MouseOverEvent.getType());
 
 		setPopupParam(popup, mainPanel);
 		popupList.add(popup);
@@ -491,7 +492,8 @@ public class Menu extends Composite {
 		mainPanel.setHeight("30px");
 		mainPanel.add(anchor);
 		
-		mainPanel.addDomHandler(addShowPopupHandler(popup), MouseOverEvent.getType());
+		mainPanel.addDomHandler(addShowPopupHandler(popup), ClickEvent.getType());
+		mainPanel.addDomHandler(addShowPopupMouseHandler(popup), MouseOverEvent.getType());
 
 		setPopupParam(popup, mainPanel);
 		popupList.add(popup);
@@ -512,7 +514,7 @@ public class Menu extends Composite {
 		return temp;
 	}
 	
-	public MouseOverHandler addShowPopupHandler(final PopupPanel popupPanel) {
+	public MouseOverHandler addShowPopupMouseHandler(final PopupPanel popupPanel) {
 			MouseOverHandler handler = new MouseOverHandler() {
 			    @Override
 			    public void onMouseOver(MouseOverEvent event) {
@@ -534,6 +536,29 @@ public class Menu extends Composite {
 			};
 		  return handler;
 		}
+	
+	public ClickHandler addShowPopupHandler(final PopupPanel popupPanel) {
+		ClickHandler handler = new ClickHandler() {
+		    @Override
+		    public void onClick(ClickEvent event) {
+		    	if (!popupPanel.isShowing())
+		    	{
+			    	for(int i=0; i<popupList.size();i++)
+			    	{
+			    		popupList.get(i).hide();
+			    	}
+			    	event.preventDefault();
+			    	event.stopPropagation();
+			    	event.getRelativeElement().getStyle().setBackgroundColor("#15B5EA");
+			    	popupPanel.setPopupPosition(
+		            		event.getRelativeElement().getAbsoluteLeft(),
+		            		event.getRelativeElement().getAbsoluteBottom());
+			    	popupPanel.show();
+		    	}
+		    }
+		};
+	  return handler;
+	}
 	
 	public void setPopupParam(PopupPanel popup, final VerticalPanel vpanel){
 		popup.addStyleName("gwt-PopUpPanel");

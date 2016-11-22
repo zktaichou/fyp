@@ -19,7 +19,7 @@ public class ResourcePreload{
 		
 		Utility.newRequestObj().sensorActuatorResponseGetAll(new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
-				Window.alert("Unable to get sensor/actuator response list");
+//				Window.alert("Unable to get sensor/actuator response list");
 			}
 			
 			public void onSuccess(String[][] reponseList) {
@@ -43,7 +43,7 @@ public class ResourcePreload{
 		
 		Utility.newRequestObj().getDayScheduleRuleAll(new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
-				Window.alert("Unable to get schedule rule list");
+//				Window.alert("Unable to get schedule rule list");
 			}
 			
 			public void onSuccess(String[][] ruleName) {
@@ -61,7 +61,7 @@ public class ResourcePreload{
 		
 		Utility.newRequestObj().getDayScheduleRuleAll(new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
-				Window.alert("Unable to get schedule rule list");
+//				Window.alert("Unable to get schedule rule list");
 			}
 			
 			public void onSuccess(String[][] rules) {
@@ -85,7 +85,7 @@ public class ResourcePreload{
 		
 		Utility.newRequestObj().getRegularScheduleByName(scheduleName, new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
-				Window.alert("Unable to get actuators list for regular schedule: "+scheduleName);
+//				Window.alert("Unable to get actuators list for regular schedule: "+scheduleName);
 			}
 			
 			public void onSuccess(final String[][] result) {
@@ -111,7 +111,7 @@ public class ResourcePreload{
 		
 		Utility.newRequestObj().getSpecialScheduleByName(scheduleName, new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
-				Window.alert("Unable to get actuators list for special schedule: "+scheduleName);
+//				Window.alert("Unable to get actuators list for special schedule: "+scheduleName);
 			}
 			
 			public void onSuccess(final String[][] result) {
@@ -138,7 +138,7 @@ public class ResourcePreload{
 		
 		Utility.newRequestObj().getRegularSchedules(new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
-				Window.alert("Unable to get regular schedules list");
+//				Window.alert("Unable to get regular schedules list");
 			}
 			
 			public void onSuccess(String[][] rSchedule) {
@@ -157,7 +157,7 @@ public class ResourcePreload{
 		
 		Utility.newRequestObj().getSpecialSchedules(new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
-				Window.alert("Unable to get site list");
+//				Window.alert("Unable to get site list");
 			}
 			
 			public void onSuccess(final String[][] sSchedule) {
@@ -172,11 +172,11 @@ public class ResourcePreload{
 		});
 	}
 	
-	private static void getSiteList(){
+	public static void getSiteList(){
 		
 		Utility.newRequestObj().getSiteList(new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
-				Window.alert("Unable to get site list");
+//				Window.alert("Unable to get site list");
 			}
 			
 			public void onSuccess(final String[][] siteResult) {
@@ -195,7 +195,7 @@ public class ResourcePreload{
 		Utility.newRequestObj().getControllerList(siteName, new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) 
 			{
-				Window.alert("Unable to get site list");
+//				Window.alert("Unable to get site list");
 			}
 			public void onSuccess(String[][] controllerResult)
 			{
@@ -226,7 +226,7 @@ public class ResourcePreload{
 		Utility.newRequestObj().getSensorList(controllerName, new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) 
 			{
-				Window.alert("Unable to get sensor list");
+//				Window.alert("Unable to get sensor list");
 			}
 			public void onSuccess(String[][] sensorResult)
 			{
@@ -255,7 +255,7 @@ public class ResourcePreload{
 		Utility.newRequestObj().getActuatorList(controllerName, new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) 
 			{
-				Window.alert("Unable to get actuator list");
+//				Window.alert("Unable to get actuator list");
 			}
 			public void onSuccess(String[][] actuatorResult)
 			{
@@ -286,7 +286,7 @@ public class ResourcePreload{
 		
 		Utility.newRequestObj().getActuatorRegularSchedule(aName, new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
-				Window.alert("Unable to get regular schedule(s) for "+aName);
+//				Window.alert("Unable to get regular schedule(s) for "+aName);
 			}
 			
 			public void onSuccess(final String[][] result) {
@@ -313,7 +313,7 @@ public class ResourcePreload{
 		
 		Utility.newRequestObj().getActuatorSpecialSchedule(aName, new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
-				Window.alert("Unable to get special schedule(s) for "+aName);
+//				Window.alert("Unable to get special schedule(s) for "+aName);
 			}
 			
 			public void onSuccess(final String[][] result) {

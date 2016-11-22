@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class LoginPage extends Composite { 
-	ContentPanel cPanel = new ContentPanel();
+	ContentPanel cPanel = new ContentPanel(); 
 	VerticalPanel mainPanel = new VerticalPanel();
 	VerticalPanel msgPanel = new VerticalPanel();
 	HorizontalPanel linksPanel = new HorizontalPanel();
@@ -119,7 +119,8 @@ public class LoginPage extends Composite {
 			
 			Utility.newRequestObj().userLogin(usernameTB.getText(),passwordTB.getText(), new AsyncCallback<Boolean>() {
 				public void onFailure(Throwable caught) {
-					Window.alert("Can't connect to database");
+					
+					Window.alert(caught.getMessage());
 				}
 				
 				//Remember to use Object[] input to get the rest of the information for chart display

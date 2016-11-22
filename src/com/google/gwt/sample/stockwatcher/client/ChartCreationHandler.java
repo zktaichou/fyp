@@ -60,7 +60,7 @@ public class ChartCreationHandler{
 	private static void getTotalReadingByDay(final String sensor, final Boolean isPredictionEnabled, final int steps){
 		Utility.newRequestObj().getTotalReadingGroupByDay(sensor,isPredictionEnabled,steps,new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
-				Window.alert("Data request failed");
+				Window.alert("Data request failed: "+caught.getMessage());
 			}
 			public void onSuccess(String[][] result) {
 				checkInsufficientDataForPrediction(result, isPredictionEnabled);
@@ -75,7 +75,7 @@ public class ChartCreationHandler{
 	private static void getTotalReadingByMonth(final String sensor, final Boolean isPredictionEnabled, final int steps){
 		Utility.newRequestObj().getTotalReadingGroupByMonth(sensor,isPredictionEnabled,steps,new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
-				Window.alert("Data request failed");
+				Window.alert("Data request failed: "+caught.getMessage());
 			}
 			public void onSuccess(String[][] result) {
 				checkInsufficientDataForPrediction(result, isPredictionEnabled);
@@ -90,7 +90,7 @@ public class ChartCreationHandler{
 	private static void getTotalReadingByYear(final String sensor, final Boolean isPredictionEnabled, final int steps){
 		Utility.newRequestObj().getTotalReadingGroupByYear(sensor,isPredictionEnabled,steps,new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
-				Window.alert("Data request failed");
+				Window.alert("Data request failed: "+caught.getMessage());
 			}
 			public void onSuccess(String[][] result) {
 				checkInsufficientDataForPrediction(result, isPredictionEnabled);
@@ -104,7 +104,7 @@ public class ChartCreationHandler{
 	private static void getAverageReadingByDay(final String sensor, final Boolean isPredictionEnabled, final int steps){
 		Utility.newRequestObj().getAverageReadingGroupByDay(sensor,isPredictionEnabled,steps,new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
-				Window.alert("Data request failed");
+				Window.alert("Data request failed: "+caught.getMessage());
 			}
 			public void onSuccess(String[][] result) {
 				checkInsufficientDataForPrediction(result, isPredictionEnabled);
@@ -119,7 +119,7 @@ public class ChartCreationHandler{
 	private static void getAverageReadingByMonth(final String sensor, final Boolean isPredictionEnabled, final int steps){
 		Utility.newRequestObj().getAverageReadingGroupByMonth(sensor,isPredictionEnabled,steps,new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
-				Window.alert("Data request failed");
+				Window.alert("Data request failed: "+caught.getMessage());
 			}
 			public void onSuccess(String[][] result) {
 				checkInsufficientDataForPrediction(result, isPredictionEnabled);
@@ -134,7 +134,7 @@ public class ChartCreationHandler{
 	private static void getAverageReadingByYear(final String sensor, final Boolean isPredictionEnabled, final int steps){
 		Utility.newRequestObj().getAverageReadingGroupByYear(sensor,isPredictionEnabled,steps,new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
-				Window.alert("Data request failed");
+				Window.alert("Data request failed: "+caught.getMessage());
 			}
 			public void onSuccess(String[][] result) {
 				checkInsufficientDataForPrediction(result, isPredictionEnabled);
@@ -148,7 +148,7 @@ public class ChartCreationHandler{
 	private static void getCulmulativeReadingByDay(final String sensor, final Boolean isPredictionEnabled, final int steps){
 		Utility.newRequestObj().getCulmulativeReadingGroupByDay(sensor,isPredictionEnabled,steps,new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
-				Window.alert("Data request failed");
+				Window.alert("Data request failed: "+caught.getMessage());
 			}
 			public void onSuccess(String[][] result) {
 				checkInsufficientDataForPrediction(result, isPredictionEnabled);
@@ -163,7 +163,7 @@ public class ChartCreationHandler{
 	private static void getCulmulativeReadingByMonth(final String sensor, final Boolean isPredictionEnabled, final int steps){
 		Utility.newRequestObj().getCulmulativeReadingGroupByMonth(sensor,isPredictionEnabled,steps,new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
-				Window.alert("Data request failed");
+				Window.alert("Data request failed: "+caught.getMessage());
 			}
 			public void onSuccess(String[][] result) {
 				checkInsufficientDataForPrediction(result, isPredictionEnabled);
@@ -178,7 +178,7 @@ public class ChartCreationHandler{
 	private static void getCulmulativeReadingByYear(final String sensor, final Boolean isPredictionEnabled, final int steps){
 		Utility.newRequestObj().getCulmulativeReadingGroupByYear(sensor,isPredictionEnabled,steps,new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
-				Window.alert("Data request failed");
+				Window.alert("Data request failed: "+caught.getMessage());
 			}
 			public void onSuccess(String[][] result) {
 				checkInsufficientDataForPrediction(result, isPredictionEnabled);

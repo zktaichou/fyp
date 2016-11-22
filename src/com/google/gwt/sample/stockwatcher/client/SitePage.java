@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.*;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
@@ -26,12 +27,27 @@ public class SitePage extends Composite{
 	static ArrayList<PopupPanel> controllerIcons = new ArrayList<>();
 	static ArrayList<PopupPanel> sensorIcons = new ArrayList<>();
 	static ArrayList<PopupPanel> actuatorIcons = new ArrayList<>();
+	
+	static ArrayList<Boolean> actuatorIconVisibility = new ArrayList<>();
+	static ArrayList<Boolean> sensorIconVisibility = new ArrayList<>();
+	static ArrayList<Boolean> controllerIconVisibility = new ArrayList<>();
 
 	static HashMap <String, ArrayList<PopupPanel>> siteControllerPopupList = new HashMap<>();
 	static HashMap <String, ArrayList<PopupPanel>> controllerSensorPopupList = new HashMap<>();
 	static HashMap <String, ArrayList<PopupPanel>> controllerActuatorPopupList = new HashMap<>();
+
+	static boolean actuatorFirstTime = true;
+	static boolean sensorFirstTime = true;
+	static boolean controllerFirstTime = true;
 	
 	public SitePage(){
+		actuatorFirstTime = true;
+		
+		controllerIcons.clear();
+		sensorIcons.clear();
+		actuatorIcons.clear();
+		
+		periodicUpdate();
 		Header.setHeaderTitle("Main Menu > Planning > Actuator Control");
 		renderSiteListBox();
 		
@@ -59,6 +75,7 @@ public class SitePage extends Composite{
 	
 	private void renderSiteListBox(){
 		siteListBox.clear();
+		siteListBox.addItem("Select an item below");
 		int count=0;
 		for(String siteName : Data.siteList.keySet())
 		{
@@ -78,20 +95,22 @@ public class SitePage extends Composite{
 	}
 	
 	public void setHandlers(){
-		getPic(siteListBox.getItemText(0));
+		getPic(siteListBox.getItemText(1));
 
 		siteListBox.addChangeHandler(new ChangeHandler(){
 		      public void onChange(ChangeEvent event) {
-		    	  
-		  		hideAllIcons();
-		  		
-		  		getPic(siteListBox.getSelectedItemText());
-
-				renderControllerPopups();
-				renderSensorPopups();
-				renderActuatorPopups();
-				
-		  		popupControllers(siteListBox.getSelectedItemText());
+		    	  if(siteListBox.getSelectedIndex()!=0)
+		    	  {
+			  		hideAllIcons();
+			  		
+			  		getPic(siteListBox.getSelectedItemText());
+	
+					renderControllerPopups();
+					renderSensorPopups();
+					renderActuatorPopups();
+					
+			  		popupControllers(siteListBox.getSelectedItemText());
+		    	  }
 		      }
 		});
 		
@@ -113,10 +132,87 @@ public class SitePage extends Composite{
 		cPanel.add(sitePic);
 	}
 	
-	public void renderControllerPopups(){
+	static Timer t = new Timer() {
+	      @Override
+	      public void run() {
+	  		ResourcePreload.getSiteList();
+			
+			renderControllerPopups();
+			renderSensorPopups();
+			renderActuatorPopups();
+	      }
+	    };
+	
+	private void periodicUpdate(){
+		t.scheduleRepeating(15000);
+	}
+	
+	private static void renderActuatorPopups(){
+		actuatorIconVisibility.clear();
+		
+		if(!actuatorFirstTime)
+		{
+			for(int i=0; i<actuatorIcons.size();i++)
+			{
+				actuatorIconVisibility.add(actuatorIcons.get(i).isVisible());
+			}
+			actuatorIcons.clear();
+		}
+		hideActuators();
+		for(String controller: Data.controllerActuatorList.keySet())
+		{
+			ArrayList<PopupPanel> popups = new ArrayList<>();
+			int i=0;
+				for(String actuators: Data.controllerActuatorList.get(controller))
+				{
+					ArrayList<String> attributes = Data.actuatorAttributeList.get(actuators);
+					String name = attributes.get(0);
+					String status = attributes.get(2);
+					final double x = Double.parseDouble(attributes.get(3));
+					final double y = Double.parseDouble(attributes.get(4));
+					String controlType = attributes.get(5);
+					
+					String icon = Images.getImage(Images.ACTUATOR_CURRENT_ICON,25);
+					
+					Actuator temp = new Actuator(icon, name, status, controlType);
+					
+					final PopupPanel container = new PopupPanel();
+					
+					actuatorIcons.add(container);
+					
+					container.add(temp);
+					container.getElement().getStyle().setBackgroundColor("rgba(255,0,0,0.0)");
+					container.getElement().getStyle().setBorderWidth(0,Unit.PX);
+					container.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
+			            public void setPosition(int offsetWidth, int offsetHeight) {
+			            	int left = sitePic.getAbsoluteLeft()+(int)(x*(double)sitePic.getWidth());
+				            int top = sitePic.getAbsoluteTop()+(int)(y*(double)sitePic.getHeight());
+			              container.setPopupPosition(left, top);
+			            }
+			          });
+					
+					if(actuatorFirstTime)
+					{
+						container.setVisible(false);
+					}
+					else
+					{
+						container.setVisible(actuatorIconVisibility.get(i++));
+					}
+					popups.add(container);
+				}
+				controllerActuatorPopupList.put(controller, popups);
+		}	
+		if(actuatorFirstTime)
+		{
+			actuatorFirstTime=false;
+		}
+	}
+	
+	private static void renderControllerPopups(){
+		hideControllers();
 		for(String site: Data.siteControllerList.keySet())
 		{
-			
 			ArrayList<PopupPanel> popups = new ArrayList<>();
 			
 			for(String controller: Data.siteControllerList.get(site))
@@ -153,7 +249,8 @@ public class SitePage extends Composite{
 		}
 	}
 	
-	public void renderSensorPopups(){
+	private static void renderSensorPopups(){
+		hideSensors();
 		for(String controller: Data.controllerSensorList.keySet())
 		{
 			
@@ -192,7 +289,7 @@ public class SitePage extends Composite{
 		}
 	}
 	
-	public void popupControllers(String siteName){
+	private static void popupControllers(String siteName){
 		
 		for(PopupPanel popup: siteControllerPopupList.get(siteName)){
 			popup.setAnimationEnabled(true);
@@ -201,7 +298,7 @@ public class SitePage extends Composite{
 		}
 	}
 	
-	public void popupSensors(String controllerName, Boolean state){
+	private static void popupSensors(String controllerName, Boolean state){
 		
 		for(PopupPanel popup: controllerSensorPopupList.get(controllerName)){
 			popup.setAnimationEnabled(true);
@@ -210,47 +307,7 @@ public class SitePage extends Composite{
 		}
 	}
 	
-	public void renderActuatorPopups(){
-		for(String controller: Data.controllerActuatorList.keySet())
-		{
-			ArrayList<PopupPanel> popups = new ArrayList<>();
-			
-				for(String actuators: Data.controllerActuatorList.get(controller))
-				{
-					ArrayList<String> attributes = Data.actuatorAttributeList.get(actuators);
-					String name = attributes.get(0);
-					String status = attributes.get(2);
-					final double x = Double.parseDouble(attributes.get(3));
-					final double y = Double.parseDouble(attributes.get(4));
-					String controlType = attributes.get(5);
-					
-					String icon = Images.getImage(Images.ACTUATOR_CURRENT_ICON,25);
-					
-					Actuator temp = new Actuator(icon, name, status, controlType);
-					
-					final PopupPanel container = new PopupPanel();
-					
-					actuatorIcons.add(container);
-					
-					container.add(temp);
-					container.getElement().getStyle().setBackgroundColor("rgba(255,0,0,0.0)");
-					container.getElement().getStyle().setBorderWidth(0,Unit.PX);
-					container.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
-			            public void setPosition(int offsetWidth, int offsetHeight) {
-			            	int left = sitePic.getAbsoluteLeft()+(int)(x*(double)sitePic.getWidth());
-				            int top = sitePic.getAbsoluteTop()+(int)(y*(double)sitePic.getHeight());
-			              container.setPopupPosition(left, top);
-			            }
-			          });
-					
-					container.setVisible(false);
-					popups.add(container);
-				}
-				controllerActuatorPopupList.put(controller, popups);
-		}	
-	}
-	
-	public void popupActuators(String controllerName, Boolean state){
+	private static void popupActuators(String controllerName, Boolean state){
 		for(PopupPanel popup: controllerActuatorPopupList.get(controllerName)){
 			popup.setAnimationEnabled(true);
 			popup.setAnimationType(AnimationType.CENTER);
@@ -258,7 +315,7 @@ public class SitePage extends Composite{
 		}
 	}
 	
-	public String setSensorIcon(String type){
+	private static String setSensorIcon(String type){
 		switch(type){
 			case "Current":{
 				return Images.getImage(Images.CURRENT_ICON,30);
@@ -276,7 +333,7 @@ public class SitePage extends Composite{
 		return "";
 	}
 	
-	public String setActuatorIcon(String type){
+	private static String setActuatorIcon(String type){
 		switch(type){
 			case "Current":{
 				return Images.getImage(Images.ACTUATOR_CURRENT_ICON,30);
@@ -306,7 +363,28 @@ public class SitePage extends Composite{
 		sitePic.setVisible(false);
 	}
 	
-	public class Sensor extends Composite{
+	public static void hideControllers(){
+		for(PopupPanel panels: controllerIcons){
+			panels.hide();
+		}
+		controllerIcons.clear();
+	}
+	
+	public static void hideSensors(){
+		for(PopupPanel panels: sensorIcons){
+			panels.hide();
+		}
+		sensorIcons.clear();
+	}
+	
+	public static void hideActuators(){
+		for(PopupPanel panels: actuatorIcons){
+			panels.hide();
+		}
+		actuatorIcons.clear();
+	}
+	
+	public static class Sensor extends Composite{
 			
 			public Sensor(String icon, String name){
 
@@ -398,7 +476,7 @@ public class SitePage extends Composite{
 								}
 								else
 								{
-									Window.alert("Error in updating");
+									Window.alert("Node communication error. Please try again.");
 								}
 								temp.setName("true");
 								temp.setHTML(toggle.get(state.get(temp)));
@@ -471,7 +549,7 @@ public class SitePage extends Composite{
 		}
 	}
 	
-	public class Controller extends Composite{
+	public static class Controller extends Composite{
 			
 			public Controller(final String name){
 

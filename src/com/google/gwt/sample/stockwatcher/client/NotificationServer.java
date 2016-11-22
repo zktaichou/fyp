@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -72,7 +73,7 @@ public class NotificationServer{
   	  	renderPopup("Sensor Notifications",sPopup,sScrollpanel,sTable,sCloseButton);
   	  	renderPopup("Actuator Notifications",aPopup,aScrollpanel,aTable,aCloseButton);
 
-		t.scheduleRepeating(10000);
+		t.scheduleRepeating(15000);
 	}
 	
 	public static void stop(){
@@ -346,6 +347,7 @@ public class NotificationServer{
 						updateSensorLastReadTime(Data.currentUser, Data.subscribedSensorList.get(i));
 					}
 				}
+
 			}
 		});
 	}

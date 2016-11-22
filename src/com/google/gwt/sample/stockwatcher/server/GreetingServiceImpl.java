@@ -1040,6 +1040,8 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			is.close();
 			
 			sc.close();
+
+			try {Thread.sleep(1000);} catch (InterruptedException e) {}
 			
 			return data;
 		} catch (Exception e) {

@@ -16,7 +16,7 @@ public class BasePage implements EntryPoint {
 	static int contentPanelHeight = Window.getClientHeight()-Menu.HEIGHT-Footer.HEIGHT-Header.HEIGHT;
 	
 	public void onModuleLoad() {
-		ResourcePreload.preloadData();
+//		ResourcePreload.preloadData();
 		
 		RootPanel.get("menuContainer").add(menuContainer);
 		RootPanel.get("headerContainer").add(headerContainer);

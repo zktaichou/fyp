@@ -18,6 +18,7 @@
 	font-weight: bold;
 	font-size: 11pt;
 	text-decoration: none;
+	cursor: hand !important
 }
 
 .gwt-NewMainMenuLabel {
