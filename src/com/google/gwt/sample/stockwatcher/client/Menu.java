@@ -167,6 +167,7 @@ public class Menu extends Composite {
 			public void onClick(ClickEvent event){
 				hidePopups();
 				NotificationServer.stop();
+				SitePage.stop();
 				Pages.enterLoginPage();
 			};
 		});

@@ -119,8 +119,7 @@ public class LoginPage extends Composite {
 			
 			Utility.newRequestObj().userLogin(usernameTB.getText(),passwordTB.getText(), new AsyncCallback<Boolean>() {
 				public void onFailure(Throwable caught) {
-					
-					Window.alert(caught.getMessage());
+					Window.alert("Unable to connect: Error Mesage - "+caught.getMessage());
 				}
 				
 				//Remember to use Object[] input to get the rest of the information for chart display
@@ -130,7 +129,8 @@ public class LoginPage extends Composite {
 						Data.currentUser = usernameTB.getText();
 						
 						msgPanel.clear();
-						msgPanel.add(new HTML(Images.getImage(Images.LOADING_EPIC,Window.getClientHeight()-Menu.HEIGHT-Footer.HEIGHT)));
+						msgPanel.add(new HTML(Images.getImage(Images.LOADING_FLASK,Window.getClientWidth(),Window.getClientHeight()-Menu.HEIGHT-Footer.HEIGHT-50)));
+//						msgPanel.add(new HTML(Images.getImage(Images.LOADING_EPIC,Window.getClientHeight()-Menu.HEIGHT-Footer.HEIGHT)));
 						
 						mainPanel.clear();
 						mainPanel.getElement().getStyle().setBackgroundColor("black");
@@ -144,6 +144,7 @@ public class LoginPage extends Composite {
 						Timer t = new Timer() {
 						      @Override
 						      public void run() {
+						    	  new Utility.ElementFader().fade(mainPanel.getElement(), 1, 0, 1000);
 									Pages.enterMainMenuPage();
 									Menu.start();
 						      }

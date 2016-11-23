@@ -26,6 +26,9 @@ public class LogFile{
 	public static String failedStringDecryption(){
 		return fileName("failedStringDecryption");
 	}
+	public static String failedDecryptToArrayListObject(){
+		return fileName("failedDecryptToArrayListObject");
+	}
 	public static String failedLoginDecryption(){
 		return fileName("failedLoginDecryption");
 	}

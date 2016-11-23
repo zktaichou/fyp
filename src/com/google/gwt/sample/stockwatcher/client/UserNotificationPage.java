@@ -310,7 +310,7 @@ public class UserNotificationPage extends Composite{
 	private void getSubscribedController(String user){
 		Utility.newRequestObj().userGetSubscribedControllers(user, new AsyncCallback<String[][]>(){
 			public void onFailure(Throwable caught) {
-				Window.alert("Unable to get "+Data.currentUser+"'s controller subscription");
+//				Window.alert("Unable to get "+Data.currentUser+"'s controller subscription");
 			}
  
 			public void onSuccess(String[][] reply) {
@@ -338,7 +338,7 @@ public class UserNotificationPage extends Composite{
 	private void getSubscribedSensor(String user){
 		Utility.newRequestObj().userGetSubscribedSensors(user, new AsyncCallback<String[][]>(){
 			public void onFailure(Throwable caught) {
-				Window.alert("Unable to get "+Data.currentUser+"'s sensor subscription");
+//				Window.alert("Unable to get "+Data.currentUser+"'s sensor subscription");
 			} 
  
 			public void onSuccess(String[][] reply) {
@@ -366,7 +366,7 @@ public class UserNotificationPage extends Composite{
 	private void getSubscribedActuator(String user){
 		Utility.newRequestObj().userGetSubscribedActuators(user, new AsyncCallback<String[][]>(){
 			public void onFailure(Throwable caught) {
-				Window.alert("Unable to get "+Data.currentUser+"'s actuator subscription");
+//				Window.alert("Unable to get "+Data.currentUser+"'s actuator subscription");
 			} 
  
 			public void onSuccess(String[][] reply) {
@@ -394,7 +394,7 @@ public class UserNotificationPage extends Composite{
 	private void subscribeController(final String user, final String controller){
 		Utility.newRequestObj().userSubscribeControllerNotification(user, controller, new AsyncCallback<String>(){
 			public void onFailure(Throwable caught) {
-				Window.alert("Unable to subscribe to "+controller);
+//				Window.alert("Unable to subscribe to "+controller);
 			} 
  
 			public void onSuccess(String reply) {
@@ -414,7 +414,7 @@ public class UserNotificationPage extends Composite{
 	private void subscribeSensor(final String user, final String sensor){
 		Utility.newRequestObj().userSubscribeSensorNotification(user, sensor, new AsyncCallback<String>(){
 			public void onFailure(Throwable caught) {
-				Window.alert("Unable to subscribe to "+sensor);
+//				Window.alert("Unable to subscribe to "+sensor);
 			} 
  
 			public void onSuccess(String reply) {
@@ -434,7 +434,7 @@ public class UserNotificationPage extends Composite{
 	private void subscribeActuator(final String user, final String actuator){
 		Utility.newRequestObj().userSubscribeActuatorNotification(user, actuator, new AsyncCallback<String>(){
 			public void onFailure(Throwable caught) {
-				Window.alert("Unable to subscribe to "+actuator);
+//				Window.alert("Unable to subscribe to "+actuator);
 			} 
  
 			public void onSuccess(String reply) {
@@ -454,7 +454,7 @@ public class UserNotificationPage extends Composite{
 	private void unSubscribeController(final String user, final String controller){
 		Utility.newRequestObj().userUnsubscribeControllerNotification(user, controller, new AsyncCallback<String>(){
 			public void onFailure(Throwable caught) {
-				Window.alert("Unable to unsubscribe "+controller);
+//				Window.alert("Unable to unsubscribe "+controller);
 			} 
  
 			public void onSuccess(String reply) {
@@ -471,7 +471,7 @@ public class UserNotificationPage extends Composite{
 	private void unSubscribeSensor(final String user, final String sensor){
 		Utility.newRequestObj().userUnsubscribeSensorNotification(user, sensor, new AsyncCallback<String>(){
 			public void onFailure(Throwable caught) {
-				Window.alert("Unable to unsubscribe "+sensor);
+//				Window.alert("Unable to unsubscribe "+sensor);
 			} 
  
 			public void onSuccess(String reply) {
@@ -488,7 +488,7 @@ public class UserNotificationPage extends Composite{
 	private void unSubscribeActuator(final String user, final String actuator){
 		Utility.newRequestObj().userUnsubscribeActuatorNotification(user, actuator, new AsyncCallback<String>(){
 			public void onFailure(Throwable caught) {
-				Window.alert("Unable to unsubscribe "+actuator);
+//				Window.alert("Unable to unsubscribe "+actuator);
 			} 
  
 			public void onSuccess(String reply) {
@@ -506,7 +506,7 @@ public class UserNotificationPage extends Composite{
 		Date date = new Date(System.currentTimeMillis());
 		Utility.newRequestObj().userUpdateControllerNotificationLastReadTime(user, controller, date, new AsyncCallback<String>(){
 			public void onFailure(Throwable caught) {
-				Window.alert("Unable to update controller last read time");
+//				Window.alert("Unable to update controller last read time");
 			} 
  
 			public void onSuccess(String reply) {
@@ -519,7 +519,7 @@ public class UserNotificationPage extends Composite{
 		Date date = new Date(System.currentTimeMillis());
 		Utility.newRequestObj().userUpdateControllerNotificationLastReadTime(user, sensor, date, new AsyncCallback<String>(){
 			public void onFailure(Throwable caught) {
-				Window.alert("Unable to update sensor last read time");
+//				Window.alert("Unable to update sensor last read time");
 			} 
  
 			public void onSuccess(String reply) {
@@ -532,7 +532,7 @@ public class UserNotificationPage extends Composite{
 		Date date = new Date(System.currentTimeMillis());
 		Utility.newRequestObj().userUpdateControllerNotificationLastReadTime(user, actuator, date, new AsyncCallback<String>(){
 			public void onFailure(Throwable caught) {
-				Window.alert("Unable to update actuator last read time");
+//				Window.alert("Unable to update actuator last read time");
 			} 
  
 			public void onSuccess(String reply) {

@@ -2,6 +2,7 @@ package com.google.gwt.sample.stockwatcher.client;
 
 import com.google.gwt.i18n.client.*;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import org.moxieapps.gwt.highcharts.client.*;
@@ -95,8 +96,7 @@ static long getTime(String date) {
 			public void onSuccess(String[][] result) {
 				if(Utility.isNull(result))
 				{
-					Window.alert(Messages.NO_DATA);
-					Utility.hideTimer();
+					Utility.setMsg(Messages.NO_DATA);
 				}
 				else if(currRequestID==Data.latestRequestID)
 				{
@@ -421,7 +421,10 @@ static long getTime(String date) {
 	}
 	
 	//Methods that's made just to improve readability
-	private static Number convertToNumber(String data){
+	private static Number convertToNumber(String unformattedData){
+		String data ="";
+		if (unformattedData.contains(".")) data=unformattedData.substring(0,Math.min(unformattedData.indexOf('.')+3,unformattedData.length()));
+		else data=unformattedData; 
 	Number value ;
 	try	{
 		value = Integer.parseInt(data);

@@ -1015,6 +1015,41 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return null;}
 	}
 	
+	public String[] actuatorGetByName(String actuator) throws IllegalArgumentException {
+		try {
+			ArrayList<Object> toSend=new ArrayList<>();
+			toSend.add("44");
+			toSend.add(actuator);
+
+			Socket sc=new Socket(Utility.serverIP,getPortNumber());
+			OutputStream os = sc.getOutputStream();
+			ObjectOutputStream oos=new ObjectOutputStream(os);
+			oos.writeObject(Utility.encryptMsg(toSend));
+			
+			InputStream is=sc.getInputStream();
+			ObjectInputStream ois=new ObjectInputStream(is);
+			
+			//Special decrypt for String-based returned response
+			 
+			ArrayList<Object> data=Utility.decryptToArrayListObject(ois);
+			
+			oos.close();
+			os.close();
+			ois.close();
+			is.close();
+			
+			sc.close();
+			
+			return Utility.DataToStringArray(data);
+		} catch (Exception e) {
+			try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.actuatorSetStatus())));
+				e.printStackTrace(pw);
+				pw.close();
+			} catch (Exception f) {}
+			return null;}
+	}
+	
 	public String actuatorSetStatus(String actuator, String status) throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();
@@ -2194,6 +2229,10 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return newData;
 		}
 		return null;
+	}
+	
+	public String [][] prediction(String[][] incoming, int incomingStep, boolean isAppend) throws IllegalArgumentException {
+		return Weka.predict(incoming, incomingStep, isAppend);
 	}
 	
 }

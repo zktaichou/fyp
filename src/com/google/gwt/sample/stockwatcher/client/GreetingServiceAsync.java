@@ -26,6 +26,7 @@ public interface GreetingServiceAsync {
 	void createDayScheduleRule(String rName, int sH, int sM, int eH, int eM, AsyncCallback<String> callback) throws IllegalArgumentException;
 	void actuatorSetStatus(String actuator, String status, AsyncCallback<String> callback) throws IllegalArgumentException;
 	void actuatorSetControlType(String actuator, String controlType, AsyncCallback<String> callback) throws IllegalArgumentException;
+	void actuatorGetByName(String actuator, AsyncCallback<String[]> callback) throws IllegalArgumentException;
 	void getDayScheduleRuleAll(AsyncCallback<String[][]> callback) throws IllegalArgumentException;
 	void getDayScheduleRuleByName(String ruleName, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
 	void deleteRegularSchedule(String rScheduleName, AsyncCallback<String> callback) throws IllegalArgumentException;

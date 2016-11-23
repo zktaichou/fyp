@@ -27,27 +27,16 @@ public class SitePage extends Composite{
 	static ArrayList<PopupPanel> controllerIcons = new ArrayList<>();
 	static ArrayList<PopupPanel> sensorIcons = new ArrayList<>();
 	static ArrayList<PopupPanel> actuatorIcons = new ArrayList<>();
-	
-	static ArrayList<Boolean> actuatorIconVisibility = new ArrayList<>();
-	static ArrayList<Boolean> sensorIconVisibility = new ArrayList<>();
-	static ArrayList<Boolean> controllerIconVisibility = new ArrayList<>();
 
 	static HashMap <String, ArrayList<PopupPanel>> siteControllerPopupList = new HashMap<>();
 	static HashMap <String, ArrayList<PopupPanel>> controllerSensorPopupList = new HashMap<>();
 	static HashMap <String, ArrayList<PopupPanel>> controllerActuatorPopupList = new HashMap<>();
-
-	static boolean actuatorFirstTime = true;
-	static boolean sensorFirstTime = true;
-	static boolean controllerFirstTime = true;
 	
 	public SitePage(){
-		actuatorFirstTime = true;
-		
 		controllerIcons.clear();
 		sensorIcons.clear();
 		actuatorIcons.clear();
 		
-		periodicUpdate();
 		Header.setHeaderTitle("Main Menu > Planning > Actuator Control");
 		renderSiteListBox();
 		
@@ -132,37 +121,19 @@ public class SitePage extends Composite{
 		cPanel.add(sitePic);
 	}
 	
-	static Timer t = new Timer() {
-	      @Override
-	      public void run() {
-	  		ResourcePreload.getSiteList();
-			
-			renderControllerPopups();
-			renderSensorPopups();
-			renderActuatorPopups();
-	      }
-	    };
-	
-	private void periodicUpdate(){
-		t.scheduleRepeating(15000);
+	public static void stop(){
+		for(Timer ti: timers)
+		{
+			ti.cancel();
+		}
+		timers.clear();
 	}
 	
 	private static void renderActuatorPopups(){
-		actuatorIconVisibility.clear();
-		
-		if(!actuatorFirstTime)
-		{
-			for(int i=0; i<actuatorIcons.size();i++)
-			{
-				actuatorIconVisibility.add(actuatorIcons.get(i).isVisible());
-			}
-			actuatorIcons.clear();
-		}
-		hideActuators();
+		stop();
 		for(String controller: Data.controllerActuatorList.keySet())
 		{
 			ArrayList<PopupPanel> popups = new ArrayList<>();
-			int i=0;
 				for(String actuators: Data.controllerActuatorList.get(controller))
 				{
 					ArrayList<String> attributes = Data.actuatorAttributeList.get(actuators);
@@ -190,27 +161,14 @@ public class SitePage extends Composite{
 			              container.setPopupPosition(left, top);
 			            }
 			          });
-					
-					if(actuatorFirstTime)
-					{
-						container.setVisible(false);
-					}
-					else
-					{
-						container.setVisible(actuatorIconVisibility.get(i++));
-					}
+					container.setVisible(false);
 					popups.add(container);
 				}
 				controllerActuatorPopupList.put(controller, popups);
 		}	
-		if(actuatorFirstTime)
-		{
-			actuatorFirstTime=false;
-		}
 	}
 	
 	private static void renderControllerPopups(){
-		hideControllers();
 		for(String site: Data.siteControllerList.keySet())
 		{
 			ArrayList<PopupPanel> popups = new ArrayList<>();
@@ -250,7 +208,6 @@ public class SitePage extends Composite{
 	}
 	
 	private static void renderSensorPopups(){
-		hideSensors();
 		for(String controller: Data.controllerSensorList.keySet())
 		{
 			
@@ -363,27 +320,6 @@ public class SitePage extends Composite{
 		sitePic.setVisible(false);
 	}
 	
-	public static void hideControllers(){
-		for(PopupPanel panels: controllerIcons){
-			panels.hide();
-		}
-		controllerIcons.clear();
-	}
-	
-	public static void hideSensors(){
-		for(PopupPanel panels: sensorIcons){
-			panels.hide();
-		}
-		sensorIcons.clear();
-	}
-	
-	public static void hideActuators(){
-		for(PopupPanel panels: actuatorIcons){
-			panels.hide();
-		}
-		actuatorIcons.clear();
-	}
-	
 	public static class Sensor extends Composite{
 			
 			public Sensor(String icon, String name){
@@ -424,15 +360,18 @@ public class SitePage extends Composite{
 			}
 	}
 	
+	static ArrayList<Timer> timers = new ArrayList<>();
+	
 	public static class Actuator extends Composite{
-		public static HashMap<Anchor,Boolean> state=new HashMap<>();
+		private static HashMap<Anchor,Boolean> state=new HashMap<>();
+
+		final Anchor temp = new Anchor(" ");
+		final ListBox lb = new ListBox();
 		
 		public Actuator(String icon, final String name, String status, String controlType){
 			final HashMap<Boolean,String> toggle=new HashMap<>();
 			toggle.put(Boolean.TRUE,Images.getImage(Images.ON, 30));
 			toggle.put(Boolean.FALSE,Images.getImage(Images.OFF, 30));
-
-			final Anchor temp = new Anchor(" ");
 			//Enable click
 			temp.setName("true");
 			
@@ -449,7 +388,7 @@ public class SitePage extends Composite{
 					{
 						//disable click until request finishes
 						temp.setName("false");
-						
+						//set loading animation
 						temp.setHTML(Images.getImage(Images.LOADING3, 25));
 	
 						String newStatus = "";
@@ -485,6 +424,46 @@ public class SitePage extends Composite{
 					}
 				}
 			});
+			
+			Timer t2 = new Timer() {
+			      @Override
+			      public void run() {
+			    	  Header.showLoading();
+						Utility.newRequestObj().actuatorGetByName(name, new AsyncCallback<String[]>() {
+							public void onFailure(Throwable caught) {
+
+							} 
+				 
+							public void onSuccess(final String[] reply) {
+						    	  Header.hideLoading();
+								ArrayList<String> lol = new ArrayList<>();
+								for(int i=0; i<reply.length;i++)
+								{
+									lol.add(reply[i]);
+								}
+								Data.actuatorAttributeList.put(name, lol);
+								
+								String status = reply[2];
+								String controlType = reply[5];
+								
+								if(status.equalsIgnoreCase("ON"))
+								{
+									state.put(temp,true);
+								}
+								else
+								{
+									state.put(temp,false);
+								}
+								
+								lb.setSelectedIndex(getIndexOfTextInWidget(lb,controlType));
+								
+								temp.setHTML(toggle.get(state.get(temp)));
+							}
+						});
+			      }
+			}; 
+			timers.add(t2);
+			t2.scheduleRepeating(15000);
 
 			HorizontalPanel hPanel = new HorizontalPanel();
 			hPanel.setStyleName("rounded");
@@ -495,7 +474,6 @@ public class SitePage extends Composite{
 			hPanel.add(new HTML(name));
 			hPanel.add(temp);
 			
-			ListBox lb = new ListBox();
 			renderControlTypeListBox(lb);
 			lb.setSelectedIndex(getIndexOfTextInWidget(lb,controlType)); 
 			lb.setTitle(name);
@@ -536,6 +514,7 @@ public class SitePage extends Composite{
 			
 			initWidget(lol);
 		}
+		
 	}
 	
 	public String toggle(String cStatus){
@@ -610,7 +589,6 @@ public class SitePage extends Composite{
 					}
 					
 					public void onSuccess(String result) {
-						Window.alert("Update control type: "+result);
 						lb.setName(String.valueOf(lb.getSelectedIndex()));
 						lb.setEnabled(true);
 					}

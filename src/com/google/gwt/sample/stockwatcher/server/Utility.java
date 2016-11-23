@@ -102,6 +102,25 @@ public class Utility{
 			
 			return null;}
 	}
+
+	@SuppressWarnings("unchecked")
+	public static ArrayList<Object> decryptToArrayListObject(ObjectInputStream ois){
+		try {
+	        Cipher decrypter=Cipher.getInstance("AES");
+	        decrypter.init(Cipher.DECRYPT_MODE,getKey());
+	        
+			return (ArrayList<Object>)(((SealedObject) ois.readObject()).getObject(decrypter));
+		} catch (Exception e) {
+			
+			try {
+				PrintWriter p=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.failedDecryptToArrayListObject())));
+				e.printStackTrace(p);
+				p.close();
+				return null;
+			} catch (Exception f) {}
+			
+			return null;}
+	}
 	
 	public static String decryptToString(ObjectInputStream ois){
 		try {
@@ -167,6 +186,20 @@ public class Utility{
 				pw.close();
 				} catch (Exception f) {}
 			}
+		}
+		return null;
+	}
+	
+	public static String[] DataToStringArray(ArrayList<Object> input){
+		if(input!=null && input.size()>0)
+		{
+			String[] data = new String[input.size()];
+			for(int i=0;i<input.size();i++)
+			{
+				data[i]=String.valueOf(input.get(i));
+			}
+			return data;
+
 		}
 		return null;
 	}
