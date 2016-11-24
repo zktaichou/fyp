@@ -86,7 +86,12 @@ public class MonitoringPage extends Composite {
 		}
 	
 	private Boolean validInputFields(){
-		if(controllerSensorListBox.getItemCount()==0)
+		if(siteControllerListBox.getSelectedItemText().equals("None"))
+		{
+			Window.alert("No controller is selected");
+			return false;
+		}
+		if(controllerSensorListBox.getSelectedItemText().equals("None"))
 		{
 			Window.alert("No sensor is selected");
 			return false;
@@ -166,9 +171,13 @@ public class MonitoringPage extends Composite {
 	
 	private void showControllers(ListBox listBox, String category) {
 		siteControllerListBox.clear();
-		for(String controllerName : Data.siteControllerList.get(category))
-		{
-		    	siteControllerListBox.addItem(controllerName);
+		try{
+			for(String controllerName : Data.siteControllerList.get(category))
+			{
+				siteControllerListBox.addItem(controllerName);
+			}
+		}catch(Exception e){
+			siteControllerListBox.addItem("None");
 		}
 	}
 	
@@ -178,9 +187,13 @@ public class MonitoringPage extends Composite {
 	
 	private void showSensors(ListBox listBox, String category) {
 		controllerSensorListBox.clear();
-	    for(String sensorName : Data.controllerSensorList.get(category))
-		{
-	    	controllerSensorListBox.addItem(sensorName);
+		try{
+			for(String sensorName : Data.controllerSensorList.get(category))
+			{
+				controllerSensorListBox.addItem(sensorName);
+			}
+		}catch(Exception e){
+			controllerSensorListBox.addItem("None");
 		}
 	}
 	
