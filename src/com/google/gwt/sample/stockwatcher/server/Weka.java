@@ -125,10 +125,17 @@ public class Weka {
 	      ArrayList<String> presult = new ArrayList<>();
 	      Date d = new Date();
 	      d.setTime(dateFormat.parse(data[data.length-1][0]).getTime());
-
+	      ArrayList<Double> negValues = new ArrayList<>();
 	      for (int i = 0; i < steps; i++) {
 	        List<NumericPrediction> predsAtStep = forecast.get(i);
 	        NumericPrediction predForTarget = predsAtStep.get(0);
+	        
+	        if(predForTarget.predicted()<=0)
+	        {
+	        	negValues.add(predForTarget.predicted());
+	        	continue;
+	        }
+	        
 	        presult.add("" + predForTarget.predicted());
 	        
 	        d.setTime(d.getTime()+difference);
@@ -151,6 +158,14 @@ public class Weka {
 	      // At some stage it becomes prudent to re-build the model using current
 	      // historical data.
 
+	      try {
+				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter("negativeValues.txt")));
+				for(Double temp: negValues){
+				pw.println(temp);
+				}
+				pw.close();
+			} catch (Exception f) {}
+	      
 	      //Prediction values
 //	      try {
 //				PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter("predictedValues.txt")));

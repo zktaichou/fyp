@@ -129,8 +129,9 @@ public class LoginPage extends Composite {
 						Data.currentUser = usernameTB.getText();
 						
 						msgPanel.clear();
-						msgPanel.add(new HTML(Images.getImage(Images.LOADING_FLASK,Window.getClientWidth(),Window.getClientHeight()-Menu.HEIGHT-Footer.HEIGHT-50)));
-//						msgPanel.add(new HTML(Images.getImage(Images.LOADING_EPIC,Window.getClientHeight()-Menu.HEIGHT-Footer.HEIGHT)));
+//						msgPanel.add(new HTML(Images.getImage(Images.LOADING_CAT)));
+//						msgPanel.add(new HTML(Images.getImage(Images.LOADING_FLASK,Window.getClientWidth(),Window.getClientHeight()-Menu.HEIGHT-Footer.HEIGHT-50)));
+						msgPanel.add(new HTML(Images.getImage(Images.LOADING_EPIC,Window.getClientHeight()-Menu.HEIGHT-Footer.HEIGHT)));
 						
 						mainPanel.clear();
 						mainPanel.getElement().getStyle().setBackgroundColor("black");

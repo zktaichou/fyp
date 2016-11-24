@@ -31,6 +31,7 @@ public class Images{
 	public static final String LOADING_EPIC3 = "images/loading_epic3.gif";
 	public static final String LOADING_EPIC4 = "images/loading_epic4.gif";
 	public static final String LOADING_FLASK = "images/loading_flask.gif";
+	public static final String LOADING_CAT = "images/loading_cat.gif";
 	public static final String BACKGROUND_LOAD = "images/background_load.gif";
 	public static final String OPTIONS = "images/options.gif";
 	public static final String GRAPH = "images/graph.gif";

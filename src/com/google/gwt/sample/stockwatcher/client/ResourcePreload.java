@@ -215,8 +215,8 @@ public class ResourcePreload{
 						}
 						Data.controllerAttributeList.put(controllerResult[i][0], controllerAttributes);
 					}
+					Data.siteControllerList.put(siteName, controller);
 				}
-				Data.siteControllerList.put(siteName, controller);
 			}
 		});
 	}
@@ -244,8 +244,8 @@ public class ResourcePreload{
 						}
 						Data.sensorAttributeList.put(sensorResult[i][0], sensorAttributes);
 					}
+					Data.controllerSensorList.put(controllerName, sensors);
 				}
-				Data.controllerSensorList.put(controllerName, sensors);
 			}
 		});
 	}
@@ -276,8 +276,8 @@ public class ResourcePreload{
 //						Window.alert("Actuator "+actuatorResult[i][0]+"->"+actuatorResult[i][2]);
 						Data.actuatorAttributeList.put(actuatorResult[i][0], actuatorAttributes);
 					} 
+					Data.controllerActuatorList.put(controllerName, actuators);
 				}
-				Data.controllerActuatorList.put(controllerName, actuators);
 			}
 		});
 	}
