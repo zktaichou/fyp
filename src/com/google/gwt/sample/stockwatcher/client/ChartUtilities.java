@@ -391,30 +391,66 @@ static long getTime(String date) {
 	
 	public static Chart createGaugeChart(final String name){
 		
-		Utility.hideTimer();
-		
 		final Chart chart = new Chart();
 		chart
-		.setType(Series.Type.GAUGE)  
-        .setChartTitleText("Live reading of "+name)
+		.setType(Series.Type.SOLID_GAUGE)  
 	    .setLegend(new Legend().setEnabled(false))  
 	    .setCredits(new Credits().setEnabled(false))
+	    .setAlignTicks(false)
+        .setPlotBackgroundImage(null)
+        .setBorderWidth(0)
+        .setPlotShadow(false)
+        .setExporting(new Exporting().setEnabled(false))
+        .setChartTitle(new ChartTitle()
+                .setText("Live reading of "+name)
+        )
+//        .setColors("blue")
+        .setPane(new Pane()
+                .setStartAngle(-90)
+                .setEndAngle(90)
+                .setCenter("50%", "85%")
+                .setBackground(new PaneBackground()
+                		.setInnerRadius("60%")
+                		.setOuterRadius("100%")
+                		.setShape(PaneBackground.Shape.ARC)
+                		.setBackgroundColor("rgba(0,0,0,0)")
+                		)
+        )
 	    ;
+		
+		final ArrayList<String> attributes =  Data.sensorAttributeList.get(name);
+	    chart.getYAxis().setMin(0);
+	    chart.getYAxis().setMax((Number)Double.parseDouble(attributes.get(8)));
+	    chart.getYAxis().setLineColor("gray");
+		
 		chart.setBackgroundColor(new Color()
 				   .setLinearGradient(0.0, 0.0, 1.0, 1.0)
 				   .addColorStop(0, 0, 0, 0, 1)
 				   .addColorStop(0, 0, 0, 0, 0)
 				 );
-
-//		chart.getXAxis().setType(Axis.Type.DATE_TIME).setMaxZoom(14 * 24 * 3600000);
 		
-		chart.getYAxis()
-        .setPlotLines(  
-            chart.getYAxis().createPlotLine()  
-                .setValue(0)  
-                .setWidth(2)  
-                .setColor("#808080")  
-        );
+//		chart.setSolidGaugePlotOptions(new SolidGaugePlotOptions().setColor(new Color()
+//				.setLinearGradient(0.5, 1.0, 0.5, 1.0)
+//				.addColorStop(0.1, "green")
+//				.addColorStop(0.5, "yellow")
+//				.addColorStop(0.9, "red"))
+//        );
+		
+        // Primary axis
+        chart.getYAxis()
+                .setTickPosition(Axis.TickPosition.INSIDE)
+                .setMinorTickPosition(Axis.TickPosition.INSIDE)
+                .setLineColor("white")
+                .setTickColor("white")
+                .setMinorTickColor("white")
+                .setLineWidth(2)
+                .setEndOnTick(true)
+                .setLabels(
+                        new YAxisLabels()
+                                // There is no documented "distance" option for gauge chart axes
+                                .setOption("distance", -20)
+                )
+        ;
 		
 		final Series series = chart.createSeries();
         chart.addSeries(series
@@ -431,15 +467,16 @@ static long getTime(String date) {
         			} 
          
         			public void onSuccess(Double reply) {
+//        				Window.alert(reply+"");
         				series.getPoints()[0]
-                                .update(reply);
+                                .update(Utility.round(new Random().nextDouble()*Double.parseDouble(attributes.get(8))));
         			}
         		});
             }
         };
 
         tempTimer.scheduleRepeating(2000);
-//        chart.setSize(Window.getClientWidth()*2/3, Window.getClientHeight()*2/3);
+        chart.setSize(Window.getClientWidth()*1/4, Window.getClientHeight()*1/4);
 	    
 		return chart;
 	}

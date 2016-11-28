@@ -146,7 +146,7 @@ public class LoginPage extends Composite {
 						Timer t = new Timer() {
 						      @Override
 						      public void run() {
-						    	  new Utility.ElementFader().fade(mainPanel.getElement(), 1, 0, 1000);
+//						    	  new Utility.ElementFader().fade(mainPanel.getElement(), 1, 0, 1000);
 									Pages.enterMainMenuPage();
 									Menu.start();
 						      }

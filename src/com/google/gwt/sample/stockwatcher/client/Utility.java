@@ -80,6 +80,13 @@ public class Utility{
 		loadingPanel.add(new HTML(myMessage));
 	}
 	
+	public static double round(double input)
+	{
+		int temp = (int)(input*100); 
+		double data = temp;
+		return (double)(data/100);
+	}
+	
 	public static class ElementFader {
 
 	    private int stepCount;

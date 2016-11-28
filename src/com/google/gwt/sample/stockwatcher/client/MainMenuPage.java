@@ -2,6 +2,7 @@ package com.google.gwt.sample.stockwatcher.client;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -16,7 +17,6 @@ public class MainMenuPage extends Composite{
 	Anchor welcomeAnchor = new Anchor();
 	
 	VerticalPanel mainPanel = new VerticalPanel();
-	FlowPanel flowPanel = new FlowPanel();
 
 	HorizontalPanel welcomePanel = new HorizontalPanel();
 	HorizontalPanel selectionPanel = new HorizontalPanel();
@@ -34,17 +34,27 @@ public class MainMenuPage extends Composite{
 		
 		welcomePanel.add(welcomeAnchor);
 		
-		for(String sensor: Data.subscribedSensorList)
-		{
-			flowPanel.add(ChartUtilities.createGaugeChart(sensor));
-		}
-
 		mainPanel.setStyleName("mainStyle");
 		mainPanel.setSize("100%", "100%");
 		mainPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		mainPanel.add(new HTML(Messages.MAIN_MENU));
-		mainPanel.add(welcomePanel);
-		mainPanel.add(flowPanel);
+		
+		HorizontalPanel temp = new HorizontalPanel();
+		Boolean flag = true;
+		for(String sensor: Data.subscribedSensorList)
+		{
+			flag=true;
+			temp.add(ChartUtilities.createGaugeChart(sensor));
+			if(temp.getWidgetCount()==4)
+			{
+				mainPanel.add(temp);
+				temp = new HorizontalPanel();
+				flag=false;
+			}
+		}
+		if(flag)
+		mainPanel.add(temp);
+//		mainPanel.add(flowPanel);
 		
 		initWidget(mainPanel);
 	}
