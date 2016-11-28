@@ -70,4 +70,5 @@ public interface GreetingService extends RemoteService {
 	String[][] getCulmulativeReadingGroupByDay(String sensor, Boolean predictionIsEnabled, int steps) throws IllegalArgumentException;
 	String[][] getCulmulativeReadingGroupByMonth(String sensor, Boolean predictionIsEnabled, int steps) throws IllegalArgumentException;
 	String[][] getCulmulativeReadingGroupByYear(String sensor, Boolean predictionIsEnabled, int steps) throws IllegalArgumentException;
+	Double getLatestReading(String sensor) throws IllegalArgumentException;
 }

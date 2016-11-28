@@ -86,6 +86,24 @@ public class Utility{
 	}
 	
 	@SuppressWarnings("unchecked")
+	public static Double decryptToDouble(ObjectInputStream ois){
+		try {
+	        Cipher decrypter=Cipher.getInstance("AES");
+	        decrypter.init(Cipher.DECRYPT_MODE,getKey());
+	        
+			return (Double)(((SealedObject) ois.readObject()).getObject(decrypter));
+		} catch (Exception e) {
+			try {
+				PrintWriter p=new PrintWriter(new BufferedWriter(new FileWriter(LogFile.failedDecryption())));
+				e.printStackTrace(p);
+				p.close();
+				return null;
+			} catch (Exception f) {}
+			
+			return null;}
+	}
+	
+	@SuppressWarnings("unchecked")
 	public static ArrayList<Object []> decryptToObjectArray(ObjectInputStream ois){
 		try {
 	        Cipher decrypter=Cipher.getInstance("AES");

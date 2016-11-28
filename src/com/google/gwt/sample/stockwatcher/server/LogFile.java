@@ -209,6 +209,9 @@ public class LogFile{
 	public static String getOngoingSchedulesByName(){
 		return fileName("getOngoingSchedulesByName");
 	}
+	public static String getLatestReading(){
+		return fileName("getLatestReading");
+	}
 	
 	public static String fileName(String name){
 		try{

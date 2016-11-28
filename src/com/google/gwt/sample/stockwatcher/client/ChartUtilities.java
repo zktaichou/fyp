@@ -4,6 +4,7 @@ import com.google.gwt.i18n.client.*;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.moxieapps.gwt.highcharts.client.*;
 import org.moxieapps.gwt.highcharts.client.labels.*;
@@ -315,6 +316,13 @@ static long getTime(String date) {
 		chart
 		.setType(Series.Type.COLUMN)  
         .setChartTitleText(title)
+        .setOptions3D(new Options3D()  
+                .setEnabled(true)  
+                .setAlpha(15)  
+                .setBeta(15)  
+                .setViewDistance(25)  
+                .setDepth(40)  
+            ) 
 	    .setLegend(new Legend().setEnabled(false))  
 	    .setCredits(new Credits().setEnabled(false))
 	    ;
@@ -377,6 +385,61 @@ static long getTime(String date) {
 		}
         
         chart.setSize(Window.getClientWidth()*2/3, Window.getClientHeight()*2/3);
+	    
+		return chart;
+	}
+	
+	public static Chart createGaugeChart(final String name){
+		
+		Utility.hideTimer();
+		
+		final Chart chart = new Chart();
+		chart
+		.setType(Series.Type.GAUGE)  
+        .setChartTitleText("Live reading of "+name)
+	    .setLegend(new Legend().setEnabled(false))  
+	    .setCredits(new Credits().setEnabled(false))
+	    ;
+		chart.setBackgroundColor(new Color()
+				   .setLinearGradient(0.0, 0.0, 1.0, 1.0)
+				   .addColorStop(0, 0, 0, 0, 1)
+				   .addColorStop(0, 0, 0, 0, 0)
+				 );
+
+//		chart.getXAxis().setType(Axis.Type.DATE_TIME).setMaxZoom(14 * 24 * 3600000);
+		
+		chart.getYAxis()
+        .setPlotLines(  
+            chart.getYAxis().createPlotLine()  
+                .setValue(0)  
+                .setWidth(2)  
+                .setColor("#808080")  
+        );
+		
+		final Series series = chart.createSeries();
+        chart.addSeries(series
+                .setName("Reading")
+                .addPoint(0)
+        );
+        
+        final Timer tempTimer = new Timer() {
+            @Override
+            public void run() {
+            	Utility.newRequestObj().getLatestReading(name, new AsyncCallback<Double>(){
+        			public void onFailure(Throwable caught) {
+//        				Window.alert("Unable to get "+Data.currentUser+"'s sensor subscription");
+        			} 
+         
+        			public void onSuccess(Double reply) {
+        				series.getPoints()[0]
+                                .update(reply);
+        			}
+        		});
+            }
+        };
+
+        tempTimer.scheduleRepeating(2000);
+//        chart.setSize(Window.getClientWidth()*2/3, Window.getClientHeight()*2/3);
 	    
 		return chart;
 	}

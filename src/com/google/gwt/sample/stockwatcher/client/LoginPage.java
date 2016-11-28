@@ -127,6 +127,7 @@ public class LoginPage extends Composite {
 					if(result)
 					{
 						Data.currentUser = usernameTB.getText();
+						SubscriptionRequest.getSubscribedSensor(Data.currentUser);
 						
 						msgPanel.clear();
 //						msgPanel.add(new HTML(Images.getImage(Images.LOADING_CAT)));

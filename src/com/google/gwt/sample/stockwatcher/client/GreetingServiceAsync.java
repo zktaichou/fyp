@@ -68,5 +68,5 @@ public interface GreetingServiceAsync {
 	void getCulmulativeReadingGroupByDay(String sensor, Boolean predictionIsEnabled, int steps, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
 	void getCulmulativeReadingGroupByMonth(String sensor, Boolean predictionIsEnabled, int steps, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
 	void getCulmulativeReadingGroupByYear(String sensor, Boolean predictionIsEnabled, int steps, AsyncCallback<String[][]> callback) throws IllegalArgumentException;
-
+	void getLatestReading(String sensor, AsyncCallback<Double> callback) throws IllegalArgumentException;
 }
