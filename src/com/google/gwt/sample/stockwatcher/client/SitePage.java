@@ -245,33 +245,33 @@ public class SitePage extends Composite{
 	}
 	
 	private static void popupControllers(String siteName){
-//		try{
+		try{
 		for(PopupPanel popup: siteControllerPopupList.get(siteName)){
 			popup.setAnimationEnabled(true);
 			popup.setAnimationType(AnimationType.CENTER);
 			popup.setVisible(true);
 		}
-//		}catch(Exception e){}
+		}catch(Exception e){}
 	}
 	
 	private static void popupSensors(String controllerName, Boolean state){
-//		try{
+		try{
 		for(PopupPanel popup: controllerSensorPopupList.get(controllerName)){
 			popup.setAnimationEnabled(true);
 			popup.setAnimationType(AnimationType.CENTER);
 			popup.setVisible(state);
 		}
-//		}catch(Exception e){}
+		}catch(Exception e){}
 	}
 	
 	private static void popupActuators(String controllerName, Boolean state){
-//		try{
+		try{
 		for(PopupPanel popup: controllerActuatorPopupList.get(controllerName)){
 			popup.setAnimationEnabled(true);
 			popup.setAnimationType(AnimationType.CENTER);
 			popup.setVisible(state);
 		}
-//		}catch(Exception e){}
+		}catch(Exception e){}
 	}
 	
 	private static String setSensorIcon(String type){
