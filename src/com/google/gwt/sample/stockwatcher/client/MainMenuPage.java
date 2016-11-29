@@ -6,34 +6,21 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class MainMenuPage extends Composite{
-
-	Anchor welcomeAnchor = new Anchor();
 	
 	public static VerticalPanel mainPanel = new VerticalPanel();
-
-	HorizontalPanel welcomePanel = new HorizontalPanel();
-	HorizontalPanel selectionPanel = new HorizontalPanel();
 	
-	Button monitorButton = new Button("Monitoring Page");
-	Button controlButton = new Button("Control Page");
-	Button logoutButton = new Button("Logout");
 	String selectTitle = "<h1>Please select the page that you want to enter</h1>";
 	
 	public MainMenuPage(){
 		Header.setHeaderTitle("");
-		setHandlers();
-		
-		welcomeAnchor.setHTML(Images.getImage(Images.WELCOME,120));
-		
-		welcomePanel.add(welcomeAnchor);
-		
+		mainPanel=new VerticalPanel();
+		mainPanel.clear();
 		mainPanel.setStyleName("mainStyle");
 		mainPanel.setSize("100%", "100%");
 		mainPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
@@ -55,27 +42,10 @@ public class MainMenuPage extends Composite{
 			}
 		}
 		if(flag)
+		{
 		mainPanel.add(temp);
-//		mainPanel.add(flowPanel);
+		}
 		
 		initWidget(mainPanel);
-	}
-	
-	private void setHandlers(){
-		monitorButton.addClickHandler(new ClickHandler(){
-			public void onClick(ClickEvent event){
-				Pages.enterMonitoringPage();
-				};
-			});
-		controlButton.addClickHandler(new ClickHandler(){
-			public void onClick(ClickEvent event){
-				Pages.enterSitePage();
-				};
-			});
-		logoutButton.addClickHandler(new ClickHandler(){
-			public void onClick(ClickEvent event){
-				Pages.enterLoginPage();
-				};
-			});
 	}
 }

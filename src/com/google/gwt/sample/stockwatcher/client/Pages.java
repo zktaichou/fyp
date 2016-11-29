@@ -1,5 +1,7 @@
 package com.google.gwt.sample.stockwatcher.client;
 
+import com.google.gwt.user.client.Window;
+
 public class Pages{
 	
 	public static void enterLoginPage(){

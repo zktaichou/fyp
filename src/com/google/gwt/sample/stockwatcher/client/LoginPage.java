@@ -28,13 +28,13 @@ public class LoginPage extends Composite {
 	VerticalPanel mainPanel = new VerticalPanel();
 	VerticalPanel msgPanel = new VerticalPanel();
 	HorizontalPanel linksPanel = new HorizontalPanel();
-	TextBox usernameTB = new TextBox();
+	TextBox usernameTB;
 	PasswordTextBox passwordTB = new PasswordTextBox();
 	String enterUsernameMsg = "Please enter your username: ";
 	String enterPasswordMsg = "Please enter your password: ";
 	Anchor forgotPassword = new Anchor("Forgot password");
 	Anchor makeNewAccount = new Anchor("Request new account");
-	Button loginButton = new Button("Login");
+	Button loginButton;
 	public static final GreetingServiceAsync greetingService = GWT.create(GreetingService.class);
 
 	public LoginPage(){
@@ -80,22 +80,26 @@ public class LoginPage extends Composite {
 	}
 	
 	public void setHandlers(){
+		usernameTB = new TextBox();
+		passwordTB = new PasswordTextBox();
+		loginButton = new Button("Login");
+		
 		MyHandler handler = new MyHandler();
 		usernameTB.addKeyUpHandler(handler);
 		passwordTB.addKeyUpHandler(handler);
 		loginButton.addClickHandler(handler);
 		
-		forgotPassword.addClickHandler(new ClickHandler(){
-			public void onClick(ClickEvent event){
-				Popup.forgotPassword();
-				};
-			});
-		
-		makeNewAccount.addClickHandler(new ClickHandler(){
-			public void onClick(ClickEvent event){
-				Popup.makeNewAccount();
-				};
-			});
+//		forgotPassword.addClickHandler(new ClickHandler(){
+//			public void onClick(ClickEvent event){
+//				Popup.forgotPassword();
+//				};
+//			});
+//		
+//		makeNewAccount.addClickHandler(new ClickHandler(){
+//			public void onClick(ClickEvent event){
+//				Popup.makeNewAccount();
+//				};
+//			});
 	}
 	
 	class MyHandler implements ClickHandler, KeyUpHandler {
@@ -132,9 +136,6 @@ public class LoginPage extends Composite {
 						mainPanel.setSize("100%", "100%");
 						mainPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 						mainPanel.add(msgPanel);
-						
-//						Pages.enterMainMenuPage();
-//						Menu.start();
 						
 						Timer t = new Timer() {
 						      @Override

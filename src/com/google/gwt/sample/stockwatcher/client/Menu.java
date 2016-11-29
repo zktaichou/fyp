@@ -79,6 +79,7 @@ public class Menu extends Composite {
 		// Set up menu items
 		setupAnchors();
 		// Render the main menu and its sub menus
+		selectionPanel.clear();
 		selectionPanel.add(new HTML(verticalLine));
 		renderHomeAnchor();
 		renderMonitoringMenu("Monitoring");
@@ -124,6 +125,7 @@ public class Menu extends Composite {
 		menuContainerPanel.setWidth("100%");
 
 		// Set up main menu panel
+		mainMenuPanel.clear();
 		mainMenuPanel.setWidth("100%");
 		mainMenuPanel.getElement().getStyle().setHeight(HEIGHT, Unit.PX);
 		mainMenuPanel.addStyleName("gwt-MainMenuPanel");

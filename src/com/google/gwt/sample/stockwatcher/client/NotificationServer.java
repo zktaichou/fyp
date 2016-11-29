@@ -63,7 +63,7 @@ public class NotificationServer{
 		cFirstRequest = true;
 		sFirstRequest = true;
 		aFirstRequest = true;
-		
+
 		setHandlers();
 		resetNotificationTables();
   	  	getUpdates();
