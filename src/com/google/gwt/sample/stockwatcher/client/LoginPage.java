@@ -112,10 +112,6 @@ public class LoginPage extends Composite {
 
 		public void checkLoginInfo(){
 			ResourcePreload.preloadData();
-			
-//			Pages.enterMainMenuPage();
-//			Menu.start();
-			
 			Utility.newRequestObj().userLogin(usernameTB.getText(),passwordTB.getText(), new AsyncCallback<Boolean>() {
 				public void onFailure(Throwable caught) {
 					Window.alert("Unable to connect: Error Mesage - "+caught.getMessage());
@@ -129,8 +125,6 @@ public class LoginPage extends Composite {
 						SubscriptionRequest.getSubscribedSensor(Data.currentUser);
 						
 						msgPanel.clear();
-//						msgPanel.add(new HTML(Images.getImage(Images.LOADING_CAT)));
-//						msgPanel.add(new HTML(Images.getImage(Images.LOADING_FLASK,Window.getClientWidth(),Window.getClientHeight()-Menu.HEIGHT-Footer.HEIGHT-50)));
 						msgPanel.add(new HTML(Images.getImage(Images.LOADING_EPIC,Window.getClientHeight()-Menu.HEIGHT-Footer.HEIGHT)));
 						
 						mainPanel.clear();

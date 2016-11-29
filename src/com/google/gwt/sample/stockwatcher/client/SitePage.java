@@ -210,9 +210,7 @@ public class SitePage extends Composite{
 	private static void renderSensorPopups(){
 		for(String controller: Data.controllerSensorList.keySet())
 		{
-			
 			ArrayList<PopupPanel> popups = new ArrayList<>();
-			
 			for(String sensors: Data.controllerSensorList.get(controller))
 			{
 				ArrayList<String> attributes = Data.sensorAttributeList.get(sensors);
@@ -247,29 +245,33 @@ public class SitePage extends Composite{
 	}
 	
 	private static void popupControllers(String siteName){
-		
+//		try{
 		for(PopupPanel popup: siteControllerPopupList.get(siteName)){
 			popup.setAnimationEnabled(true);
 			popup.setAnimationType(AnimationType.CENTER);
 			popup.setVisible(true);
 		}
+//		}catch(Exception e){}
 	}
 	
 	private static void popupSensors(String controllerName, Boolean state){
-		
+//		try{
 		for(PopupPanel popup: controllerSensorPopupList.get(controllerName)){
 			popup.setAnimationEnabled(true);
 			popup.setAnimationType(AnimationType.CENTER);
 			popup.setVisible(state);
 		}
+//		}catch(Exception e){}
 	}
 	
 	private static void popupActuators(String controllerName, Boolean state){
+//		try{
 		for(PopupPanel popup: controllerActuatorPopupList.get(controllerName)){
 			popup.setAnimationEnabled(true);
 			popup.setAnimationType(AnimationType.CENTER);
 			popup.setVisible(state);
 		}
+//		}catch(Exception e){}
 	}
 	
 	private static String setSensorIcon(String type){
@@ -290,6 +292,7 @@ public class SitePage extends Composite{
 		return "";
 	}
 	
+	@SuppressWarnings("unused")
 	private static String setActuatorIcon(String type){
 		switch(type){
 			case "Current":{
@@ -543,7 +546,9 @@ public class SitePage extends Composite{
 					public void onClick(ClickEvent event){
 						temp.getElement().getStyle().setProperty("toggleStatus",String.valueOf(!Boolean.parseBoolean(temp.getElement().getStyle().getProperty("toggleStatus"))));
 						temp.setHTML(toggle.get(Boolean.parseBoolean(temp.getElement().getStyle().getProperty("toggleStatus"))));
+						if(controllerSensorPopupList.containsKey(name))
 						popupSensors(name,Boolean.parseBoolean(temp.getElement().getStyle().getProperty("toggleStatus")));
+						if(controllerActuatorPopupList.containsKey(name))
 						popupActuators(name,Boolean.parseBoolean(temp.getElement().getStyle().getProperty("toggleStatus")));
 						}
 				});
@@ -583,7 +588,6 @@ public class SitePage extends Composite{
 				
 				Utility.newRequestObj().actuatorSetControlType(lb.getTitle(), lb.getSelectedItemText(), new AsyncCallback<String>() {
 					public void onFailure(Throwable caught) {
-						Window.alert("Unable to update control type");
 						lb.setSelectedIndex(Integer.parseInt(lb.getName()));
 						lb.setEnabled(true);
 					}

@@ -1209,8 +1209,7 @@ public class SchedulePage extends Composite{
 			public void onSuccess(String[][] result) {
 				if(Utility.isNull(result))
 				{
-					Window.alert("No regular schedule found");
-					Utility.hideTimer();
+					Utility.setMsg(Messages.NO_DATA);
 				}
 				else
 				{
@@ -1233,8 +1232,7 @@ public class SchedulePage extends Composite{
 			public void onSuccess(String[][] result) {
 				if(Utility.isNull(result))
 				{
-					Window.alert("No special schedule found");
-					Utility.hideTimer();
+					Utility.setMsg(Messages.NO_DATA);
 				}
 				else
 				{
@@ -1287,8 +1285,7 @@ public class SchedulePage extends Composite{
 			public void onSuccess(String[][] result) {
 				if(Utility.isNull(result))
 				{
-					Window.alert("No ongoing schedules found for "+actuator);
-					Utility.hideTimer();
+					Utility.setMsg(Messages.NO_DATA);
 				}
 				else
 				{
@@ -1309,8 +1306,7 @@ public class SchedulePage extends Composite{
 			public void onSuccess(String[][] result) {
 				if(Utility.isNull(result))
 				{
-					Window.alert("No ongoing schedules found");
-					Utility.hideTimer();
+					Utility.setMsg(Messages.NO_DATA);
 				}
 				else
 				{
