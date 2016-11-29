@@ -10,6 +10,7 @@ import org.moxieapps.gwt.highcharts.client.*;
 import org.moxieapps.gwt.highcharts.client.labels.*;
 import org.moxieapps.gwt.highcharts.client.plotOptions.*;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Timer;
@@ -389,8 +390,8 @@ static long getTime(String date) {
 		return chart;
 	}
 	
-	public static Chart createGaugeChart(final String name){
-		
+	public static HorizontalPanel createGaugeChart(final String name, final int size){
+		final HorizontalPanel lol = new HorizontalPanel();
 		final Chart chart = new Chart();
 		chart
 		.setType(Series.Type.SOLID_GAUGE)  
@@ -404,7 +405,6 @@ static long getTime(String date) {
         .setChartTitle(new ChartTitle()
                 .setText("Live reading of "+name)
         )
-//        .setColors("blue")
         .setPane(new Pane()
                 .setStartAngle(-90)
                 .setEndAngle(90)
@@ -416,11 +416,16 @@ static long getTime(String date) {
                 		.setBackgroundColor("rgba(0,0,0,0)")
                 		)
         )
-	    ;
+        .setSolidGaugePlotOptions(new SolidGaugePlotOptions()
+                .setAnimation(false))
+        ;
+		
 		
 		final ArrayList<String> attributes =  Data.sensorAttributeList.get(name);
+		
+		final Number maxTreshold = (Number)Double.parseDouble(attributes.get(8));
 	    chart.getYAxis().setMin(0);
-	    chart.getYAxis().setMax((Number)Double.parseDouble(attributes.get(8)));
+	    chart.getYAxis().setMax(maxTreshold);
 	    chart.getYAxis().setLineColor("gray");
 		
 		chart.setBackgroundColor(new Color()
@@ -429,14 +434,6 @@ static long getTime(String date) {
 				   .addColorStop(0, 0, 0, 0, 0)
 				 );
 		
-//		chart.setSolidGaugePlotOptions(new SolidGaugePlotOptions().setColor(new Color()
-//				.setLinearGradient(0.5, 1.0, 0.5, 1.0)
-//				.addColorStop(0.1, "green")
-//				.addColorStop(0.5, "yellow")
-//				.addColorStop(0.9, "red"))
-//        );
-		
-        // Primary axis
         chart.getYAxis()
                 .setTickPosition(Axis.TickPosition.INSIDE)
                 .setMinorTickPosition(Axis.TickPosition.INSIDE)
@@ -457,28 +454,87 @@ static long getTime(String date) {
                 .setName("Reading")
                 .addPoint(0)
         );
-        
         final Timer tempTimer = new Timer() {
             @Override
             public void run() {
+            	if(MainMenuPage.mainPanel.isVisible())
             	Utility.newRequestObj().getLatestReading(name, new AsyncCallback<Double>(){
         			public void onFailure(Throwable caught) {
 //        				Window.alert("Unable to get "+Data.currentUser+"'s sensor subscription");
         			} 
          
         			public void onSuccess(Double reply) {
-//        				Window.alert(reply+"");
-        				series.getPoints()[0]
-                                .update(Utility.round(new Random().nextDouble()*Double.parseDouble(attributes.get(8))));
+//        				double temp = Utility.round(new Random().nextDouble()*Double.parseDouble(attributes.get(8)));
+        				double temp = Utility.round(reply);
+        				series.getPoints()[0].update(temp);
+        				chart.setColors(updateColor(temp,maxTreshold));
+        				lol.add(chart);
         			}
         		});
             }
         };
 
         tempTimer.scheduleRepeating(2000);
+        
+        chart.setSize(Window.getClientWidth()*1/size, Window.getClientHeight()*1/size);
+        if(size>4)
+        {
         chart.setSize(Window.getClientWidth()*1/4, Window.getClientHeight()*1/4);
-	    
-		return chart;
+        }
+        lol.add(chart);
+		return lol;
+	}
+	
+	private static void doFadeOut(HorizontalPanel panel) {
+		final Element element = panel.getElement();
+	    final double opacity = Double.parseDouble(element.getStyle().getOpacity());
+	    final Timer tempTimer = new Timer() {
+            @Override
+            public void run() {
+            	if(opacity==0)
+            	{
+            		cancel();
+            	}
+        	    element.getStyle().setOpacity(opacity - 0.1);
+            }
+        };
+        tempTimer.scheduleRepeating(10);
+	}
+
+	private static void doFadeIn(HorizontalPanel panel) {
+		final Element element = panel.getElement();
+	    final double opacity = Double.parseDouble(element.getStyle().getOpacity());
+	    final Timer tempTimer = new Timer() {
+            @Override
+            public void run() {
+            	if(opacity==1)
+            	{
+            		cancel();
+            	}
+        	    element.getStyle().setOpacity(opacity + 0.1);
+            }
+        };
+        tempTimer.scheduleRepeating(10);
+	}
+	
+	private static String updateColor(double input,Number maxTreshold){
+		double ratio = input/maxTreshold.doubleValue();
+		int value = (int)(ratio*10);
+		switch(value)
+		{
+		case 0: return "#00FF00";
+		case 1: return "#33FF00";
+		case 2: return "#66FF00";
+		case 3: return "#99FF00";
+		case 4: return "#CCFF00";
+		case 5: return "#FFFF00";
+		case 6: return "#FFCC00";
+		case 7: return "#FF9900";
+		case 8: return "#FF6600";
+		case 9: return "#FF3300";
+		case 10: return "#FF0000";
+		}
+		return null;
 	}
 
 	//Methods to create a flex table from an input 2D String array

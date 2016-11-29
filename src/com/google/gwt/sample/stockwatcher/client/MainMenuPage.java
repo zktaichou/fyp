@@ -16,7 +16,7 @@ public class MainMenuPage extends Composite{
 
 	Anchor welcomeAnchor = new Anchor();
 	
-	VerticalPanel mainPanel = new VerticalPanel();
+	public static VerticalPanel mainPanel = new VerticalPanel();
 
 	HorizontalPanel welcomePanel = new HorizontalPanel();
 	HorizontalPanel selectionPanel = new HorizontalPanel();
@@ -41,15 +41,17 @@ public class MainMenuPage extends Composite{
 		
 		HorizontalPanel temp = new HorizontalPanel();
 		Boolean flag = true;
+		int count=0;
 		for(String sensor: Data.subscribedSensorList)
 		{
 			flag=true;
-			temp.add(ChartUtilities.createGaugeChart(sensor));
+			temp.add(ChartUtilities.createGaugeChart(sensor,Data.subscribedSensorList.size()-(count*4)));
 			if(temp.getWidgetCount()==4)
 			{
 				mainPanel.add(temp);
 				temp = new HorizontalPanel();
 				flag=false;
+				count++;
 			}
 		}
 		if(flag)

@@ -3,6 +3,7 @@ package com.google.gwt.sample.stockwatcher.client;
 import java.util.Random;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -34,7 +35,6 @@ public class LoginPage extends Composite {
 	Anchor forgotPassword = new Anchor("Forgot password");
 	Anchor makeNewAccount = new Anchor("Request new account");
 	Button loginButton = new Button("Login");
-	
 	public static final GreetingServiceAsync greetingService = GWT.create(GreetingService.class);
 
 	public LoginPage(){
@@ -61,6 +61,7 @@ public class LoginPage extends Composite {
 		wrapper.add(new HTML(enterPasswordMsg));
 		wrapper.add(passwordTB);
 		wrapper.add(loginButton);
+//		wrapper.add(linksPanel);
 		
 		mainPanel.clear();
 		mainPanel.addStyleName("mainStyle");
@@ -96,8 +97,6 @@ public class LoginPage extends Composite {
 				};
 			});
 	}
-	
-	
 	
 	class MyHandler implements ClickHandler, KeyUpHandler {
 		
