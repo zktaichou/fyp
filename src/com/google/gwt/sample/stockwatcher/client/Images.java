@@ -48,6 +48,7 @@ public class Images{
 	public static final String ACTUATOR_CURRENT_ICON = "images/actuator_current_icon.png";
 	public static final String ACTUATOR_WATER_ICON = "images/actuator_water_icon.png";
 	public static final String MICROCONTROLLER_ICON = "images/microcontroller_icon.png";
+	public static final String POTENTIOMETER_ICON = "images/potentiometer_icon.png";
 	
 	// Function to customize image width, height and image alignment
 	public static String getImage(String _path, int _width_px, int _height_px) {

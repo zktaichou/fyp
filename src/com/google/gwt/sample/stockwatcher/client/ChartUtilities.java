@@ -70,7 +70,7 @@ static long getTime(String date) {
 	}
 	
 	public static String updateLiveUpdateTitle(String name, java.sql.Date sd, java.sql.Date ed){
-		return "Today's live updates for "+name;
+		return "Past 24h live reading for "+name;
 		//return name+" reading from "+sd+" to "+ed;
 	}
 	
@@ -298,7 +298,10 @@ static long getTime(String date) {
 	            		}
 	                    schedule(2000);
 	            	}
-	
+	            	else
+	            	{
+	            		cancel();
+	            	}
 	            }  
 	        };
 	        tempTimer.schedule(0);
@@ -477,17 +480,25 @@ static long getTime(String date) {
         			} 
          
         			public void onSuccess(Double reply) {
+        				if(lol.isVisible())
+        				{
 //        				double temp = Utility.round(new Random().nextDouble()*Double.parseDouble(attributes.get(8)));
-        				double temp = Utility.round(reply);
-        				series.getPoints()[0].update(temp);
-        				chart.setColors(updateColor(temp,maxTreshold));
-        				lol.add(chart);
+	        				double temp = Utility.round(reply);
+	        				series.getPoints()[0].update(temp);
+	        				chart.setColors(updateColor(temp,maxTreshold));
+	        				lol.add(chart);
+        				}
+        				else
+        				{
+        					cancel();
+        				}
         			}
         		});
             }
         };
 
         tempTimer.scheduleRepeating(2000);
+        Data.gaugeTimers.add(tempTimer);
         
         chart.setSize(Window.getClientWidth()*1/size, Window.getClientHeight()*1/size);
         if(size>4)

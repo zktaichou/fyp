@@ -138,7 +138,7 @@ public class MonitoringPage extends Composite {
 	@SuppressWarnings("deprecation")
 	public void setWidgetContent(){
 		
-		Date today = new Date();
+		Date today = new Date(new Date().getTime()-86400000);
 		Date startOfYear = new Date();
 		startOfYear.setDate(1);
 		startOfYear.setMonth(0);

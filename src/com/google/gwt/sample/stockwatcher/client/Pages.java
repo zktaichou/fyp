@@ -1,10 +1,11 @@
 package com.google.gwt.sample.stockwatcher.client;
 
-import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.Timer;
 
 public class Pages{
 	
 	public static void enterLoginPage(){
+		stopGaugeTimers();
 		Menu.arrowAnchor.setVisible(false);
 		LoginPage loginPage = new LoginPage();
 		
@@ -13,6 +14,7 @@ public class Pages{
 	}
 
 	public static void enterMainMenuPage(){
+		stopGaugeTimers();
 		Menu.arrowAnchor.setVisible(true);
 		MainMenuPage mainMenuPage = new MainMenuPage();
 		
@@ -21,6 +23,7 @@ public class Pages{
 	}
 
 	public static void enterMonitoringPage(){
+		stopGaugeTimers();
 		Menu.arrowAnchor.setVisible(false);
 		MonitoringPage monitoringPage = new MonitoringPage();
 		
@@ -29,6 +32,7 @@ public class Pages{
 	}
 
 	public static void enterReportingPage(){
+		stopGaugeTimers();
 		Menu.arrowAnchor.setVisible(false);
 		ReportingPage reportingPage = new ReportingPage();
 		
@@ -37,6 +41,7 @@ public class Pages{
 	}
 
 	public static void enterSitePage(){
+		stopGaugeTimers();
 		Menu.arrowAnchor.setVisible(false);
 		SitePage sitePage = new SitePage();
 		
@@ -45,6 +50,7 @@ public class Pages{
 	}
 	
 	public static void enterSchedulePage(){
+		stopGaugeTimers();
 		Menu.arrowAnchor.setVisible(false);
 		SchedulePage schedulePage = new SchedulePage();
 		
@@ -53,6 +59,7 @@ public class Pages{
 	}
 	
 	public static void enterUserNotificationPage(){
+		stopGaugeTimers();
 		Menu.arrowAnchor.setVisible(false);
 		UserNotificationPage userNotificationPage = new UserNotificationPage(Data.currentUser);
 		
@@ -61,10 +68,18 @@ public class Pages{
 	}
 	
 	public static void enterSensorActuatorResponsePage(){
+		stopGaugeTimers();
 		Menu.arrowAnchor.setVisible(false);
 		SensorActuatorResponsePage sensorActuatorResponsePage = new SensorActuatorResponsePage();
 		
 		BasePage.contentPanel.clear();
 		BasePage.contentPanel.add(sensorActuatorResponsePage);
+	}
+	
+	private static void stopGaugeTimers(){
+		for(Timer t: Data.gaugeTimers)
+		{
+			t.cancel();
+		}
 	}
 }

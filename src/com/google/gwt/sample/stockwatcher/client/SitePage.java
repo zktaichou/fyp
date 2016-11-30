@@ -288,6 +288,9 @@ public class SitePage extends Composite{
 			case "Temperature":{
 				return Images.getImage(Images.TEMPERATURE_ICON,30);
 			}
+			case "Potentiometer":{
+				return Images.getImage(Images.POTENTIOMETER_ICON,30);
+			}
 		}
 		return "";
 	}

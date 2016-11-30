@@ -3,6 +3,8 @@ package com.google.gwt.sample.stockwatcher.client;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.google.gwt.user.client.Timer;
+
 public class Data{
 	
 	static int latestRequestID;
@@ -35,4 +37,5 @@ public class Data{
 	static int ruleAttributeSize = 0;
 	static int responseAttributeSize = 0;
 	static String currentUser = "";
+	static ArrayList<Timer> gaugeTimers = new ArrayList<Timer>();
 }
