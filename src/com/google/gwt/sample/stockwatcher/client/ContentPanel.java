@@ -9,12 +9,17 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class ContentPanel extends Composite{
 
-	HorizontalPanel wholePanel = new HorizontalPanel();
-	HorizontalPanel leftPanel = new HorizontalPanel();
-	VerticalPanel middlePanel = new VerticalPanel();
-	HorizontalPanel rightPanel = new HorizontalPanel();
+	HorizontalPanel wholePanel;
+	HorizontalPanel leftPanel;
+	VerticalPanel middlePanel;
+	HorizontalPanel rightPanel;
 	
 	public ContentPanel(){
+		wholePanel = new HorizontalPanel();
+		leftPanel = new HorizontalPanel();
+		middlePanel = new VerticalPanel();
+		rightPanel = new HorizontalPanel();
+		
 		wholePanel.add(leftPanel);
 		wholePanel.add(middlePanel);
 		wholePanel.add(rightPanel);

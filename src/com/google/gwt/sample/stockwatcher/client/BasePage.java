@@ -7,16 +7,22 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class BasePage implements EntryPoint {
-	static VerticalPanel menuContainer = new VerticalPanel();
-	static VerticalPanel headerContainer = new VerticalPanel();
-	static VerticalPanel contentContainer = new VerticalPanel();
-	static VerticalPanel footerContainer = new VerticalPanel();
-	static ContentPanel contentPanel = new ContentPanel();
+	static VerticalPanel menuContainer;
+	static VerticalPanel headerContainer;
+	static VerticalPanel contentContainer;
+	static VerticalPanel footerContainer;
+	static ContentPanel contentPanel;
 	
 	static int contentPanelHeight = Window.getClientHeight()-Menu.HEIGHT-Footer.HEIGHT-Header.HEIGHT;
 	
 	public void onModuleLoad() {
-//		ResourcePreload.preloadData();
+		ResourcePreload.preloadData();
+		
+		menuContainer = new VerticalPanel();
+		headerContainer = new VerticalPanel();
+		contentContainer = new VerticalPanel();
+		footerContainer = new VerticalPanel();
+		contentPanel = new ContentPanel();
 		
 		RootPanel.get("menuContainer").add(menuContainer);
 		RootPanel.get("headerContainer").add(headerContainer);

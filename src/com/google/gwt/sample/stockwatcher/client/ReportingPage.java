@@ -168,7 +168,12 @@ public class ReportingPage extends Composite {
 		});
 		goButton.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event){
-				sendDataToServer();
+				if(isSensorSelected())
+				{
+					refreshAdvanceFilterMenu();
+					filterBox.setValue(false, true);
+					sendDataToServer();
+				}
 			};
 		});
 		refreshButton.addClickHandler(new ClickHandler(){
@@ -194,8 +199,6 @@ public class ReportingPage extends Composite {
 	private void sendDataToServer(){
 		if(isSensorSelected())
 		{
-			refreshAdvanceFilterMenu();
-			filterBox.setValue(false, true);
 			chartPanel.clear();
 			chartPanel.add(Utility.addTimer());
 			

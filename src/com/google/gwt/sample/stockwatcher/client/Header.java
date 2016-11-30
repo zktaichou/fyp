@@ -8,9 +8,9 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 
 public class Header extends Composite{
 	
-	public static HorizontalPanel basePanel = new HorizontalPanel();
-	public static HorizontalPanel leftPanel = new HorizontalPanel();
-	public static HorizontalPanel rightPanel = new HorizontalPanel();
+	public static HorizontalPanel basePanel;
+	public static HorizontalPanel leftPanel;
+	public static HorizontalPanel rightPanel;
 	public static final int HEIGHT = 30;
 	
 	public Header(){
@@ -18,6 +18,10 @@ public class Header extends Composite{
 	}
 	
 	public Header(String msg){
+		basePanel = new HorizontalPanel();
+		leftPanel = new HorizontalPanel();
+		rightPanel = new HorizontalPanel();
+		
 		if(msg==null){
 			msg=Messages.WELCOME;
 		} 

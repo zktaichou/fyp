@@ -332,6 +332,19 @@ static long getTime(String date) {
 				   .addColorStop(0, 0, 0, 0, 1)
 				   .addColorStop(0, 0, 0, 0, 0)
 				 );
+		
+		chart.setSeriesPlotOptions(
+			     new SeriesPlotOptions()
+			       .setDataLabels(
+			           new DataLabels()
+			              .setEnabled(true)
+			              .setAlign(Labels.Align.RIGHT)
+			              .setColor("#FFFFFF")
+			              .setRotation(-20)
+			              .setX(-3)
+			              .setY(-18)
+			       )
+			   );
 
 		String[] dateContents = title.split(" ");
 
@@ -341,12 +354,12 @@ static long getTime(String date) {
 		{
 			if(dateContents[i].equals("Daily"))
 			{
-				chart.getXAxis().setDateTimeLabelFormats(new DateTimeLabelFormats().setDay("%e %B %Y"));
+				chart.getXAxis().setDateTimeLabelFormats(new DateTimeLabelFormats().setDay("%e %b %Y"));
 				break;
 			}
 			if(dateContents[i].equals("Monthly"))
 			{
-				chart.getXAxis().setDateTimeLabelFormats(new DateTimeLabelFormats().setMonth("%B %Y"));
+				chart.getXAxis().setDateTimeLabelFormats(new DateTimeLabelFormats().setMonth("%b %Y"));
 				break;
 			}
 			if(dateContents[i].equals("Yearly"))

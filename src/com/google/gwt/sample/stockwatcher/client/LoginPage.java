@@ -3,7 +3,6 @@ package com.google.gwt.sample.stockwatcher.client;
 import java.util.Random;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -24,20 +23,29 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class LoginPage extends Composite { 
-	ContentPanel cPanel = new ContentPanel(); 
-	VerticalPanel mainPanel = new VerticalPanel();
-	VerticalPanel msgPanel = new VerticalPanel();
-	HorizontalPanel linksPanel = new HorizontalPanel();
+	ContentPanel cPanel; 
+	VerticalPanel mainPanel;
+	VerticalPanel msgPanel;
+	HorizontalPanel linksPanel;
 	TextBox usernameTB;
-	PasswordTextBox passwordTB = new PasswordTextBox();
+	PasswordTextBox passwordTB;
 	String enterUsernameMsg = "Please enter your username: ";
 	String enterPasswordMsg = "Please enter your password: ";
-	Anchor forgotPassword = new Anchor("Forgot password");
-	Anchor makeNewAccount = new Anchor("Request new account");
+	Anchor forgotPassword;
+	Anchor makeNewAccount;
 	Button loginButton;
 	public static final GreetingServiceAsync greetingService = GWT.create(GreetingService.class);
 
 	public LoginPage(){
+		cPanel = new ContentPanel(); 
+		mainPanel = new VerticalPanel();
+		msgPanel = new VerticalPanel();
+		linksPanel = new HorizontalPanel();
+		passwordTB = new PasswordTextBox();
+		forgotPassword = new Anchor("Forgot password");
+		makeNewAccount = new Anchor("Request new account");
+		
+		
 		Header.setHeaderTitle("");
 		setHandlers();
 		
