@@ -82,9 +82,9 @@ public class Menu extends Composite {
 		selectionPanel.clear();
 		selectionPanel.add(new HTML(verticalLine));
 		renderHomeAnchor();
-		renderMonitoringMenu("Monitoring");
-		renderPlanningMenu("Planning");
-		renderSettingsMenu("Settings");
+		renderMonitoringMenu("Monitoring/Reporting");
+		renderPlanningMenu("Control Module");
+		renderSettingsMenu("Device Setting");
 		renderOptionsMenu(Images.getImage(Images.GEAR_ICON,Menu.HEIGHT));
 		renderNotificationAnchor();
 		

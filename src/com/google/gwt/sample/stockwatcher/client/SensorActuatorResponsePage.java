@@ -241,8 +241,6 @@ public class SensorActuatorResponsePage extends Composite {
 				}
 				else
 				{
-					Window.alert("No data found");
-					
 					responsePopup.setVisible(false);
 					
 					FlexTable newTable = new FlexTable();

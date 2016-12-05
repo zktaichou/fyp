@@ -138,16 +138,14 @@ public class MonitoringPage extends Composite {
 	@SuppressWarnings("deprecation")
 	public void setWidgetContent(){
 		
-		Date today = new Date(new Date().getTime()-86400000);
-		Date startOfYear = new Date();
-		startOfYear.setDate(1);
-		startOfYear.setMonth(0);
+		Date past24Hours = new Date(new Date().getTime()-86400000);
+		Date today = new Date();
 		
 		formatHolder.setFormat(new DateBox.DefaultFormat(ChartUtilities.requestFormat));
 
 		sDateBox.setFormat(new DateBox.DefaultFormat(ChartUtilities.calendarFormat));
 		sDateBox.getDatePicker().setYearArrowsVisible(true);
-		sDateBox.setValue(today);
+		sDateBox.setValue(past24Hours);
 	    
 		eDateBox.setFormat(new DateBox.DefaultFormat(ChartUtilities.calendarFormat));
 		eDateBox.getDatePicker().setYearArrowsVisible(true);
