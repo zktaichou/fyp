@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import com.google.gwt.sample.stockwatcher.client.GreetingService;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -856,6 +857,8 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			return null;}
 	}
 	
+	
+	
 	public String[][] greetServer(String sn, Date sd, Date ed, Boolean predictionIsEnabled, int steps, Boolean isAppend) throws IllegalArgumentException {
 		try {
 			ArrayList<Object> toSend=new ArrayList<>();
@@ -875,6 +878,11 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			
 			 
 			ArrayList<Object []> data=Utility.decryptToObjectArray(ois);
+			
+			LocalDateTime test = (LocalDateTime)data.get(0)[0];
+			test=test.plusHours(8);
+			data.get(0)[0]=test;
+			
 			
 			oos.close();
 			os.close();

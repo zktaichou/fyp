@@ -249,7 +249,7 @@ static long getTime(String date) {
 		
 		chart.getXAxis().setDateTimeLabelFormats(
 				new DateTimeLabelFormats()
-				    .setSecond("%l:%M:%S %p"));
+				    .setMinute("%l:%M %p"));
 		
 		ArrayList<String> attributes = Data.sensorAttributeList.get(sensorName);
 		String unit = attributes.get(5);
