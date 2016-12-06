@@ -458,7 +458,7 @@ public class UserNotificationPage extends Composite{
 			} 
  
 			public void onSuccess(String reply) {
-				Window.alert("Controller Unsubscription: "+reply);
+				Window.alert("Controller Unsubscribe: "+reply);
 				if(success(reply))
 				{
 					addItemToListBox(controllerLB, controller);
@@ -475,7 +475,7 @@ public class UserNotificationPage extends Composite{
 			} 
  
 			public void onSuccess(String reply) {
-				Window.alert("Sensor Unsubscription: "+reply);
+				Window.alert("Sensor Unsubscribe: "+reply);
 				if(success(reply))
 				{
 					addItemToListBox(sensorLB, sensor);
@@ -492,7 +492,7 @@ public class UserNotificationPage extends Composite{
 			} 
  
 			public void onSuccess(String reply) {
-				Window.alert("Actuator Unsubscription: "+reply);
+				Window.alert("Actuator Unsubscribe: "+reply);
 				if(success(reply))
 				{
 					addItemToListBox(actuatorLB, actuator);
@@ -510,7 +510,7 @@ public class UserNotificationPage extends Composite{
 			} 
  
 			public void onSuccess(String reply) {
-				Window.alert(reply);
+				
 			}
 		});
 	} 

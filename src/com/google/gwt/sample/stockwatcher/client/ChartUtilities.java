@@ -419,7 +419,7 @@ static long getTime(String date) {
         .setPlotShadow(false)
         .setExporting(new Exporting().setEnabled(false))
         .setChartTitle(new ChartTitle()
-                .setText("Live reading of "+name)
+                .setText("Latest reading of "+name)
         )
         .setPane(new Pane()
                 .setStartAngle(-90)
