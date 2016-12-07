@@ -136,6 +136,8 @@ static long getTime(String date) {
 				{
 					series.addPoint(data[i][0],data[i][1], true, true, true);
 				}
+				
+				series.removePoint(series.getPoints()[0]);
 			}
 		});
 	}
@@ -222,7 +224,6 @@ static long getTime(String date) {
 	public static StockChart createLiveChart(final String sensorName, Number[][] data, String title, final Boolean predictionIsEnabled, final Boolean isLiveUpdate, int steps){
 		
 		Utility.hideTimer();
-		
 		final StockChart chart = new StockChart();
 		chart
 		.setType(Series.Type.SPLINE)  
@@ -294,9 +295,9 @@ static long getTime(String date) {
 	            		if (chart.isRendered()) {
 		                	long currTime=System.currentTimeMillis();
 		                	getAppendData(series,sensorName,lastRequestTime,new java.sql.Date(currTime),predictionIsEnabled, predictionSeries);
-		                    lastRequestTime=new java.sql.Date(currTime+10);
+		                    lastRequestTime=new java.sql.Date(currTime+1);
 	            		}
-	                    schedule(2000);
+	                    schedule(6000);
 	            	}
 	            	else
 	            	{

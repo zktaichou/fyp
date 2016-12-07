@@ -1,5 +1,8 @@
 package com.google.gwt.sample.stockwatcher.client;
 
+import org.moxieapps.gwt.highcharts.client.Global;
+import org.moxieapps.gwt.highcharts.client.Highcharts;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -16,6 +19,12 @@ public class BasePage implements EntryPoint {
 	static int contentPanelHeight = Window.getClientHeight()-Menu.HEIGHT-Footer.HEIGHT-Header.HEIGHT;
 	
 	public void onModuleLoad() {
+		Highcharts.setOptions(
+			     new Highcharts.Options().setGlobal(
+			         new Global()
+			           .setUseUTC(false)
+			   ));
+		
 		ResourcePreload.preloadData();
 		
 		menuContainer = new VerticalPanel();

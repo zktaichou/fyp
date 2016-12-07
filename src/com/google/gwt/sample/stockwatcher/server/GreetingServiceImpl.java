@@ -879,9 +879,9 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			 
 			ArrayList<Object []> data=Utility.decryptToObjectArray(ois);
 			
-			LocalDateTime test = (LocalDateTime)data.get(0)[0];
-			test=test.plusHours(8);
-			data.get(0)[0]=test;
+			LocalDateTime gmt8Time = (LocalDateTime)data.get(0)[0];
+			gmt8Time = gmt8Time.plusHours(8);
+			data.get(0)[0]=gmt8Time;
 			
 			
 			oos.close();
