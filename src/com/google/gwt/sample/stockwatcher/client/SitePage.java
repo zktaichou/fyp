@@ -492,6 +492,8 @@ public class SitePage extends Composite{
 			selectablesPanel.add(lb);
 			
 			VerticalPanel vPanel = new VerticalPanel();
+			vPanel.setStyleName("rounded");
+			vPanel.getElement().getStyle().setBackgroundColor("white");
 			vPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 			vPanel.setSpacing(5);
 			vPanel.add(hPanel);
@@ -513,12 +515,7 @@ public class SitePage extends Composite{
 //			  }
 //			});
 			
-			PopupPanel lol = new PopupPanel();
-			lol.setStyleName("rounded");
-			lol.getElement().getStyle().setBackgroundColor("white");
-			lol.add(vPanel);
-			
-			initWidget(lol);
+			initWidget(vPanel);
 		}
 		
 	}
