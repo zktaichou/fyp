@@ -44,9 +44,9 @@ public class Menu extends Composite {
 	
 	// Menu Items
 	Anchor logoutAnchor = new Anchor("logout");
-	Anchor logicAnchor = new Anchor("Sensor/Actuator Logic");
-	Anchor userNotificationAnchor = new Anchor("User Notification");
-	Anchor actuatorAnchor = new Anchor("Actuator control");
+	Anchor logicAnchor = new Anchor("Sensor/Actuator Logic Binding");
+	Anchor userNotificationAnchor = new Anchor("Device Subscription");
+	Anchor actuatorAnchor = new Anchor("Device Control Center");
 	Anchor scheduleAnchor = new Anchor("Scheduling");
 	Anchor liveAnchor = new Anchor("Live Updates");
 	Anchor historicalAnchor = new Anchor("Historical");

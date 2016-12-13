@@ -10,181 +10,213 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public class ChartCreationHandler{
 
 	public static void acceptParam(String sensor, Date sd, Date ed, Boolean isPredictionEnabled, int steps, String reportSort, String reportView, Boolean isLiveUpdate){
+
+		Data.latestRequestID++;
+		final int currRequestID=Data.latestRequestID;
+		
 		if(reportSort.equals("Average"))
 		{
 			if(reportView.equals("Daily"))
 			{
-				getAverageReadingByDay(sensor,isPredictionEnabled,steps);
+				getAverageReadingByDay(sensor,isPredictionEnabled,steps,currRequestID);
 			}
 			else if(reportView.equals("Monthly"))
 			{
-				getAverageReadingByMonth(sensor,isPredictionEnabled,steps);
+				getAverageReadingByMonth(sensor,isPredictionEnabled,steps,currRequestID);
 			}
 			else if(reportView.equals("Yearly"))
 			{
-				getAverageReadingByYear(sensor,isPredictionEnabled,steps);
+				getAverageReadingByYear(sensor,isPredictionEnabled,steps,currRequestID);
 			}
 		}
 		else if(reportSort.equals("Sum"))
 		{
 			if(reportView.equals("Daily"))
 			{
-				getTotalReadingByDay(sensor,isPredictionEnabled,steps);
+				getTotalReadingByDay(sensor,isPredictionEnabled,steps,currRequestID);
 			}
 			else if(reportView.equals("Monthly"))
 			{
-				getTotalReadingByMonth(sensor,isPredictionEnabled,steps);
+				getTotalReadingByMonth(sensor,isPredictionEnabled,steps,currRequestID);
 			}
 			else if(reportView.equals("Yearly"))
 			{
-				getTotalReadingByYear(sensor,isPredictionEnabled,steps);
+				getTotalReadingByYear(sensor,isPredictionEnabled,steps,currRequestID);
 			}
 		}
 		else if(reportSort.equals("Cumulative Sum"))
 		{
 			if(reportView.equals("Daily"))
 			{
-				getCulmulativeReadingByDay(sensor,isPredictionEnabled,steps);
+				getCulmulativeReadingByDay(sensor,isPredictionEnabled,steps,currRequestID);
 			}
 			else if(reportView.equals("Monthly"))
 			{
-				getCulmulativeReadingByMonth(sensor,isPredictionEnabled,steps);
+				getCulmulativeReadingByMonth(sensor,isPredictionEnabled,steps,currRequestID);
 			}
 			else if(reportView.equals("Yearly"))
 			{
-				getCulmulativeReadingByYear(sensor,isPredictionEnabled,steps);
+				getCulmulativeReadingByYear(sensor,isPredictionEnabled,steps,currRequestID);
 			}
 		}
+		
 	}
 	
-	private static void getTotalReadingByDay(final String sensor, final Boolean isPredictionEnabled, final int steps){
+	private static void getTotalReadingByDay(final String sensor, final Boolean isPredictionEnabled, final int steps, final int currRequestID){
 		Utility.newRequestObj().getTotalReadingGroupByDay(sensor,isPredictionEnabled,steps,new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
 				Window.alert("Data request failed: "+caught.getMessage());
 			}
 			public void onSuccess(String[][] result) {
+				if(currRequestID==Data.latestRequestID)
+				{
 				checkInsufficientDataForPrediction(result, isPredictionEnabled);
 //				String [][] result2 = combineDate(result);
 				Number[][] data = ChartUtilities.formatDaily(result);
 				Chart chart = ChartUtilities.createReportChart(sensor, data, "Sum of Daily Readings of "+sensor, isPredictionEnabled, steps);
 				ReportingPage.chartPanel.add(chart);
+				}
 			}
 		});
 	}
 	
-	private static void getTotalReadingByMonth(final String sensor, final Boolean isPredictionEnabled, final int steps){
+	private static void getTotalReadingByMonth(final String sensor, final Boolean isPredictionEnabled, final int steps, final int currRequestID){
 		Utility.newRequestObj().getTotalReadingGroupByMonth(sensor,isPredictionEnabled,steps,new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
 				Window.alert("Data request failed: "+caught.getMessage());
 			}
 			public void onSuccess(String[][] result) {
+				if(currRequestID==Data.latestRequestID)
+				{
 				checkInsufficientDataForPrediction(result, isPredictionEnabled);
 //				String [][] result2 = combineDate(result);
 				Number[][] data = ChartUtilities.formatMonthly(result);
 				Chart chart = ChartUtilities.createReportChart(sensor, data, "Sum of Monthly Readings of "+sensor, isPredictionEnabled, steps);
 				ReportingPage.chartPanel.add(chart);
+				}
 			}
 		});
 	}
 	
-	private static void getTotalReadingByYear(final String sensor, final Boolean isPredictionEnabled, final int steps){
+	private static void getTotalReadingByYear(final String sensor, final Boolean isPredictionEnabled, final int steps, final int currRequestID){
 		Utility.newRequestObj().getTotalReadingGroupByYear(sensor,isPredictionEnabled,steps,new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
 				Window.alert("Data request failed: "+caught.getMessage());
 			}
 			public void onSuccess(String[][] result) {
+				if(currRequestID==Data.latestRequestID)
+				{
 				checkInsufficientDataForPrediction(result, isPredictionEnabled);
 				Number[][] data = ChartUtilities.formatYearly(result);
 				Chart chart = ChartUtilities.createReportChart(sensor, data, "Sum of Yearly Readings of "+sensor, isPredictionEnabled, steps);
 				ReportingPage.chartPanel.add(chart);
+				}
 			}
 		});
 	}
 	
-	private static void getAverageReadingByDay(final String sensor, final Boolean isPredictionEnabled, final int steps){
+	private static void getAverageReadingByDay(final String sensor, final Boolean isPredictionEnabled, final int steps, final int currRequestID){
 		Utility.newRequestObj().getAverageReadingGroupByDay(sensor,isPredictionEnabled,steps,new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
 				Window.alert("Data request failed: "+caught.getMessage());
 			}
 			public void onSuccess(String[][] result) {
+				if(currRequestID==Data.latestRequestID)
+				{
 				checkInsufficientDataForPrediction(result, isPredictionEnabled);
 //				String [][] result2 = combineDate(result);
 				Number[][] data = ChartUtilities.formatDaily(result);
 				Chart chart = ChartUtilities.createReportChart(sensor, data, "Average Daily Readings of "+sensor, isPredictionEnabled, steps);
 				ReportingPage.chartPanel.add(chart);
+				}
 			}
 		});
 	}
 	
-	private static void getAverageReadingByMonth(final String sensor, final Boolean isPredictionEnabled, final int steps){
+	private static void getAverageReadingByMonth(final String sensor, final Boolean isPredictionEnabled, final int steps, final int currRequestID){
 		Utility.newRequestObj().getAverageReadingGroupByMonth(sensor,isPredictionEnabled,steps,new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
 				Window.alert("Data request failed: "+caught.getMessage());
 			}
 			public void onSuccess(String[][] result) {
+				if(currRequestID==Data.latestRequestID)
+				{
 				checkInsufficientDataForPrediction(result, isPredictionEnabled);
 //				String [][] result2 = combineDate(result);
 				Number[][] data = ChartUtilities.formatMonthly(result);
 				Chart chart = ChartUtilities.createReportChart(sensor, data, "Average Monthly Readings of "+sensor, isPredictionEnabled, steps);
 				ReportingPage.chartPanel.add(chart);
+				}
 			}
 		});
 	}
 	
-	private static void getAverageReadingByYear(final String sensor, final Boolean isPredictionEnabled, final int steps){
+	private static void getAverageReadingByYear(final String sensor, final Boolean isPredictionEnabled, final int steps, final int currRequestID){
 		Utility.newRequestObj().getAverageReadingGroupByYear(sensor,isPredictionEnabled,steps,new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
 				Window.alert("Data request failed: "+caught.getMessage());
 			}
 			public void onSuccess(String[][] result) {
+				if(currRequestID==Data.latestRequestID)
+				{
 				checkInsufficientDataForPrediction(result, isPredictionEnabled);
 				Number[][] data = ChartUtilities.formatYearly(result);
 				Chart chart = ChartUtilities.createReportChart(sensor, data, "Average Yearly Readings of "+sensor, isPredictionEnabled, steps);
 				ReportingPage.chartPanel.add(chart);
+				}
 			}
 		});
 	}
 	
-	private static void getCulmulativeReadingByDay(final String sensor, final Boolean isPredictionEnabled, final int steps){
+	private static void getCulmulativeReadingByDay(final String sensor, final Boolean isPredictionEnabled, final int steps, final int currRequestID){
 		Utility.newRequestObj().getCulmulativeReadingGroupByDay(sensor,isPredictionEnabled,steps,new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
 				Window.alert("Data request failed: "+caught.getMessage());
 			}
 			public void onSuccess(String[][] result) {
+				if(currRequestID==Data.latestRequestID)
+				{
 				checkInsufficientDataForPrediction(result, isPredictionEnabled);
 //				String [][] result2 = combineDate(result);
 				Number[][] data = ChartUtilities.formatDaily(result);
 				Chart chart = ChartUtilities.createReportChart(sensor, data, "Daily Cumulative Sum Readings of "+sensor, isPredictionEnabled, steps);
 				ReportingPage.chartPanel.add(chart);
+				}
 			}
 		});
 	}
 	
-	private static void getCulmulativeReadingByMonth(final String sensor, final Boolean isPredictionEnabled, final int steps){
+	private static void getCulmulativeReadingByMonth(final String sensor, final Boolean isPredictionEnabled, final int steps, final int currRequestID){
 		Utility.newRequestObj().getCulmulativeReadingGroupByMonth(sensor,isPredictionEnabled,steps,new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
 				Window.alert("Data request failed: "+caught.getMessage());
 			}
 			public void onSuccess(String[][] result) {
+				if(currRequestID==Data.latestRequestID)
+				{
 				checkInsufficientDataForPrediction(result, isPredictionEnabled);
 //				String [][] result2 = combineDate(result);
 				Number[][] data = ChartUtilities.formatMonthly(result);
 				Chart chart = ChartUtilities.createReportChart(sensor, data, "Monthly Cumulative Sum Readings of "+sensor, isPredictionEnabled, steps);
 				ReportingPage.chartPanel.add(chart);
+				}
 			}
 		});
 	}
 	
-	private static void getCulmulativeReadingByYear(final String sensor, final Boolean isPredictionEnabled, final int steps){
+	private static void getCulmulativeReadingByYear(final String sensor, final Boolean isPredictionEnabled, final int steps, final int currRequestID){
 		Utility.newRequestObj().getCulmulativeReadingGroupByYear(sensor,isPredictionEnabled,steps,new AsyncCallback<String[][]>() {
 			public void onFailure(Throwable caught) {
 				Window.alert("Data request failed: "+caught.getMessage());
 			}
 			public void onSuccess(String[][] result) {
+				if(currRequestID==Data.latestRequestID)
+				{
 				checkInsufficientDataForPrediction(result, isPredictionEnabled);
 				Number[][] data = ChartUtilities.formatYearly(result);
 				Chart chart = ChartUtilities.createReportChart(sensor, data, "Yearly Cumulative Sum Readings of "+sensor, isPredictionEnabled, steps);
 				ReportingPage.chartPanel.add(chart);
+				}
 			}
 		});
 	}

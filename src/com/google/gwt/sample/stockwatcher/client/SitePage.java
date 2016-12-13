@@ -279,7 +279,7 @@ public class SitePage extends Composite{
 			case "Current":{
 				return Images.getImage(Images.CURRENT_ICON,30);
 			}
-			case "Water":{
+			case "Waterflow":{
 				return Images.getImage(Images.WATER_ICON,30);
 			}
 			case "Light":{
@@ -370,11 +370,13 @@ public class SitePage extends Composite{
 	
 	public static class Actuator extends Composite{
 		private static HashMap<Anchor,Boolean> state=new HashMap<>();
-
+		boolean waitingResponse=false;
 		final Anchor temp = new Anchor(" ");
 		final ListBox lb = new ListBox();
 		
 		public Actuator(String icon, final String name, String status, String controlType){
+			//boolean waitingResponse = false;
+			
 			final HashMap<Boolean,String> toggle=new HashMap<>();
 			toggle.put(Boolean.TRUE,Images.getImage(Images.ON, 30));
 			toggle.put(Boolean.FALSE,Images.getImage(Images.OFF, 30));
@@ -392,6 +394,7 @@ public class SitePage extends Composite{
 					//if clickable
 					if(temp.getName().equalsIgnoreCase("TRUE"))
 					{
+						waitingResponse=true;
 						//disable click until request finishes
 						temp.setName("false");
 						//set loading animation
@@ -415,6 +418,7 @@ public class SitePage extends Composite{
 							} 
 				 
 							public void onSuccess(final String reply) {
+								waitingResponse=false;
 								if(reply.equals("OK"))
 								{
 									state.put(temp,!state.get(temp));
@@ -434,6 +438,8 @@ public class SitePage extends Composite{
 			Timer t2 = new Timer() {
 			      @Override
 			      public void run() {
+			    	  if(!waitingResponse)
+			    	  {
 			    	  Header.showLoading();
 						Utility.newRequestObj().actuatorGetByName(name, new AsyncCallback<String[]>() {
 							public void onFailure(Throwable caught) {
@@ -466,6 +472,7 @@ public class SitePage extends Composite{
 								temp.setHTML(toggle.get(state.get(temp)));
 							}
 						});
+			    	  }
 			      }
 			}; 
 			timers.add(t2);

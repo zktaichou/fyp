@@ -420,7 +420,7 @@ static long getTime(String date) {
         .setPlotShadow(false)
         .setExporting(new Exporting().setEnabled(false))
         .setChartTitle(new ChartTitle()
-                .setText("Latest reading of "+name)
+                .setText("Latest "+name+" sensor reading")
         )
         .setPane(new Pane()
                 .setStartAngle(-90)

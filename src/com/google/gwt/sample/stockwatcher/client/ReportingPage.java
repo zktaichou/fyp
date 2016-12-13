@@ -199,40 +199,41 @@ public class ReportingPage extends Composite {
 	private void sendDataToServer(){
 		if(isSensorSelected())
 		{
+			
 			chartPanel.clear();
 			chartPanel.add(Utility.addTimer());
 			
-			if(predictionBox.getValue())
-			{
-				if(Utility.isNumeric(tb.getText()))
+				if(predictionBox.getValue())
 				{
-					int steps = Integer.parseInt(tb.getText());
+					if(Utility.isNumeric(tb.getText()))
+					{
+						int steps = Integer.parseInt(tb.getText());
+						ChartCreationHandler.acceptParam(controllerSensorListBox.getSelectedItemText(), 
+								ChartUtilities.stringToStartDate(getSDate()), 
+								ChartUtilities.stringToEndDate(getEDate()), 
+								predictionBox.getValue(), 
+								steps,
+								reportSortLB.getSelectedItemText(), 
+								reportViewLB.getSelectedItemText(), 
+								false); //isLiveUpdate
+					}
+					else
+					{
+						Window.alert("Invalid input for number of steps");
+						Utility.hideTimer();
+					}
+				}
+				else
+				{
 					ChartCreationHandler.acceptParam(controllerSensorListBox.getSelectedItemText(), 
 							ChartUtilities.stringToStartDate(getSDate()), 
 							ChartUtilities.stringToEndDate(getEDate()), 
 							predictionBox.getValue(), 
-							steps,
+							0,
 							reportSortLB.getSelectedItemText(), 
 							reportViewLB.getSelectedItemText(), 
 							false); //isLiveUpdate
 				}
-				else
-				{
-					Window.alert("Invalid input for number of steps");
-					Utility.hideTimer();
-				}
-			}
-			else
-			{
-				ChartCreationHandler.acceptParam(controllerSensorListBox.getSelectedItemText(), 
-						ChartUtilities.stringToStartDate(getSDate()), 
-						ChartUtilities.stringToEndDate(getEDate()), 
-						predictionBox.getValue(), 
-						0,
-						reportSortLB.getSelectedItemText(), 
-						reportViewLB.getSelectedItemText(), 
-						false); //isLiveUpdate
-			}
 		}
 	}
 	
